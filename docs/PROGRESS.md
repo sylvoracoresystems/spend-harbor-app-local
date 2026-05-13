@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 3 — Taxonomy 与预算
-- **当前 Step**：3.2 标签管理 CRUD ✅；准备进入 3.3 来源管理
+- **当前 Step**：3.3 来源管理 CRUD ✅；准备进入 3.4 预算管理
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,24 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 3 · 3.2 — 标签管理 CRUD ✅
+**当前 Step**：Phase 3 · 3.3 — 来源管理 CRUD ✅
+
+**子任务**：
+
+- [x] `SourceDao.updateName(id, name, icon, color, currency)`：保留 createdAt + 清空 nameKey
+- [x] `application/source_form_controller.dart`：5 字段（name + icon + color + currency）+ 同步/异步同名校验
+- [x] `presentation/sources_page.dart`：列表（圆形彩色图标 + 「CCY · symbol」副标题）+ FAB
+- [x] `presentation/source_edit_page.dart`：name + 币种 Dropdown（18 种，含 code · symbol · 名）+ 图标网格 + 颜色网格 + 保存 / 删除
+- [x] go_router：`/settings/sources` + `/new` + `/:id/edit`，从占位列表中摘除
+- [x] ARB：srcNewTitle / srcEditTitle / srcFieldCurrency / errors / 删除确认 / 空状态 / srcAdd（en + zh）
+- [x] 单测 4 例（validate / 同名 duplicate / updateName 改币种 / 软删）
+- [x] `flutter analyze` + `flutter test` 通过（54 tests）
+
+**下一步接入点**：3.4 预算管理 CRUD + 周期对齐。`Budget` 表已有 period (`BudgetPeriod`) / scope (`BudgetScope`) / categoryId / amountCents / currency / startsOn。需要：① `BudgetDao` 现有 watchAll，需补 `insertBudget` / `updateBudget` / `softDelete`（若缺）/ `findById` ② `application/budget_form_controller.dart` ③ `application/budget_period_alignment.dart` —— 把 `startsOn` 对齐到当前周期起点（周一/月初/季度首日/年初）④ `presentation/budgets_page.dart` + `budget_edit_page.dart`（period segmented + scope segmented + 关联分类 dropdown + 金额 + 币种）⑤ 路由 ⑥ ARB + 测试。
+
+**已完成 Step 3.2**：
+
+
 
 **子任务**：
 
@@ -250,7 +267,7 @@
 
 - [x] 分类管理 CRUD + 同名去重
 - [x] 标签管理 CRUD
-- [ ] 来源管理 CRUD（带币种）
+- [x] 来源管理 CRUD（带币种）
 - [ ] 预算管理 CRUD + 周期对齐
 - [ ] Dashboard 接入预算块
 
@@ -316,6 +333,7 @@
 | 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）       | watchTrashed/restore/purge + 启动自动 30 天清理            |
 | 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测         |
 | 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                | name + color；4 单测                                        |
+| 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                | name + icon + color + 币种（18 种）；4 单测                  |
 
 ---
 

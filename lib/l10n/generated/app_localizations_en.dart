@@ -312,6 +312,33 @@ class AppL10nEn extends AppL10n {
   String get tagAdd => 'Add tag';
 
   @override
+  String get srcNewTitle => 'New Source';
+
+  @override
+  String get srcEditTitle => 'Edit Source';
+
+  @override
+  String get srcFieldCurrency => 'Currency';
+
+  @override
+  String get srcErrNameRequired => 'Enter a name';
+
+  @override
+  String get srcErrNameDuplicate => 'A source with this name already exists';
+
+  @override
+  String get srcDeleteConfirmTitle => 'Delete this source?';
+
+  @override
+  String get srcDeleteConfirmBody => 'Existing transactions keep their reference but this source will no longer appear in pickers.';
+
+  @override
+  String get srcEmpty => 'No sources yet';
+
+  @override
+  String get srcAdd => 'Add source';
+
+  @override
   String get catFood => 'Food';
 
   @override

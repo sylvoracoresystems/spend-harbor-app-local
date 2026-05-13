@@ -312,6 +312,33 @@ class AppL10nZh extends AppL10n {
   String get tagAdd => '新建标签';
 
   @override
+  String get srcNewTitle => '新建来源';
+
+  @override
+  String get srcEditTitle => '编辑来源';
+
+  @override
+  String get srcFieldCurrency => '币种';
+
+  @override
+  String get srcErrNameRequired => '请输入名称';
+
+  @override
+  String get srcErrNameDuplicate => '已存在同名来源';
+
+  @override
+  String get srcDeleteConfirmTitle => '删除该来源？';
+
+  @override
+  String get srcDeleteConfirmBody => '已有交易仍保留对该来源的引用，但此来源将不再出现在选择列表中。';
+
+  @override
+  String get srcEmpty => '暂无来源';
+
+  @override
+  String get srcAdd => '新建来源';
+
+  @override
   String get catFood => '餐饮';
 
   @override

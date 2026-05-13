@@ -26,6 +26,26 @@ class SourceDao extends DatabaseAccessor<AppDatabase> with _$SourceDaoMixin {
   Future<bool> updateSource(SourcesCompanion entry) =>
       update(sources).replace(entry);
 
+  /// 仅更新可编辑字段；保留 createdAt / isDefault；编辑后清空 nameKey。
+  Future<int> updateName({
+    required String id,
+    required String name,
+    required String icon,
+    required String color,
+    required String currency,
+  }) {
+    return (update(sources)..where((t) => t.id.equals(id))).write(
+      SourcesCompanion(
+        name: Value(name),
+        icon: Value(icon),
+        color: Value(color),
+        currency: Value(currency),
+        nameKey: const Value(null),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
   Future<int> softDelete(String id) {
     return (update(sources)..where((t) => t.id.equals(id))).write(
       SourcesCompanion(

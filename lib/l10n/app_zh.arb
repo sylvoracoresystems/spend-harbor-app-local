@@ -124,6 +124,16 @@
   "tagEmpty": "暂无标签",
   "tagAdd": "新建标签",
 
+  "srcNewTitle": "新建来源",
+  "srcEditTitle": "编辑来源",
+  "srcFieldCurrency": "币种",
+  "srcErrNameRequired": "请输入名称",
+  "srcErrNameDuplicate": "已存在同名来源",
+  "srcDeleteConfirmTitle": "删除该来源？",
+  "srcDeleteConfirmBody": "已有交易仍保留对该来源的引用，但此来源将不再出现在选择列表中。",
+  "srcEmpty": "暂无来源",
+  "srcAdd": "新建来源",
+
   "catFood": "餐饮",
   "catTransport": "交通",
   "catShopping": "购物",

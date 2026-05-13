@@ -689,6 +689,60 @@ abstract class AppL10n {
   /// **'Add tag'**
   String get tagAdd;
 
+  /// No description provided for @srcNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Source'**
+  String get srcNewTitle;
+
+  /// No description provided for @srcEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Source'**
+  String get srcEditTitle;
+
+  /// No description provided for @srcFieldCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get srcFieldCurrency;
+
+  /// No description provided for @srcErrNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get srcErrNameRequired;
+
+  /// No description provided for @srcErrNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'A source with this name already exists'**
+  String get srcErrNameDuplicate;
+
+  /// No description provided for @srcDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this source?'**
+  String get srcDeleteConfirmTitle;
+
+  /// No description provided for @srcDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing transactions keep their reference but this source will no longer appear in pickers.'**
+  String get srcDeleteConfirmBody;
+
+  /// No description provided for @srcEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No sources yet'**
+  String get srcEmpty;
+
+  /// No description provided for @srcAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add source'**
+  String get srcAdd;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

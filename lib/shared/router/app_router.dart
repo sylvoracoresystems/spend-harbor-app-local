@@ -8,6 +8,8 @@ import '../../features/categories/presentation/category_edit_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
+import '../../features/sources/presentation/source_edit_page.dart';
+import '../../features/sources/presentation/sources_page.dart';
 import '../../features/stats/presentation/stats_page.dart';
 import '../../features/tags/presentation/tag_edit_page.dart';
 import '../../features/tags/presentation/tags_page.dart';
@@ -28,7 +30,7 @@ const _settingsRoutes = <_SettingsRoute>[
   (path: '/settings/profile', title: _profile),
   // categories 已实现，从占位列表中移除
   // tags 已实现，从占位列表中移除
-  (path: '/settings/sources', title: _sources),
+  // sources 已实现，从占位列表中移除
   (path: '/settings/budgets', title: _budgets),
   (path: '/settings/export', title: _export),
   (path: '/settings/import', title: _import),
@@ -42,7 +44,6 @@ const _settingsRoutes = <_SettingsRoute>[
 ];
 
 String _profile(AppL10n l) => l.settingsProfile;
-String _sources(AppL10n l) => l.settingsSources;
 String _budgets(AppL10n l) => l.settingsBudgets;
 String _export(AppL10n l) => l.settingsExport;
 String _import(AppL10n l) => l.settingsImport;
@@ -119,6 +120,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             parentNavigatorKey: _rootKey,
             builder: (_, state) =>
                 TagEditPage(id: state.pathParameters['id']),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/settings/sources',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const SourcesPage(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootKey,
+            builder: (_, __) => const SourceEditPage(),
+          ),
+          GoRoute(
+            path: ':id/edit',
+            parentNavigatorKey: _rootKey,
+            builder: (_, state) =>
+                SourceEditPage(id: state.pathParameters['id']),
           ),
         ],
       ),

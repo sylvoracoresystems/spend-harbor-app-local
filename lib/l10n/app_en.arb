@@ -127,6 +127,16 @@
   "tagEmpty": "No tags yet",
   "tagAdd": "Add tag",
 
+  "srcNewTitle": "New Source",
+  "srcEditTitle": "Edit Source",
+  "srcFieldCurrency": "Currency",
+  "srcErrNameRequired": "Enter a name",
+  "srcErrNameDuplicate": "A source with this name already exists",
+  "srcDeleteConfirmTitle": "Delete this source?",
+  "srcDeleteConfirmBody": "Existing transactions keep their reference but this source will no longer appear in pickers.",
+  "srcEmpty": "No sources yet",
+  "srcAdd": "Add source",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",
