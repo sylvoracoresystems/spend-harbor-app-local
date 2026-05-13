@@ -415,6 +415,35 @@ class AppL10nEn extends AppL10n {
   String get lockBiometricReason => 'Unlock SpendHarbor';
 
   @override
+  String aboutVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get aboutTagline => 'Track your spending. Fully offline. Yours forever.';
+
+  @override
+  String get aboutDescription => 'SpendHarbor Local stores everything on your device. No accounts, no servers, no telemetry. Export, import, and back up your data anytime.';
+
+  @override
+  String get aboutCreditsTitle => 'Credits';
+
+  @override
+  String get aboutCreditsBody => 'Built with Flutter, Drift, Riverpod, go_router, fl_chart, and Lucide icons.';
+
+  @override
+  String get legalPrivacyTitle => 'Privacy';
+
+  @override
+  String get legalPrivacyBody => 'SpendHarbor Local does not collect or transmit any personal data. All categories, transactions, budgets, and preferences remain on your device. The app does not connect to the network.';
+
+  @override
+  String get legalTermsTitle => 'Terms';
+
+  @override
+  String get legalTermsBody => 'The app is provided as-is. You are responsible for backing up your data; the developer cannot recover information lost to device damage or uninstalls without a backup.';
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

@@ -851,6 +851,60 @@ abstract class AppL10n {
   /// **'Unlock SpendHarbor'**
   String get lockBiometricReason;
 
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String aboutVersion(String version);
+
+  /// No description provided for @aboutTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your spending. Fully offline. Yours forever.'**
+  String get aboutTagline;
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'SpendHarbor Local stores everything on your device. No accounts, no servers, no telemetry. Export, import, and back up your data anytime.'**
+  String get aboutDescription;
+
+  /// No description provided for @aboutCreditsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get aboutCreditsTitle;
+
+  /// No description provided for @aboutCreditsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Built with Flutter, Drift, Riverpod, go_router, fl_chart, and Lucide icons.'**
+  String get aboutCreditsBody;
+
+  /// No description provided for @legalPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get legalPrivacyTitle;
+
+  /// No description provided for @legalPrivacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'SpendHarbor Local does not collect or transmit any personal data. All categories, transactions, budgets, and preferences remain on your device. The app does not connect to the network.'**
+  String get legalPrivacyBody;
+
+  /// No description provided for @legalTermsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms'**
+  String get legalTermsTitle;
+
+  /// No description provided for @legalTermsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The app is provided as-is. You are responsible for backing up your data; the developer cannot recover information lost to device damage or uninstalls without a backup.'**
+  String get legalTermsBody;
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

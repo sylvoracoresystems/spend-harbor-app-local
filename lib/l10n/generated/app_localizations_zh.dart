@@ -414,6 +414,35 @@ class AppL10nZh extends AppL10n {
   String get lockBiometricReason => '解锁 SpendHarbor';
 
   @override
+  String aboutVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String get aboutTagline => '纯本地记账，永久属于你。';
+
+  @override
+  String get aboutDescription => 'SpendHarbor Local 的全部数据都保存在你的设备上。无账号、无服务器、无追踪。随时可导出、导入或备份。';
+
+  @override
+  String get aboutCreditsTitle => '致谢';
+
+  @override
+  String get aboutCreditsBody => '基于 Flutter、Drift、Riverpod、go_router、fl_chart 和 Lucide 图标构建。';
+
+  @override
+  String get legalPrivacyTitle => '隐私';
+
+  @override
+  String get legalPrivacyBody => 'SpendHarbor Local 不收集也不上传任何个人数据。所有分类、交易、预算和偏好都保留在你的设备上。应用本身不发起任何网络请求。';
+
+  @override
+  String get legalTermsTitle => '服务条款';
+
+  @override
+  String get legalTermsBody => '本应用按现状提供。请定期备份你的数据；若设备损坏或卸载未备份，开发者无法找回信息。';
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

@@ -191,6 +191,20 @@
   "lockUseBiometric": "Use biometrics",
   "lockBiometricReason": "Unlock SpendHarbor",
 
+  "aboutVersion": "Version {version}",
+  "@aboutVersion": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "aboutTagline": "Track your spending. Fully offline. Yours forever.",
+  "aboutDescription": "SpendHarbor Local stores everything on your device. No accounts, no servers, no telemetry. Export, import, and back up your data anytime.",
+  "aboutCreditsTitle": "Credits",
+  "aboutCreditsBody": "Built with Flutter, Drift, Riverpod, go_router, fl_chart, and Lucide icons.",
+
+  "legalPrivacyTitle": "Privacy",
+  "legalPrivacyBody": "SpendHarbor Local does not collect or transmit any personal data. All categories, transactions, budgets, and preferences remain on your device. The app does not connect to the network.",
+  "legalTermsTitle": "Terms",
+  "legalTermsBody": "The app is provided as-is. You are responsible for backing up your data; the developer cannot recover information lost to device damage or uninstalls without a backup.",
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",

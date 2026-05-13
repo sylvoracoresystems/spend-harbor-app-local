@@ -12,9 +12,11 @@ import '../../features/data_io/presentation/backup_page.dart';
 import '../../features/data_io/presentation/import_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
+import '../../features/settings/presentation/about_page.dart';
 import '../../features/settings/presentation/appearance_page.dart';
 import '../../features/settings/presentation/currency_page.dart';
 import '../../features/settings/presentation/language_page.dart';
+import '../../features/settings/presentation/legal_page.dart';
 import '../../features/settings/presentation/profile_page.dart';
 import '../../features/settings/presentation/security_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
@@ -49,12 +51,8 @@ const _settingsRoutes = <_SettingsRoute>[
   // language 已实现
   // appearance 已实现
   // security 已实现
-  (path: '/settings/about', title: _about),
-  (path: '/settings/legal', title: _legal),
+  // about / legal 已实现
 ];
-
-String _about(AppL10n l) => l.settingsAbout;
-String _legal(AppL10n l) => l.settingsLegal;
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -181,6 +179,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings/security',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const SecurityPage(),
+      ),
+      GoRoute(
+        path: '/settings/about',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const AboutPage(),
+      ),
+      GoRoute(
+        path: '/settings/legal',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const LegalPage(),
       ),
       GoRoute(
         path: '/settings/budgets',

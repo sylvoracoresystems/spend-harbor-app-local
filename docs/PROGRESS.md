@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 6 — 设置与体验
-- **当前 Step**：6.3 应用锁 ✅；准备进入 6.4 关于 / 法律页
+- **当前阶段**：Phase 6 ✅ 全部完成
+- **当前 Step**：6.4 关于 / 法律页 + 6.5 触感反馈 ✅；准备进入 Phase 7（打磨与上架）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,28 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 6 · 6.3 — 应用锁（PIN + 生物识别）✅
+**当前 Step**：Phase 6 · 6.4 + 6.5 — 关于 / 法律 / 触感反馈 ✅（Phase 6 收尾）
+
+**子任务**：
+
+- [x] `presentation/about_page.dart`：图标 + App 名 + 版本 1.0.0 + tagline + 描述 + 致谢段
+- [x] `presentation/legal_page.dart`：隐私（强调零网络）+ 服务条款两段
+- [x] go_router `/settings/about` + `/settings/legal` 替换占位（占位列表清空）
+- [x] ARB：about{Version, Tagline, Description, CreditsTitle, CreditsBody} + legal{Privacy, Terms}{Title, Body}（en + zh）
+- [x] 触感反馈：底部 tab 切换 → `selectionClick`；FAB 新建交易 → `lightImpact`；交易行长按进选择模式 → `mediumImpact`
+- [x] `flutter analyze` + `flutter test` 通过（133 tests）
+
+**下一步接入点**：Phase 7 — 打磨与上架。
+- 7.1 App 图标 + 启动页（`flutter_launcher_icons` + `flutter_native_splash`）
+- 7.2 国际化全量回归 + 200% 字号 + 深色（手动 QA + 文档化 checklist）
+- 7.3 性能基准（冷启动 + Stats 聚合）
+- 7.4 隐私清单（Apple Privacy Manifest / Google Data Safety）
+- 7.5 应用商店素材
+- 7.6 上架审核
+
+**已完成 Step 6.3**：
+
+
 
 **子任务**：
 
@@ -519,8 +540,8 @@
 - [x] 个人偏好（昵称、头像 initials）
 - [x] 默认货币、语言、外观主题
 - [x] 应用锁（PIN + 生物识别）
-- [ ] 关于页、法律页
-- [ ] 触感反馈（HapticFeedback）接入
+- [x] 关于页、法律页
+- [x] 触感反馈（HapticFeedback）接入
 
 ---
 
@@ -570,6 +591,7 @@
 | 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言       | 昵称 + initials + ThemeMode 持久化 + 9 单测                  |
 | 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                     | 持久化 + Source/Budget 新建套用默认 + 4 单测                 |
 | 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）     | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
+| 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾）| AboutPage + LegalPage + 3 处 HapticFeedback                  |
 
 ---
 

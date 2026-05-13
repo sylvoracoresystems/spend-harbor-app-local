@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -252,7 +253,10 @@ class _TransactionRow extends ConsumerWidget {
           context.push('/transactions/${tx.id}/edit');
         }
       },
-      onLongPress: () => selectionCtrl.toggle(tx.id),
+      onLongPress: () {
+        HapticFeedback.mediumImpact();
+        selectionCtrl.toggle(tx.id);
+      },
       borderRadius: AppRadius.brXl,
       child: Container(
         color: selected ? c.mintSoft : null,

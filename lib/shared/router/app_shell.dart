@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -67,10 +68,10 @@ class _MobileShell extends StatelessWidget {
       body: shell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
-        onDestinationSelected: (i) => shell.goBranch(
-          i,
-          initialLocation: i == shell.currentIndex,
-        ),
+        onDestinationSelected: (i) {
+          HapticFeedback.selectionClick();
+          shell.goBranch(i, initialLocation: i == shell.currentIndex);
+        },
         destinations: [
           for (final d in destinations)
             NavigationDestination(
@@ -84,7 +85,10 @@ class _MobileShell extends StatelessWidget {
               tooltip: fabLabel,
               backgroundColor: c.action,
               foregroundColor: Colors.white,
-              onPressed: () => context.push('/transactions/new'),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                context.push('/transactions/new');
+              },
               child: const Icon(LucideIcons.plus),
             )
           : null,
@@ -123,7 +127,10 @@ class _TabletShell extends StatelessWidget {
                 backgroundColor: c.action,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                onPressed: () => context.push('/transactions/new'),
+                onPressed: () {
+                HapticFeedback.lightImpact();
+                context.push('/transactions/new');
+              },
                 child: const Icon(LucideIcons.plus),
               ),
             ),

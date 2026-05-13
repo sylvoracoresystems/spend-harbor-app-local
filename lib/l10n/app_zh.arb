@@ -188,6 +188,20 @@
   "lockUseBiometric": "使用生物识别",
   "lockBiometricReason": "解锁 SpendHarbor",
 
+  "aboutVersion": "版本 {version}",
+  "@aboutVersion": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "aboutTagline": "纯本地记账，永久属于你。",
+  "aboutDescription": "SpendHarbor Local 的全部数据都保存在你的设备上。无账号、无服务器、无追踪。随时可导出、导入或备份。",
+  "aboutCreditsTitle": "致谢",
+  "aboutCreditsBody": "基于 Flutter、Drift、Riverpod、go_router、fl_chart 和 Lucide 图标构建。",
+
+  "legalPrivacyTitle": "隐私",
+  "legalPrivacyBody": "SpendHarbor Local 不收集也不上传任何个人数据。所有分类、交易、预算和偏好都保留在你的设备上。应用本身不发起任何网络请求。",
+  "legalTermsTitle": "服务条款",
+  "legalTermsBody": "本应用按现状提供。请定期备份你的数据；若设备损坏或卸载未备份，开发者无法找回信息。",
+
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",
   "recycleBinDaysLeft": "剩 {days} 天",
