@@ -217,6 +217,26 @@ class AppL10nZh extends AppL10n {
   String get dashCount => '笔数';
 
   @override
+  String get dashFilterCurrency => '货币';
+
+  @override
+  String get dashFilterSource => '来源';
+
+  @override
+  String get dashFilterAll => '全部';
+
+  @override
+  String get dashPrevMonth => '上个月';
+
+  @override
+  String get dashNextMonth => '下个月';
+
+  @override
+  String dashOthersBadge(int count) {
+    return '+$count';
+  }
+
+  @override
   String get dashRecent => '近期';
 
   @override

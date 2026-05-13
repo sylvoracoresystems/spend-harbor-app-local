@@ -89,6 +89,15 @@
   "dashExpense": "Expense",
   "dashNet": "Net",
   "dashCount": "Transactions",
+  "dashFilterCurrency": "Currency",
+  "dashFilterSource": "Source",
+  "dashFilterAll": "All",
+  "dashPrevMonth": "Previous month",
+  "dashNextMonth": "Next month",
+  "dashOthersBadge": "+{count}",
+  "@dashOthersBadge": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "dashRecent": "Recent",
   "dashViewAll": "View all",
   "dashEmpty": "No transactions yet — tap + to add one.",

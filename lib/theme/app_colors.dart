@@ -14,6 +14,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.incomeSoft,
     required this.expense,
     required this.expenseSoft,
+    required this.info,
+    required this.infoSoft,
     required this.textPrimary,
     required this.textBody,
     required this.textMuted,
@@ -36,6 +38,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color incomeSoft;
   final Color expense;
   final Color expenseSoft;
+  final Color info;
+  final Color infoSoft;
 
   final Color textPrimary;
   final Color textBody;
@@ -59,6 +63,8 @@ class AppColors extends ThemeExtension<AppColors> {
     incomeSoft: Color(0xFFDCFCE7),
     expense: Color(0xFFF06262),
     expenseSoft: Color(0xFFFEE2E2),
+    info: Color(0xFF3B82F6),
+    infoSoft: Color(0xFFDBEAFE),
     textPrimary: Color(0xFF0F172A),
     textBody: Color(0xFF334155),
     textMuted: Color(0xFF64748B),
@@ -81,6 +87,8 @@ class AppColors extends ThemeExtension<AppColors> {
     incomeSoft: Color(0xFF064E3B),
     expense: Color(0xFFF87171),
     expenseSoft: Color(0xFF7F1D1D),
+    info: Color(0xFF60A5FA),
+    infoSoft: Color(0xFF1E3A8A),
     textPrimary: Color(0xFFE2E8F0),
     textBody: Color(0xFFCBD5E1),
     textMuted: Color(0xFF94A3B8),
@@ -104,6 +112,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? incomeSoft,
     Color? expense,
     Color? expenseSoft,
+    Color? info,
+    Color? infoSoft,
     Color? textPrimary,
     Color? textBody,
     Color? textMuted,
@@ -125,6 +135,8 @@ class AppColors extends ThemeExtension<AppColors> {
       incomeSoft: incomeSoft ?? this.incomeSoft,
       expense: expense ?? this.expense,
       expenseSoft: expenseSoft ?? this.expenseSoft,
+      info: info ?? this.info,
+      infoSoft: infoSoft ?? this.infoSoft,
       textPrimary: textPrimary ?? this.textPrimary,
       textBody: textBody ?? this.textBody,
       textMuted: textMuted ?? this.textMuted,
@@ -151,6 +163,8 @@ class AppColors extends ThemeExtension<AppColors> {
       incomeSoft: Color.lerp(incomeSoft, other.incomeSoft, t)!,
       expense: Color.lerp(expense, other.expense, t)!,
       expenseSoft: Color.lerp(expenseSoft, other.expenseSoft, t)!,
+      info: Color.lerp(info, other.info, t)!,
+      infoSoft: Color.lerp(infoSoft, other.infoSoft, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textBody: Color.lerp(textBody, other.textBody, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,

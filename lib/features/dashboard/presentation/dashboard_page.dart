@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
@@ -15,9 +16,9 @@ import '../../../theme/app_typography.dart';
 import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
 import '../../data_io/presentation/backup_reminder_banner.dart';
-import '../../transactions/application/transactions_list_controller.dart';
 import '../application/budget_progress_provider.dart';
 import '../application/dashboard_summary_controller.dart';
+import 'dashboard_filter_bar.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -26,200 +27,205 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final c = context.appColors;
-    final ym = ref.watch(currentMonthProvider);
-    final summaryAsync = ref.watch(dashboardSummaryProvider);
+    final metricsAsync = ref.watch(dashboardMetricsProvider);
     final recentAsync = ref.watch(recentTransactionsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l.tabDashboard),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(24),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.x2),
-            child: Text(
-              ym.key,
-              style: AppTypography.xs.copyWith(color: c.textMuted),
-            ),
-          ),
-        ),
-      ),
-      body: summaryAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('$e')),
-        data: (summary) {
-          if (summary.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.x6),
-                child: Text(
-                  l.dashEmpty,
-                  textAlign: TextAlign.center,
-                  style: AppTypography.sm.copyWith(color: c.textMuted),
-                ),
-              ),
-            );
-          }
-          return ListView(
-            padding: const EdgeInsets.all(AppSpacing.x4),
-            children: [
-              const BackupReminderBanner(),
-              _MetricsGrid(summary: summary),
-              const SizedBox(height: AppSpacing.x6),
-              const _BudgetsSection(),
-              _RecentSection(asyncRows: recentAsync),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _MetricsGrid extends StatelessWidget {
-  const _MetricsGrid({required this.summary});
-  final DashboardSummary summary;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final c = context.appColors;
-    // 4 张卡：收入 / 支出 / 净额 / 笔数
-    // 多币种：在前三张卡内分行展示
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // 宽屏：2 列；窄屏：1 列
-        final cols = constraints.maxWidth >= 540 ? 2 : 1;
-        final cards = <Widget>[
-          _MetricCard(
-            label: l.dashIncome,
-            color: c.income,
-            rows: [
-              for (final s in summary.byCurrency)
-                (currency: s.currency, cents: s.incomeCents),
-            ],
-          ),
-          _MetricCard(
-            label: l.dashExpense,
-            color: c.expense,
-            rows: [
-              for (final s in summary.byCurrency)
-                (currency: s.currency, cents: s.expenseCents),
-            ],
-          ),
-          _MetricCard(
-            label: l.dashNet,
-            color: c.actionInk,
-            signed: true,
-            rows: [
-              for (final s in summary.byCurrency)
-                (currency: s.currency, cents: s.netCents),
-            ],
-          ),
-          _CountCard(label: l.dashCount, count: summary.transactionCount),
-        ];
-        return GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: cols,
-          mainAxisSpacing: AppSpacing.x3,
-          crossAxisSpacing: AppSpacing.x3,
-          childAspectRatio: cols == 2 ? 2.0 : 2.8,
-          children: cards,
-        );
-      },
-    );
-  }
-}
-
-typedef _CcyRow = ({String currency, int cents});
-
-class _MetricCard extends StatelessWidget {
-  const _MetricCard({
-    required this.label,
-    required this.color,
-    required this.rows,
-    this.signed = false,
-  });
-  final String label;
-  final Color color;
-  final List<_CcyRow> rows;
-  final bool signed;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Container(
-      padding: AppSpacing.card,
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: AppRadius.brXl,
-        border: Border.all(color: c.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+      appBar: AppBar(title: Text(l.tabDashboard)),
+      body: Column(
         children: [
-          Text(
-            label,
-            style: AppTypography.xs.copyWith(
-              color: c.textMuted,
-              fontWeight: AppTypography.weightMedium,
+          const DashboardFilterBar(),
+          Expanded(
+            child: metricsAsync.when(
+              loading: () =>
+                  const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('$e')),
+              data: (metrics) {
+                return ListView(
+                  padding: const EdgeInsets.all(AppSpacing.x4),
+                  children: [
+                    const BackupReminderBanner(),
+                    _MetricsGrid(metrics: metrics),
+                    if (metrics.isEmpty)
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: AppSpacing.x6),
+                        child: Center(
+                          child: Text(
+                            l.dashEmpty,
+                            textAlign: TextAlign.center,
+                            style: AppTypography.sm
+                                .copyWith(color: c.textMuted),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: AppSpacing.x6),
+                    const _BudgetsSection(),
+                    _RecentSection(asyncRows: recentAsync),
+                  ],
+                );
+              },
             ),
           ),
-          const SizedBox(height: AppSpacing.x2),
-          for (final r in rows)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Text(
-                _formatAmount(r.cents, r.currency, signed: signed),
-                style: AppTypography.lg
-                    .merge(AppTypography.mono)
-                    .copyWith(
-                      color: color,
-                      fontWeight: AppTypography.weightSemibold,
-                    ),
-              ),
-            ),
         ],
       ),
     );
   }
 }
 
-class _CountCard extends StatelessWidget {
-  const _CountCard({required this.label, required this.count});
-  final String label;
-  final int count;
+class _MetricsGrid extends StatelessWidget {
+  const _MetricsGrid({required this.metrics});
+  final DashboardMetrics metrics;
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final c = context.appColors;
+    // Net 颜色 / 背景跟随符号：≥0 走 income 配色，<0 走 expense 配色。
+    final netPositive = metrics.netCents >= 0;
+    final netColor = netPositive ? c.income : c.expense;
+    final netBg = netPositive ? c.incomeSoft : c.expenseSoft;
+
+    final cards = <Widget>[
+      _TileMetricCard(
+        label: l.dashIncome,
+        icon: LucideIcons.coins,
+        accentColor: c.income,
+        bgColor: c.incomeSoft,
+        amount: _formatAmount(
+          metrics.incomeCents,
+          metrics.dominantCurrency,
+          signed: true,
+        ),
+        currencyBadge: metrics.dominantCurrency,
+        otherCurrencyCount: metrics.otherCurrencyCount,
+      ),
+      _TileMetricCard(
+        label: l.dashExpense,
+        icon: LucideIcons.shoppingBag,
+        accentColor: c.expense,
+        bgColor: c.expenseSoft,
+        amount: _formatAmount(
+          metrics.expenseCents,
+          metrics.dominantCurrency,
+          signed: true,
+          forceNegative: true,
+        ),
+        currencyBadge: metrics.dominantCurrency,
+        otherCurrencyCount: metrics.otherCurrencyCount,
+      ),
+      _TileMetricCard(
+        label: l.dashNet,
+        icon: LucideIcons.wallet,
+        accentColor: netColor,
+        bgColor: netBg,
+        amount: _formatAmount(
+          metrics.netCents,
+          metrics.dominantCurrency,
+          signed: true,
+        ),
+        currencyBadge: metrics.dominantCurrency,
+        otherCurrencyCount: metrics.otherCurrencyCount,
+      ),
+      _TileMetricCard(
+        label: l.dashCount,
+        icon: LucideIcons.listChecks,
+        accentColor: c.info,
+        bgColor: c.infoSoft,
+        amount: '${metrics.transactionCount}',
+        currencyBadge: null,
+        otherCurrencyCount: 0,
+      ),
+    ];
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      mainAxisSpacing: AppSpacing.x3,
+      crossAxisSpacing: AppSpacing.x3,
+      childAspectRatio: 1.45,
+      children: cards,
+    );
+  }
+}
+
+class _TileMetricCard extends StatelessWidget {
+  const _TileMetricCard({
+    required this.label,
+    required this.icon,
+    required this.accentColor,
+    required this.bgColor,
+    required this.amount,
+    required this.currencyBadge,
+    required this.otherCurrencyCount,
+  });
+  final String label;
+  final IconData icon;
+  final Color accentColor;
+  final Color bgColor;
+  final String amount;
+  final String? currencyBadge;
+  final int otherCurrencyCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final c = context.appColors;
     return Container(
-      padding: AppSpacing.card,
+      padding: const EdgeInsets.all(AppSpacing.x4),
       decoration: BoxDecoration(
-        color: c.surface,
+        color: bgColor,
         borderRadius: AppRadius.brXl,
-        border: Border.all(color: c.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // tile icon
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: accentColor,
+                  borderRadius: AppRadius.brLg,
+                ),
+                child: Icon(icon, color: Colors.white, size: 20),
+              ),
+              const Spacer(),
+              if (currencyBadge != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    otherCurrencyCount > 0
+                        ? '$currencyBadge  ${l.dashOthersBadge(otherCurrencyCount)}'
+                        : currencyBadge!,
+                    style: AppTypography.xs.copyWith(
+                      color: accentColor,
+                      fontWeight: AppTypography.weightSemibold,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const Spacer(),
           Text(
             label,
-            style: AppTypography.xs.copyWith(
-              color: c.textMuted,
+            style: AppTypography.sm.copyWith(
+              color: c.textBody,
               fontWeight: AppTypography.weightMedium,
             ),
           ),
-          const SizedBox(height: AppSpacing.x2),
+          const SizedBox(height: AppSpacing.x1),
           Text(
-            '$count',
-            style: AppTypography.xxl.copyWith(
-              color: c.actionInk,
-              fontWeight: AppTypography.weightSemibold,
-            ),
+            amount,
+            style: AppTypography.xl.merge(AppTypography.mono).copyWith(
+                  color: accentColor,
+                  fontWeight: AppTypography.weightBold,
+                ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -506,10 +512,18 @@ class _BudgetRow extends ConsumerWidget {
   }
 }
 
-String _formatAmount(int cents, String code, {bool signed = false}) {
+String _formatAmount(
+  int cents,
+  String? code, {
+  bool signed = false,
+  bool forceNegative = false,
+}) {
+  // 无数据：占位 0.00（不带符号），统一对齐视觉。
+  if (code == null) return '0.00';
   final symbol = Currency.byCode(code).symbol;
   final abs = cents.abs();
   final body = '$symbol${(abs / 100).toStringAsFixed(2)}';
+  if (forceNegative && cents > 0) return '-$body';
   if (!signed || cents == 0) return body;
   return cents < 0 ? '-$body' : '+$body';
 }

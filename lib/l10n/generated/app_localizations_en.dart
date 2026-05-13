@@ -217,6 +217,26 @@ class AppL10nEn extends AppL10n {
   String get dashCount => 'Transactions';
 
   @override
+  String get dashFilterCurrency => 'Currency';
+
+  @override
+  String get dashFilterSource => 'Source';
+
+  @override
+  String get dashFilterAll => 'All';
+
+  @override
+  String get dashPrevMonth => 'Previous month';
+
+  @override
+  String get dashNextMonth => 'Next month';
+
+  @override
+  String dashOthersBadge(int count) {
+    return '+$count';
+  }
+
+  @override
   String get dashRecent => 'Recent';
 
   @override

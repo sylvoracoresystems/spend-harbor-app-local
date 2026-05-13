@@ -503,6 +503,42 @@ abstract class AppL10n {
   /// **'Transactions'**
   String get dashCount;
 
+  /// No description provided for @dashFilterCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get dashFilterCurrency;
+
+  /// No description provided for @dashFilterSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get dashFilterSource;
+
+  /// No description provided for @dashFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get dashFilterAll;
+
+  /// No description provided for @dashPrevMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get dashPrevMonth;
+
+  /// No description provided for @dashNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get dashNextMonth;
+
+  /// No description provided for @dashOthersBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count}'**
+  String dashOthersBadge(int count);
+
   /// No description provided for @dashRecent.
   ///
   /// In en, this message translates to:

@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 7 进行中
-- **当前 Step**：7.2 App 图标 + 启动页 ✅；准备进入 7.3 国际化 / 字号 / 深色回归
+- **当前 Step**：7.1 Dashboard 视觉重构 ✅（过滤条 + tile-icon 卡片）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,19 +18,23 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 7 · 7.2 — App 图标 + 启动页 ✅
+**当前 Step**：Phase 7 · 7.1 — Dashboard 视觉重构 ✅
 
 **子任务**：
 
-- [x] 品牌图源 `assets/branding/spend_harbor_logo.png`（钱袋 + 柱状图渐变 logo）
-- [x] 用 PIL 生成 iOS / Android adaptive / splash 三套规格变体（白底不透明 + 透明前景层 + 1152 splash）
-- [x] `pubspec.yaml` 加 `flutter_launcher_icons` + `flutter_native_splash` dev_deps + 配置块（白底 + 深色 `#0F1115`，web 关闭）
-- [x] `dart run flutter_launcher_icons` 生成 iOS Assets.xcassets + Android mipmap/drawable
-- [x] `dart run flutter_native_splash:create` 生成启动页（iOS storyboard + Android v21/v31 + 深色模式）
-- [x] `flutter analyze` + `flutter test` 通过（134 tests）
-- [ ] 实机验证（用户自己跑，发现问题再回头改）
+- [x] 新增 `colorInfo` + `colorInfoSoft` 蓝色 token（浅 + 深，含 copyWith / lerp）
+- [x] `application/dashboard_filter_provider.dart`：`DashboardFilter`（currency/sourceId 双 nullable）+ `dashboardFilterProvider`（初始货币 = 用户 default currency，不响应后续修改）
+- [x] 重构 `dashboard_summary_controller.dart`：拆出 `applyDashboardFilter` 纯函数 + `DashboardMetrics` 视图模型（dominantCurrency + otherCurrencyCount）+ `toMetrics` 派生函数；`dashboardMetricsProvider` / `recentTransactionsProvider` 接入过滤
+- [x] `presentation/dashboard_filter_bar.dart`：① ◀ YYYY年MM月 ▶ 居中导航（自定义 28×28 InkResponse，整行 32pt）② 货币 / 来源 pill 风格下拉（icon 前缀 + 36pt 固定高度）
+- [x] 重写 4 张卡：tile-icon 风格（40×40 圆角方块 + 白色 icon）、soft 背景、Net 颜色 / 背景跟随符号、`CAD +N` badge 多币种提示；2×2 强制网格（aspectRatio 1.45）
+- [x] ARB en+zh：`dashFilterCurrency / dashFilterSource / dashFilterAll / dashPrevMonth / dashNextMonth / dashOthersBadge`
+- [x] 新增 11 个单测：`applyDashboardFilter` × 5 + `DashboardFilter.copyWith` × 2 + `toMetrics` × 4
+- [x] `flutter analyze` + `flutter test` 通过（148 tests）
+- [ ] 实机验证（用户自己跑）
 
-**下一步接入点**：Phase 7 · 7.3 — 国际化 / 字号 / 深色全量回归。
+**下一步接入点**：Phase 7 · 7.2 — App 图标 + 启动页（**已完成**，见下方记录）；继续 7.3 国际化 / 字号 / 深色全量回归（已做完程序化检查部分；剩手动 QA checklist）。
+
+**已完成 Step 7.2**：
 
 - 手动 QA checklist 文档化：每个 route 在 en / zh × light / dark × 100% / 200% 字号下截图核对
 - 建议新建 `docs/QA_CHECKLIST.md`：列所有 route + ARB key 缺失检查（grep ARB 文件覆盖率）+ TextScaler 200% 关键页面（Dashboard / Stats / Settings 表单 / Onboarding）
@@ -38,14 +42,13 @@
 
 **Phase 7 全部子项**：
 
+- [x] 7.1 Dashboard 视觉重构（过滤条 + tile-icon 卡片）
 - [x] 7.2 App 图标 + 启动页
-- [ ] 7.3 国际化全量回归 + 200% 字号 + 深色（手动 QA + 文档化 checklist）
+- [ ] 7.3 国际化全量回归 + 200% 字号 + 深色（程序化已过，手动 QA checklist 待做）
 - [ ] 7.4 性能基准（冷启动 + Stats 聚合）
 - [ ] 7.5 隐私清单（Apple Privacy Manifest / Google Data Safety）
 - [ ] 7.6 应用商店素材
 - [ ] 7.7 上架审核
-
-> 注：原 7.1「UI 界面设计大调整」已在 6.4 子任务中完成，Phase 7 不再单列。
 
 **已完成 Step 6.3**：
 
@@ -583,6 +586,7 @@
 | 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）       | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
 | 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾） | AboutPage + LegalPage + 3 处 HapticFeedback                 |
 | 2026-05-13 | 完成 Phase 7 · 7.2：App 图标 + 启动页              | flutter_launcher_icons + flutter_native_splash 白底品牌 logo |
+| 2026-05-13 | 完成 Phase 7 · 7.1：Dashboard 视觉重构             | 过滤条（月份导航 + 货币/来源 pill）+ tile-icon 2×2 卡 + 11 单测 |
 
 ---
 

@@ -86,6 +86,15 @@
   "dashExpense": "支出",
   "dashNet": "净额",
   "dashCount": "笔数",
+  "dashFilterCurrency": "货币",
+  "dashFilterSource": "来源",
+  "dashFilterAll": "全部",
+  "dashPrevMonth": "上个月",
+  "dashNextMonth": "下个月",
+  "dashOthersBadge": "+{count}",
+  "@dashOthersBadge": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "dashRecent": "近期",
   "dashViewAll": "查看全部",
   "dashEmpty": "本月暂无交易，点击 + 新建一笔。",
