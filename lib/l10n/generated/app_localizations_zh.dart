@@ -171,6 +171,21 @@ class AppL10nZh extends AppL10n {
   String get txNotePlaceholder => '例如：团建午餐';
 
   @override
+  String get txListEmpty => '本月暂无交易';
+
+  @override
+  String get txMonthPrev => '上个月';
+
+  @override
+  String get txMonthNext => '下个月';
+
+  @override
+  String get dayToday => '今天';
+
+  @override
+  String get dayYesterday => '昨天';
+
+  @override
   String get catFood => '餐饮';
 
   @override

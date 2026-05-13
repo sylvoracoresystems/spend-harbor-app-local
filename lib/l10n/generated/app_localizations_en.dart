@@ -171,6 +171,21 @@ class AppL10nEn extends AppL10n {
   String get txNotePlaceholder => 'e.g. Lunch with team';
 
   @override
+  String get txListEmpty => 'No transactions this month';
+
+  @override
+  String get txMonthPrev => 'Previous month';
+
+  @override
+  String get txMonthNext => 'Next month';
+
+  @override
+  String get dayToday => 'Today';
+
+  @override
+  String get dayYesterday => 'Yesterday';
+
+  @override
   String get catFood => 'Food';
 
   @override

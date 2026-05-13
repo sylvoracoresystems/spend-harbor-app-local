@@ -67,6 +67,12 @@
   "txEmptySource": "No sources yet",
   "txNotePlaceholder": "e.g. Lunch with team",
 
+  "txListEmpty": "No transactions this month",
+  "txMonthPrev": "Previous month",
+  "txMonthNext": "Next month",
+  "dayToday": "Today",
+  "dayYesterday": "Yesterday",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",

@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 2 — 核心交易链路 MVP
-- **当前 Step**：2.2 交易表单 ✅；准备进入 2.3 交易列表
+- **当前 Step**：2.3 交易列表 ✅；准备进入 2.4 多选与批量删除
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,26 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 2 · 2.2 — 交易表单 ✅
+**当前 Step**：Phase 2 · 2.3 — 交易列表 ✅
+
+**子任务**：
+
+- [x] `application/transactions_list_controller.dart`：`YearMonth` 值对象 + `currentMonthProvider`（StateNotifier）+ `transactionsOfMonthProvider`（Stream，跟随月份切换）+ `groupByDay`
+- [x] `presentation/transactions_page.dart`：AppBar 月份切换（◀ ▶ + YYYY-MM 标签）+ DayGroup 卡片 + 多币种分行展示（不换算）
+- [x] 行点击 → `context.push('/transactions/:id/edit')`
+- [x] 空状态文案 + ARB（en + zh）
+- [x] 单测 6 例（YearMonth 边界 + groupByDay 排序 + provider 跟随月份切换）
+- [x] `flutter analyze` + `flutter test` 通过（32 tests）
+
+**已延后**：
+
+- URL query `?month=YYYY-MM` 双向同步 — 当前用 Riverpod 内存 state，月份在 tab 切换间保持；深链恢复推迟到 Phase 7 打磨
+
+**下一步接入点**：2.4 多选与批量删除 — 在 `application/transactions_list_controller.dart` 新增 `SelectionController`（StateNotifier<Set<String>>），交易行 onLongPress（500ms 由 InkWell 默认）进入选择模式，AppBar 顶部替换为「N 已选 + 取消 + 删除」批量按钮，调用 `transactionDao.softDelete` 循环。
+
+**已完成 Step 2.2**：
+
+
 
 **子任务**：
 
@@ -131,7 +150,7 @@
 目标：新建交易 → 交易列表 → Dashboard 闭环可用。
 
 - [x] 交易表单（`/transactions/new` 与 `/edit`）：字段、验证、提交
-- [ ] 交易列表（`/transactions`）：DayGroup 分组、无限滚动、月份切换
+- [x] 交易列表（`/transactions`）：DayGroup 分组、月份切换（无限滚动延后 — 单月数据量小，按月翻页够用）
 - [ ] 长按进入选择模式 + 批量删除
 - [ ] Dashboard：4 张指标卡 + 近期交易
 - [ ] 回收站（30 天）
@@ -202,6 +221,7 @@
 | 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）         | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
 | 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                  | appDatabaseProvider + DAO/stream providers + 启动 seed     |
 | 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                      | StateNotifier 控制器 + 9 字段表单 + 9 单测                  |
+| 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                      | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后    |
 
 ---
 

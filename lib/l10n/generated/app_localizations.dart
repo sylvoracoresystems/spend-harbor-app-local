@@ -419,6 +419,36 @@ abstract class AppL10n {
   /// **'e.g. Lunch with team'**
   String get txNotePlaceholder;
 
+  /// No description provided for @txListEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions this month'**
+  String get txListEmpty;
+
+  /// No description provided for @txMonthPrev.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get txMonthPrev;
+
+  /// No description provided for @txMonthNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get txMonthNext;
+
+  /// No description provided for @dayToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get dayToday;
+
+  /// No description provided for @dayYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get dayYesterday;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:
