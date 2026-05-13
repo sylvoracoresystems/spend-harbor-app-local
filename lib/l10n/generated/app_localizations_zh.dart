@@ -240,6 +240,17 @@ class AppL10nZh extends AppL10n {
   String get dashBudgetManage => '管理';
 
   @override
+  String get statsTrendTitle => '每日支出';
+
+  @override
+  String get statsEmpty => '本月暂无数据';
+
+  @override
+  String statsCurrencyHint(String currency) {
+    return '显示 $currency';
+  }
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

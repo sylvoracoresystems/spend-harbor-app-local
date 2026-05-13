@@ -240,6 +240,17 @@ class AppL10nEn extends AppL10n {
   String get dashBudgetManage => 'Manage';
 
   @override
+  String get statsTrendTitle => 'Daily Expense';
+
+  @override
+  String get statsEmpty => 'No data this month';
+
+  @override
+  String statsCurrencyHint(String currency) {
+    return 'Showing $currency';
+  }
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

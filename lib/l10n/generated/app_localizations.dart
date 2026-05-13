@@ -545,6 +545,24 @@ abstract class AppL10n {
   /// **'Manage'**
   String get dashBudgetManage;
 
+  /// No description provided for @statsTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Expense'**
+  String get statsTrendTitle;
+
+  /// No description provided for @statsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No data this month'**
+  String get statsEmpty;
+
+  /// No description provided for @statsCurrencyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing {currency}'**
+  String statsCurrencyHint(String currency);
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

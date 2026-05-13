@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 3 ✅ 全部完成
-- **当前 Step**：3.5 Dashboard 接入预算块 ✅；准备进入 Phase 4（统计分析）
+- **当前阶段**：Phase 4 — 统计分析
+- **当前 Step**：4.1 趋势柱状图 ✅；准备进入 4.2 分类/标签 Donut
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,23 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 3 · 3.5 — Dashboard 接入预算块 ✅（Phase 3 收尾）
+**当前 Step**：Phase 4 · 4.1 — 趋势柱状图 ✅
+
+**子任务**：
+
+- [x] 新增依赖 `fl_chart: ^0.69.0`（钉 0.69 — 1.x 引用了当前 Flutter SDK 没有的 `Matrix4.translateByDouble`）
+- [x] `application/stats_controller.dart`：纯函数 `aggregateDailyExpenses(rows, year, month)` 按日分桶 + 多币种独立累加；`dominantCurrency`（CAD 优先 → 否则按总额降序）；`dailyExpenseBarsProvider`
+- [x] `presentation/stats_page.dart`：AppBar 显示当前月份；趋势卡片（BarChart：x 轴每 5 日打标 + 1 号 / y 轴顶端 max 标签 / 主币种横幅 / 空状态文案）
+- [x] ARB：statsTrendTitle / statsEmpty / statsCurrencyHint (ICU `{currency}`)（en + zh）
+- [x] TECH_STACK.md §2.1 追加 `fl_chart`
+- [x] 单测 7 例（按日累加 / 多币种 / 月底 / 12 月跨年 / dominantCurrency 3 例）
+- [x] `flutter analyze` + `flutter test` 通过（80 tests）
+
+**下一步接入点**：4.2 分类 / 标签 Donut — 在 `stats_controller.dart` 补 `aggregateByCategory(rows, type)` 返回 `[{categoryId, totalCents, currency}]`（同样按 currency 分桶）+ `aggregateByTag` 类似。StatsPage 用 fl_chart 的 `PieChart` 画 Donut（每币种一张？或者只显示 dominant 币种 + 切换 chip）。先做 dominant 一张图，简洁。
+
+**已完成 Step 3.5**：
+
+
 
 **子任务**：
 
@@ -290,7 +306,7 @@
 
 ## Phase 4 — 统计分析
 
-- [ ] 趋势图（Bar Chart）
+- [x] 趋势图（Bar Chart）
 - [ ] 分类 / 标签 Donut
 - [ ] Top 排行
 - [ ] 点击图表跳转交易列表（带筛选）
@@ -351,6 +367,7 @@
 | 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                 | name + icon + color + 币种（18 种）；4 单测                 |
 | 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐      | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测  |
 | 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾） | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测     |
+| 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                   | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测         |
 
 ---
 

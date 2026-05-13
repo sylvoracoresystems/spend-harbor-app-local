@@ -101,6 +101,13 @@
   },
   "dashBudgetManage": "Manage",
 
+  "statsTrendTitle": "Daily Expense",
+  "statsEmpty": "No data this month",
+  "statsCurrencyHint": "Showing {currency}",
+  "@statsCurrencyHint": {
+    "placeholders": { "currency": { "type": "String" } }
+  },
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",

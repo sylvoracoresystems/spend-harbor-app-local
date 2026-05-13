@@ -66,6 +66,7 @@ dependencies:
 
   # Local preferences (locale, theme mode, onboarding flag, ...)
   shared_preferences: ^2.3.2
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

@@ -98,6 +98,13 @@
   },
   "dashBudgetManage": "管理",
 
+  "statsTrendTitle": "每日支出",
+  "statsEmpty": "本月暂无数据",
+  "statsCurrencyHint": "显示 {currency}",
+  "@statsCurrencyHint": {
+    "placeholders": { "currency": { "type": "String" } }
+  },
+
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",
   "recycleBinDaysLeft": "剩 {days} 天",
