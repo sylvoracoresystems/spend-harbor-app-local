@@ -108,6 +108,69 @@ class AppL10nZh extends AppL10n {
   String get comingSoon => '即将上线';
 
   @override
+  String get txFieldAmount => '金额';
+
+  @override
+  String get txFieldType => '类型';
+
+  @override
+  String get txFieldCategory => '分类';
+
+  @override
+  String get txFieldSource => '来源';
+
+  @override
+  String get txFieldDate => '日期';
+
+  @override
+  String get txFieldTags => '标签';
+
+  @override
+  String get txFieldNote => '备注';
+
+  @override
+  String get txTypeExpense => '支出';
+
+  @override
+  String get txTypeIncome => '收入';
+
+  @override
+  String get txSave => '保存';
+
+  @override
+  String get txDelete => '删除';
+
+  @override
+  String get txDeleteConfirmTitle => '删除这笔交易？';
+
+  @override
+  String get txDeleteConfirmBody => '将进入回收站，30 天内可恢复。';
+
+  @override
+  String get txCancel => '取消';
+
+  @override
+  String get txErrAmountRequired => '请输入金额';
+
+  @override
+  String get txErrAmountInvalid => '金额必须大于 0';
+
+  @override
+  String get txErrCategoryRequired => '请选择分类';
+
+  @override
+  String get txErrSourceRequired => '请选择来源';
+
+  @override
+  String get txEmptyCategory => '暂无分类';
+
+  @override
+  String get txEmptySource => '暂无来源';
+
+  @override
+  String get txNotePlaceholder => '例如：团建午餐';
+
+  @override
   String get catFood => '餐饮';
 
   @override

@@ -293,6 +293,132 @@ abstract class AppL10n {
   /// **'Coming soon'**
   String get comingSoon;
 
+  /// No description provided for @txFieldAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get txFieldAmount;
+
+  /// No description provided for @txFieldType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get txFieldType;
+
+  /// No description provided for @txFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get txFieldCategory;
+
+  /// No description provided for @txFieldSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get txFieldSource;
+
+  /// No description provided for @txFieldDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get txFieldDate;
+
+  /// No description provided for @txFieldTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get txFieldTags;
+
+  /// No description provided for @txFieldNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get txFieldNote;
+
+  /// No description provided for @txTypeExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get txTypeExpense;
+
+  /// No description provided for @txTypeIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get txTypeIncome;
+
+  /// No description provided for @txSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get txSave;
+
+  /// No description provided for @txDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get txDelete;
+
+  /// No description provided for @txDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this transaction?'**
+  String get txDeleteConfirmTitle;
+
+  /// No description provided for @txDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It will move to the recycle bin for 30 days.'**
+  String get txDeleteConfirmBody;
+
+  /// No description provided for @txCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get txCancel;
+
+  /// No description provided for @txErrAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount'**
+  String get txErrAmountRequired;
+
+  /// No description provided for @txErrAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than 0'**
+  String get txErrAmountInvalid;
+
+  /// No description provided for @txErrCategoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a category'**
+  String get txErrCategoryRequired;
+
+  /// No description provided for @txErrSourceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a source'**
+  String get txErrSourceRequired;
+
+  /// No description provided for @txEmptyCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet'**
+  String get txEmptyCategory;
+
+  /// No description provided for @txEmptySource.
+  ///
+  /// In en, this message translates to:
+  /// **'No sources yet'**
+  String get txEmptySource;
+
+  /// No description provided for @txNotePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Lunch with team'**
+  String get txNotePlaceholder;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

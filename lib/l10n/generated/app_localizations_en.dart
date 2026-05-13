@@ -108,6 +108,69 @@ class AppL10nEn extends AppL10n {
   String get comingSoon => 'Coming soon';
 
   @override
+  String get txFieldAmount => 'Amount';
+
+  @override
+  String get txFieldType => 'Type';
+
+  @override
+  String get txFieldCategory => 'Category';
+
+  @override
+  String get txFieldSource => 'Source';
+
+  @override
+  String get txFieldDate => 'Date';
+
+  @override
+  String get txFieldTags => 'Tags';
+
+  @override
+  String get txFieldNote => 'Note';
+
+  @override
+  String get txTypeExpense => 'Expense';
+
+  @override
+  String get txTypeIncome => 'Income';
+
+  @override
+  String get txSave => 'Save';
+
+  @override
+  String get txDelete => 'Delete';
+
+  @override
+  String get txDeleteConfirmTitle => 'Delete this transaction?';
+
+  @override
+  String get txDeleteConfirmBody => 'It will move to the recycle bin for 30 days.';
+
+  @override
+  String get txCancel => 'Cancel';
+
+  @override
+  String get txErrAmountRequired => 'Enter an amount';
+
+  @override
+  String get txErrAmountInvalid => 'Amount must be greater than 0';
+
+  @override
+  String get txErrCategoryRequired => 'Pick a category';
+
+  @override
+  String get txErrSourceRequired => 'Pick a source';
+
+  @override
+  String get txEmptyCategory => 'No categories yet';
+
+  @override
+  String get txEmptySource => 'No sources yet';
+
+  @override
+  String get txNotePlaceholder => 'e.g. Lunch with team';
+
+  @override
   String get catFood => 'Food';
 
   @override

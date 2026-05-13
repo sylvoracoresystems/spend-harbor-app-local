@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../shared/widgets/placeholder_page.dart';
+import 'transaction_form.dart';
 
 class TransactionEditPage extends StatelessWidget {
   const TransactionEditPage({super.key, this.id});
@@ -12,8 +12,11 @@ class TransactionEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    return PlaceholderPage(
-      title: id == null ? l.newTransactionTitle : l.editTransactionTitle,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(id == null ? l.newTransactionTitle : l.editTransactionTitle),
+      ),
+      body: TransactionForm(editId: id),
     );
   }
 }

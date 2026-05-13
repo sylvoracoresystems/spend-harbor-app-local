@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 2 — 核心交易链路 MVP
-- **当前 Step**：2.1 数据访问基础 ✅；准备进入 2.2 交易表单
+- **当前 Step**：2.2 交易表单 ✅；准备进入 2.3 交易列表
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,25 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 2 · 2.1 — 数据访问基础 ✅
+**当前 Step**：Phase 2 · 2.2 — 交易表单 ✅
+
+**子任务**：
+
+- [x] `TransactionFormState` + `TransactionFormController`（StateNotifier.family, autoDispose）
+- [x] 字段：金额（minor units 解析）/ 类型 / 分类（按 type 过滤）/ 来源（决定币种）/ 日期 / 标签（多选）/ 备注
+- [x] 校验：amountRequired / amountInvalid / categoryRequired / sourceRequired
+- [x] 编辑模式：构造时异步加载现有交易 + 标签
+- [x] 提交：根据 source 派生 currency；新建 → `insertWithTags`，编辑 → `updateWithTags`
+- [x] 软删除（编辑模式 + 二次确认弹窗）
+- [x] `TransactionEditPage` 接入 `TransactionForm`
+- [x] ARB：所有字段标签 / 类型 / 校验文案 / 删除确认（en + zh）
+- [x] 控制器单测（9 tests）+ `flutter analyze` + `flutter test` 通过（26 tests）
+
+**下一步接入点**：2.3 交易列表 — 在 `lib/features/transactions/presentation/transactions_page.dart` 实现：①月份切换（◀ ▶ + URL query `?month=YYYY-MM`）②按日 DayGroup 分组渲染 ③无限滚动（按月分页）④点击进入编辑（push `/transactions/:id/edit`）。先建 `application/transactions_list_controller.dart` 把月份 state + 列表 stream 串起来。
+
+**已完成 Step 2.1**：
+
+
 
 **子任务**：
 
@@ -112,7 +130,7 @@
 
 目标：新建交易 → 交易列表 → Dashboard 闭环可用。
 
-- [ ] 交易表单（`/transactions/new` 与 `/edit`）：字段、验证、提交
+- [x] 交易表单（`/transactions/new` 与 `/edit`）：字段、验证、提交
 - [ ] 交易列表（`/transactions`）：DayGroup 分组、无限滚动、月份切换
 - [ ] 长按进入选择模式 + 批量删除
 - [ ] Dashboard：4 张指标卡 + 近期交易
@@ -183,6 +201,7 @@
 | 2026-05-13 | 完成 Step 4：i18n 基础                            | en/zh ARB + localeController + nameKey resolver + 12 单测 |
 | 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）         | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
 | 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                  | appDatabaseProvider + DAO/stream providers + 启动 seed     |
+| 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                      | StateNotifier 控制器 + 9 字段表单 + 9 单测                  |
 
 ---
 
