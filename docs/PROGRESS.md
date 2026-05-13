@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 3 — Taxonomy 与预算
-- **当前 Step**：3.1 分类管理 CRUD ✅；准备进入 3.2 标签管理
+- **当前 Step**：3.2 标签管理 CRUD ✅；准备进入 3.3 来源管理
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,24 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 3 · 3.1 — 分类管理 CRUD ✅
+**当前 Step**：Phase 3 · 3.2 — 标签管理 CRUD ✅
+
+**子任务**：
+
+- [x] `TagDao.updateName`：仅更新可编辑字段，编辑后清空 nameKey
+- [x] `application/tag_form_controller.dart`：name + color（无 type / icon），同步 + 异步同名校验
+- [x] `presentation/tags_page.dart`：扁平列表（圆形彩色 # 图标）+ FAB Add
+- [x] `presentation/tag_edit_page.dart`：name + color 网格 + 保存 + 编辑模式下删除
+- [x] go_router：`/settings/tags` + `/new` + `/:id/edit`（root navigator），从占位列表中摘除
+- [x] ARB：tagNewTitle / tagEditTitle / errors / 删除确认 / 空状态 / tagAdd（en + zh）
+- [x] 单测 4 例（validate / 同名 duplicate / updateName 保留 createdAt / 软删）
+- [x] `flutter analyze` + `flutter test` 通过（50 tests）
+
+**下一步接入点**：3.3 来源管理 CRUD — 与标签管理类似，但需额外字段：图标（复用 icon_registry）+ 币种（dropdown 选 `Currency.all`）。在 `lib/features/sources/` 下建文件，`SourceDao` 已有 `existsName`，需补 `updateName(id, name, icon, color, currency)`。注意：spec §6.5 列了 18 种币种，UI 用 grouped/searchable dropdown。
+
+**已完成 Step 3.1**：
+
+
 
 **子任务**：
 
@@ -232,7 +249,7 @@
 ## Phase 3 — Taxonomy 与预算
 
 - [x] 分类管理 CRUD + 同名去重
-- [ ] 标签管理 CRUD
+- [x] 标签管理 CRUD
 - [ ] 来源管理 CRUD（带币种）
 - [ ] 预算管理 CRUD + 周期对齐
 - [ ] Dashboard 接入预算块
@@ -298,6 +315,7 @@
 | 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线  |
 | 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）       | watchTrashed/restore/purge + 启动自动 30 天清理            |
 | 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测         |
+| 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                | name + color；4 单测                                        |
 
 ---
 

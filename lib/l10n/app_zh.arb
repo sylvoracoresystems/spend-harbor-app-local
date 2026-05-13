@@ -115,6 +115,15 @@
   "catEmptyIncome": "暂无收入分类",
   "catAdd": "新建分类",
 
+  "tagNewTitle": "新建标签",
+  "tagEditTitle": "编辑标签",
+  "tagErrNameRequired": "请输入名称",
+  "tagErrNameDuplicate": "已存在同名标签",
+  "tagDeleteConfirmTitle": "删除该标签？",
+  "tagDeleteConfirmBody": "已有交易仍保留对该标签的引用，但此标签将不再出现在选择列表中。",
+  "tagEmpty": "暂无标签",
+  "tagAdd": "新建标签",
+
   "catFood": "餐饮",
   "catTransport": "交通",
   "catShopping": "购物",

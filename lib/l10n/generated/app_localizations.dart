@@ -641,6 +641,54 @@ abstract class AppL10n {
   /// **'Add category'**
   String get catAdd;
 
+  /// No description provided for @tagNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Tag'**
+  String get tagNewTitle;
+
+  /// No description provided for @tagEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Tag'**
+  String get tagEditTitle;
+
+  /// No description provided for @tagErrNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get tagErrNameRequired;
+
+  /// No description provided for @tagErrNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'A tag with this name already exists'**
+  String get tagErrNameDuplicate;
+
+  /// No description provided for @tagDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this tag?'**
+  String get tagDeleteConfirmTitle;
+
+  /// No description provided for @tagDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing transactions keep their reference but this tag will no longer appear in pickers.'**
+  String get tagDeleteConfirmBody;
+
+  /// No description provided for @tagEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet'**
+  String get tagEmpty;
+
+  /// No description provided for @tagAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add tag'**
+  String get tagAdd;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

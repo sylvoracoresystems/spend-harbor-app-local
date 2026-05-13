@@ -9,6 +9,8 @@ import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
 import '../../features/stats/presentation/stats_page.dart';
+import '../../features/tags/presentation/tag_edit_page.dart';
+import '../../features/tags/presentation/tags_page.dart';
 import '../../features/transactions/presentation/recycle_bin_page.dart';
 import '../../features/transactions/presentation/transaction_edit_page.dart';
 import '../../features/transactions/presentation/transactions_page.dart';
@@ -25,7 +27,7 @@ typedef _SettingsRoute = ({String path, String Function(AppL10n) title});
 const _settingsRoutes = <_SettingsRoute>[
   (path: '/settings/profile', title: _profile),
   // categories 已实现，从占位列表中移除
-  (path: '/settings/tags', title: _tags),
+  // tags 已实现，从占位列表中移除
   (path: '/settings/sources', title: _sources),
   (path: '/settings/budgets', title: _budgets),
   (path: '/settings/export', title: _export),
@@ -40,7 +42,6 @@ const _settingsRoutes = <_SettingsRoute>[
 ];
 
 String _profile(AppL10n l) => l.settingsProfile;
-String _tags(AppL10n l) => l.settingsTags;
 String _sources(AppL10n l) => l.settingsSources;
 String _budgets(AppL10n l) => l.settingsBudgets;
 String _export(AppL10n l) => l.settingsExport;
@@ -100,6 +101,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, state) => CategoryEditPage(
               id: state.pathParameters['id'],
             ),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/settings/tags',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const TagsPage(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootKey,
+            builder: (_, __) => const TagEditPage(),
+          ),
+          GoRoute(
+            path: ':id/edit',
+            parentNavigatorKey: _rootKey,
+            builder: (_, state) =>
+                TagEditPage(id: state.pathParameters['id']),
           ),
         ],
       ),

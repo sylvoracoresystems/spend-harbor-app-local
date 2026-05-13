@@ -288,6 +288,30 @@ class AppL10nEn extends AppL10n {
   String get catAdd => 'Add category';
 
   @override
+  String get tagNewTitle => 'New Tag';
+
+  @override
+  String get tagEditTitle => 'Edit Tag';
+
+  @override
+  String get tagErrNameRequired => 'Enter a name';
+
+  @override
+  String get tagErrNameDuplicate => 'A tag with this name already exists';
+
+  @override
+  String get tagDeleteConfirmTitle => 'Delete this tag?';
+
+  @override
+  String get tagDeleteConfirmBody => 'Existing transactions keep their reference but this tag will no longer appear in pickers.';
+
+  @override
+  String get tagEmpty => 'No tags yet';
+
+  @override
+  String get tagAdd => 'Add tag';
+
+  @override
   String get catFood => 'Food';
 
   @override

@@ -288,6 +288,30 @@ class AppL10nZh extends AppL10n {
   String get catAdd => '新建分类';
 
   @override
+  String get tagNewTitle => '新建标签';
+
+  @override
+  String get tagEditTitle => '编辑标签';
+
+  @override
+  String get tagErrNameRequired => '请输入名称';
+
+  @override
+  String get tagErrNameDuplicate => '已存在同名标签';
+
+  @override
+  String get tagDeleteConfirmTitle => '删除该标签？';
+
+  @override
+  String get tagDeleteConfirmBody => '已有交易仍保留对该标签的引用，但此标签将不再出现在选择列表中。';
+
+  @override
+  String get tagEmpty => '暂无标签';
+
+  @override
+  String get tagAdd => '新建标签';
+
+  @override
   String get catFood => '餐饮';
 
   @override

@@ -24,6 +24,22 @@ class TagDao extends DatabaseAccessor<AppDatabase> with _$TagDaoMixin {
 
   Future<bool> updateTag(TagsCompanion entry) => update(tags).replace(entry);
 
+  /// 仅更新可编辑字段；保留 createdAt / isDefault；编辑后清空 nameKey。
+  Future<int> updateName({
+    required String id,
+    required String name,
+    required String color,
+  }) {
+    return (update(tags)..where((t) => t.id.equals(id))).write(
+      TagsCompanion(
+        name: Value(name),
+        color: Value(color),
+        nameKey: const Value(null),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
   Future<int> softDelete(String id) {
     return (update(tags)..where((t) => t.id.equals(id))).write(
       TagsCompanion(

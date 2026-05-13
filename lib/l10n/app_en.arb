@@ -118,6 +118,15 @@
   "catEmptyIncome": "No income categories yet",
   "catAdd": "Add category",
 
+  "tagNewTitle": "New Tag",
+  "tagEditTitle": "Edit Tag",
+  "tagErrNameRequired": "Enter a name",
+  "tagErrNameDuplicate": "A tag with this name already exists",
+  "tagDeleteConfirmTitle": "Delete this tag?",
+  "tagDeleteConfirmBody": "Existing transactions keep their reference but this tag will no longer appear in pickers.",
+  "tagEmpty": "No tags yet",
+  "tagAdd": "Add tag",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",
