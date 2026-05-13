@@ -152,6 +152,15 @@
       "expected": { "type": "int" }
     }
   },
+  "backupNever": "你还没备份过，点这里开始备份。",
+  "backupOverdue": "已 {days} 天未备份，建议立即备份。",
+  "@backupOverdue": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "backupRecent": "上次备份于 {days} 天前。",
+  "@backupRecent": {
+    "placeholders": { "days": { "type": "int" } }
+  },
 
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",

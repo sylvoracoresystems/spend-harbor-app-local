@@ -14,6 +14,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
+import '../../data_io/presentation/backup_reminder_banner.dart';
 import '../../transactions/application/transactions_list_controller.dart';
 import '../application/budget_progress_provider.dart';
 import '../application/dashboard_summary_controller.dart';
@@ -62,6 +63,7 @@ class DashboardPage extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(AppSpacing.x4),
             children: [
+              const BackupReminderBanner(),
               _MetricsGrid(summary: summary),
               const SizedBox(height: AppSpacing.x6),
               const _BudgetsSection(),

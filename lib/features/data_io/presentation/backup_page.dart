@@ -8,6 +8,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../application/backup_controller.dart';
 import '../application/backup_serializer.dart';
+import 'backup_reminder_banner.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -29,6 +30,8 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.x4),
         children: [
+          const BackupReminderBanner(showAlways: true),
+          const SizedBox(height: AppSpacing.x3),
           Text(
             l.backupExportHint,
             style: AppTypography.sm.copyWith(color: c.textBody),

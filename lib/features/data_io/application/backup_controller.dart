@@ -8,6 +8,8 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
+import '../../../shared/providers/preferences_provider.dart';
+import 'backup_reminder.dart';
 import 'backup_serializer.dart';
 
 /// 把整个数据库写成 `.shbak` 文件并调起系统分享。
@@ -30,6 +32,9 @@ Future<String> exportBackup({required WidgetRef ref}) async {
       subject: filename,
     ),
   );
+  // 备份提醒：记录最近一次备份时间
+  await markBackupCompleted(ref.read(sharedPreferencesProvider));
+  ref.invalidate(backupStatusProvider);
   return file.path;
 }
 

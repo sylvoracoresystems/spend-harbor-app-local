@@ -713,6 +713,24 @@ abstract class AppL10n {
   /// **'Backup version {found} cannot be restored (expected {expected}).'**
   String backupVersionMismatch(int found, int expected);
 
+  /// No description provided for @backupNever.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t backed up yet. Tap to back up now.'**
+  String get backupNever;
+
+  /// No description provided for @backupOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup {days} days ago — consider backing up.'**
+  String backupOverdue(int days);
+
+  /// No description provided for @backupRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup {days} days ago.'**
+  String backupRecent(int days);
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

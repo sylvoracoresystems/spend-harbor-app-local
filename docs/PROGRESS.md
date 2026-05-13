@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 5 — 导入 / 导出 / 备份
-- **当前 Step**：5.3 备份 / 恢复 ✅；准备进入 5.4 备份提醒
+- **当前阶段**：Phase 5 ✅ 全部完成
+- **当前 Step**：5.4 备份提醒 ✅；准备进入 Phase 6（设置与体验）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,24 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 5 · 5.3 — 备份 / 恢复 ✅
+**当前 Step**：Phase 5 · 5.4 — 备份提醒 ✅（Phase 5 收尾）
+
+**子任务**：
+
+- [x] `application/backup_reminder.dart`：`BackupStatus`（lastBackupAt / daysSince / shouldRemind）+ `markBackupCompleted` 写 prefs + `backupStatusProvider`
+- [x] `presentation/backup_reminder_banner.dart`：复用横幅（橙/红高亮 + 「点击跳备份」+ 阈值内绿色"上次于 N 天前"，`showAlways` 可控）
+- [x] `BackupController.exportBackup` 成功后写 `backup.lastAt` + `invalidate(backupStatusProvider)`
+- [x] Dashboard 顶部 + BackupPage 顶部各嵌入一个横幅
+- [x] ARB：backupNever / Overdue / Recent（ICU `{days}`）（en + zh）
+- [x] 单测 6 例（BackupStatus 4 种状态 + markBackupCompleted + provider 读取）
+- [x] `flutter analyze` + `flutter test` 通过（111 tests）
+
+**下一步接入点**：Phase 6 — 设置与体验。子项：① 个人偏好（昵称、头像 initials/本地图片）② 默认货币 / 语言 / 外观 ③ 应用锁（PIN + 生物识别）④ 关于页、法律页 ⑤ 触感反馈（HapticFeedback）。
+- 第一步 6.1：个人偏好 + 外观（最简）。在 SharedPreferences 加 `profile.nickname` + `profile.avatarInitials` + 已有 `app.locale`。新增 `themeMode` provider 覆盖 ThemeMode（system/light/dark）。把 `/settings/profile` 和 `/settings/appearance` 占位替换成实页。
+
+**已完成 Step 5.3**：
+
+
 
 **子任务**：
 
@@ -428,7 +445,7 @@
 - [x] Excel / CSV 导出 → 系统分享面板（先做 CSV；Excel 推迟）
 - [x] 数据导入（含冲突合并策略：复合 key dedupe，缺失字典项跳过）
 - [x] 一键备份 / 恢复 `.shbak`
-- [ ] 备份提醒
+- [x] 备份提醒
 
 ---
 
@@ -484,6 +501,7 @@
 | 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                     | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测                |
 | 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                     | parseCsv + 复合 key dedupe + ImportSummary + 8 单测          |
 | 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak           | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测        |
+| 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）     | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测           |
 
 ---
 

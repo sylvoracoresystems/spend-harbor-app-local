@@ -340,6 +340,19 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get backupNever => 'You haven\'t backed up yet. Tap to back up now.';
+
+  @override
+  String backupOverdue(int days) {
+    return 'Last backup $days days ago — consider backing up.';
+  }
+
+  @override
+  String backupRecent(int days) {
+    return 'Last backup $days days ago.';
+  }
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

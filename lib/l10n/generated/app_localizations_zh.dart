@@ -339,6 +339,19 @@ class AppL10nZh extends AppL10n {
   }
 
   @override
+  String get backupNever => '你还没备份过，点这里开始备份。';
+
+  @override
+  String backupOverdue(int days) {
+    return '已 $days 天未备份，建议立即备份。';
+  }
+
+  @override
+  String backupRecent(int days) {
+    return '上次备份于 $days 天前。';
+  }
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

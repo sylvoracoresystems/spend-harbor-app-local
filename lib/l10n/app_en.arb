@@ -155,6 +155,15 @@
       "expected": { "type": "int" }
     }
   },
+  "backupNever": "You haven't backed up yet. Tap to back up now.",
+  "backupOverdue": "Last backup {days} days ago — consider backing up.",
+  "@backupOverdue": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "backupRecent": "Last backup {days} days ago.",
+  "@backupRecent": {
+    "placeholders": { "days": { "type": "int" } }
+  },
 
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
