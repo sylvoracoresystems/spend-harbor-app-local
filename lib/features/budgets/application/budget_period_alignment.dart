@@ -23,3 +23,18 @@ DateTime alignToPeriodStart(DateTime date, BudgetPeriod period) {
 /// 把 [date] 序列化为 ISO 日期字符串（YYYY-MM-DD）。
 String formatIsoDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+/// 返回 [date] 所在周期的 **结束日**（闭区间最后一天，含）。
+DateTime periodEndOn(DateTime date, BudgetPeriod period) {
+  final start = alignToPeriodStart(date, period);
+  switch (period) {
+    case BudgetPeriod.week:
+      return start.add(const Duration(days: 6));
+    case BudgetPeriod.month:
+      final nextMonth =
+          start.month == 12 ? DateTime(start.year + 1, 1, 1) : DateTime(start.year, start.month + 1, 1);
+      return nextMonth.subtract(const Duration(days: 1));
+    case BudgetPeriod.year:
+      return DateTime(start.year, 12, 31);
+  }
+}

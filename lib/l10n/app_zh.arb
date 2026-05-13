@@ -90,6 +90,14 @@
   "dashViewAll": "查看全部",
   "dashEmpty": "本月暂无交易，点击 + 新建一笔。",
 
+  "dashBudgets": "预算",
+  "dashBudgetTotal": "总额",
+  "dashBudgetOver": "超支 {amount}",
+  "@dashBudgetOver": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "dashBudgetManage": "管理",
+
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",
   "recycleBinDaysLeft": "剩 {days} 天",

@@ -521,6 +521,30 @@ abstract class AppL10n {
   /// **'No transactions yet — tap + to add one.'**
   String get dashEmpty;
 
+  /// No description provided for @dashBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get dashBudgets;
+
+  /// No description provided for @dashBudgetTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get dashBudgetTotal;
+
+  /// No description provided for @dashBudgetOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Over by {amount}'**
+  String dashBudgetOver(String amount);
+
+  /// No description provided for @dashBudgetManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get dashBudgetManage;
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

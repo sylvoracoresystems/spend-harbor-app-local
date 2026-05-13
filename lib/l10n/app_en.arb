@@ -93,6 +93,14 @@
   "dashViewAll": "View all",
   "dashEmpty": "No transactions yet — tap + to add one.",
 
+  "dashBudgets": "Budgets",
+  "dashBudgetTotal": "Total",
+  "dashBudgetOver": "Over by {amount}",
+  "@dashBudgetOver": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "dashBudgetManage": "Manage",
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",

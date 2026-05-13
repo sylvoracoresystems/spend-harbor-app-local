@@ -226,6 +226,20 @@ class AppL10nZh extends AppL10n {
   String get dashEmpty => '本月暂无交易，点击 + 新建一笔。';
 
   @override
+  String get dashBudgets => '预算';
+
+  @override
+  String get dashBudgetTotal => '总额';
+
+  @override
+  String dashBudgetOver(String amount) {
+    return '超支 $amount';
+  }
+
+  @override
+  String get dashBudgetManage => '管理';
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

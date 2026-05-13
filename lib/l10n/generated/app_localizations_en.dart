@@ -226,6 +226,20 @@ class AppL10nEn extends AppL10n {
   String get dashEmpty => 'No transactions yet — tap + to add one.';
 
   @override
+  String get dashBudgets => 'Budgets';
+
+  @override
+  String get dashBudgetTotal => 'Total';
+
+  @override
+  String dashBudgetOver(String amount) {
+    return 'Over by $amount';
+  }
+
+  @override
+  String get dashBudgetManage => 'Manage';
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

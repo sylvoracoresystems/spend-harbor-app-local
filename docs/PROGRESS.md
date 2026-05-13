@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 3 — Taxonomy 与预算
-- **当前 Step**：3.4 预算管理 CRUD ✅；准备进入 3.5 Dashboard 接入预算块
+- **当前阶段**：Phase 3 ✅ 全部完成
+- **当前 Step**：3.5 Dashboard 接入预算块 ✅；准备进入 Phase 4（统计分析）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,23 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 3 · 3.4 — 预算管理 CRUD + 周期对齐 ✅
+**当前 Step**：Phase 3 · 3.5 — Dashboard 接入预算块 ✅（Phase 3 收尾）
+
+**子任务**：
+
+- [x] `TransactionDao.watchBetween(startIso, endIso)`：闭区间流式查询
+- [x] `budget_period_alignment.dart`：补 `periodEndOn` —— 周末日 / 当月最后一天 / 12-31
+- [x] `application/budget_progress_provider.dart`：`BudgetProgress`（ratio + overBudget）+ 纯函数 `spentForBudget`（type==expense + 币种匹配 + scope=category 时 categoryId 匹配）+ `budgetProgressListProvider`（按预算自己的 period 取本期窗口）
+- [x] `presentation/dashboard_page.dart`：在指标卡下方插入预算卡片块（scope+period 标题 / 已花/预算 / 进度条 / 超支红色高亮 + 「管理」跳 `/settings/budgets`）
+- [x] ARB：dashBudgets / dashBudgetTotal / dashBudgetOver (ICU `{amount}`) / dashBudgetManage（en + zh）
+- [x] 单测 7 例（spentForBudget 2 + ratio/over 1 + periodEndOn 4）
+- [x] `flutter analyze` + `flutter test` 通过（73 tests）
+
+**下一步接入点**：Phase 4 — 统计分析。子项：① 趋势图（Bar Chart，按日/周/月聚合金额）② 分类 / 标签 Donut（金额占比）③ Top 排行（按支出金额 / 笔数）④ 点击图表跳交易列表（带筛选）。第三方依赖：`fl_chart`（轻量、零网络、纯 Flutter，先评估）。建议先做 4.1 趋势图：在 Stats tab 落地，复用 `transactionsOfMonthProvider` 起步，再决定是否加 `byDateRange` 范围 picker。
+
+**已完成 Step 3.4**：
+
+
 
 **子任务**：
 
@@ -268,7 +284,7 @@
 - [x] 标签管理 CRUD
 - [x] 来源管理 CRUD（带币种）
 - [x] 预算管理 CRUD + 周期对齐
-- [ ] Dashboard 接入预算块
+- [x] Dashboard 接入预算块
 
 ---
 
@@ -334,6 +350,7 @@
 | 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                 | name + color；4 单测                                        |
 | 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                 | name + icon + color + 币种（18 种）；4 单测                 |
 | 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐      | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测  |
+| 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾） | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测     |
 
 ---
 
