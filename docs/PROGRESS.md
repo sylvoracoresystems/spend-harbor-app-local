@@ -14,6 +14,31 @@
 
 ---
 
+## Current Work（细粒度进度，新会话先读这一段）
+
+> 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Step 2 — 设计 token 落地（未开始）
+
+**子任务**：
+
+- [ ] `lib/theme/app_colors.dart`
+- [ ] `lib/theme/app_spacing.dart`
+- [ ] `lib/theme/app_radius.dart`
+- [ ] `lib/theme/app_typography.dart`
+- [ ] `lib/theme/app_shadows.dart`
+- [ ] `lib/theme/app_theme.dart`（装配 lightTheme + darkTheme）
+- [ ] `app.dart` 接入 theme
+- [ ] `flutter analyze` + `flutter test` 通过
+
+**下一步接入点**：从 `lib/theme/app_colors.dart` 开始，照 DESIGN_STANDARDS §2.1 写颜色 token。
+
+**未提交改动**：无（Step 1 改动待用户决定何时 commit）
+
+**已知阻塞**：无
+
+---
+
 ## Phase 1 — 脚手架（Scaffolding）
 
 目标：搭好可运行、可测试、文档齐备的工程骨架，为业务开发铺路。
