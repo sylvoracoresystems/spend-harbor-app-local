@@ -251,6 +251,15 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get statsByCategory => 'By Category';
+
+  @override
+  String get statsByTag => 'By Tag';
+
+  @override
+  String get statsNoTags => 'No tagged transactions';
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

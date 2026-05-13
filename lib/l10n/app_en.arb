@@ -107,6 +107,9 @@
   "@statsCurrencyHint": {
     "placeholders": { "currency": { "type": "String" } }
   },
+  "statsByCategory": "By Category",
+  "statsByTag": "By Tag",
+  "statsNoTags": "No tagged transactions",
 
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",

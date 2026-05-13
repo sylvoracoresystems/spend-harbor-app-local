@@ -104,6 +104,9 @@
   "@statsCurrencyHint": {
     "placeholders": { "currency": { "type": "String" } }
   },
+  "statsByCategory": "按分类",
+  "statsByTag": "按标签",
+  "statsNoTags": "本月暂无标签交易",
 
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",

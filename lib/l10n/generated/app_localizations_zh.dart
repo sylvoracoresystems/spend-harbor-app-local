@@ -251,6 +251,15 @@ class AppL10nZh extends AppL10n {
   }
 
   @override
+  String get statsByCategory => '按分类';
+
+  @override
+  String get statsByTag => '按标签';
+
+  @override
+  String get statsNoTags => '本月暂无标签交易';
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

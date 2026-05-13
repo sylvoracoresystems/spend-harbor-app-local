@@ -563,6 +563,24 @@ abstract class AppL10n {
   /// **'Showing {currency}'**
   String statsCurrencyHint(String currency);
 
+  /// No description provided for @statsByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'By Category'**
+  String get statsByCategory;
+
+  /// No description provided for @statsByTag.
+  ///
+  /// In en, this message translates to:
+  /// **'By Tag'**
+  String get statsByTag;
+
+  /// No description provided for @statsNoTags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tagged transactions'**
+  String get statsNoTags;
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

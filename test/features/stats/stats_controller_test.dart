@@ -64,6 +64,46 @@ void main() {
     });
   });
 
+  group('aggregateByCategory', () {
+    test('按分类降序，仅 expense + 匹配币种', () {
+      final slices = aggregateByCategory(
+        [
+          _tx(id: 'a', cents: 1000, date: '2026-05-01'),
+          _tx(id: 'b', cents: 500, date: '2026-05-02'),
+          _tx(id: 'c', cents: 9999, date: '2026-05-03', currency: 'USD'),
+          _tx(id: 'd', cents: 2000, date: '2026-05-04',
+              type: TransactionType.income),
+        ],
+        currency: 'CAD',
+      );
+      expect(slices.length, 1);
+      expect(slices.first.categoryId, 'c1');
+      expect(slices.first.totalCents, 1500);
+    });
+  });
+
+  group('aggregateByTag', () {
+    test('多标签都累加同一笔金额', () {
+      final slices = aggregateByTag(
+        [_tx(id: 'a', cents: 1000, date: '2026-05-01')],
+        currency: 'CAD',
+        tagIdsByTx: const {
+          'a': ['t1', 't2'],
+        },
+      );
+      expect(slices.length, 2);
+      expect(slices.every((s) => s.totalCents == 1000), isTrue);
+    });
+    test('忽略未挂标签的交易', () {
+      final slices = aggregateByTag(
+        [_tx(id: 'a', cents: 1000, date: '2026-05-01')],
+        currency: 'CAD',
+        tagIdsByTx: const {},
+      );
+      expect(slices, isEmpty);
+    });
+  });
+
   group('dominantCurrency', () {
     test('CAD 永远优先', () {
       final bars = [

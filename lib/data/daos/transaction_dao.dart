@@ -176,6 +176,21 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
+  /// 批量获取多笔交易的标签关联：返回 `transactionId → [tagId,...]`。
+  Future<Map<String, List<String>>> tagIdsForMany(
+    List<String> transactionIds,
+  ) async {
+    if (transactionIds.isEmpty) return const {};
+    final rows = await (select(transactionTags)
+          ..where((t) => t.transactionId.isIn(transactionIds)))
+        .get();
+    final out = <String, List<String>>{};
+    for (final r in rows) {
+      out.putIfAbsent(r.transactionId, () => []).add(r.tagId);
+    }
+    return out;
+  }
+
   /// 获取某笔交易关联的所有标签 id。
   Future<List<String>> tagIdsOf(String transactionId) async {
     final rows = await (select(transactionTags)

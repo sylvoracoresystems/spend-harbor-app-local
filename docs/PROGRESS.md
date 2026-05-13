@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 4 — 统计分析
-- **当前 Step**：4.1 趋势柱状图 ✅；准备进入 4.2 分类/标签 Donut
+- **当前 Step**：4.2 分类 / 标签 Donut ✅；准备进入 4.3 Top 排行
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,24 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 4 · 4.1 — 趋势柱状图 ✅
+**当前 Step**：Phase 4 · 4.2 — 分类 / 标签 Donut ✅
+
+**子任务**：
+
+- [x] `TransactionDao.tagIdsForMany([txIds])`：一次性查多笔交易的标签关联
+- [x] 纯函数 `aggregateByCategory(rows, currency)` / `aggregateByTag(rows, currency, tagIdsByTx)`（多标签都累加全额）
+- [x] `categorySlicesProvider` / `tagSlicesProvider`（按 dominant 币种）
+- [x] `StatsPage` 增加两张 Donut 卡：fl_chart `PieChart` + 自绘 legend（颜色块 / 名称 / 金额 + 百分比）
+- [x] 调色板 10 色循环；标签卡空状态 fallback
+- [x] ARB：statsByCategory / statsByTag / statsNoTags（en + zh）
+- [x] 单测 3 例（分类降序 + 多标签累加 + 无标签空集）
+- [x] `flutter analyze` + `flutter test` 通过（83 tests）
+
+**下一步接入点**：4.3 Top 排行。Stats 页底部加 Top N 列表（默认 5）：① 分类支出 Top（已有 `categorySlicesProvider`，直接 take(5)）② 笔数 Top（按 categoryId 计数，需新纯函数 `countByCategory`）。考虑 Tab 切「按金额 / 按笔数」。
+
+**已完成 Step 4.1**：
+
+
 
 **子任务**：
 
@@ -307,7 +324,7 @@
 ## Phase 4 — 统计分析
 
 - [x] 趋势图（Bar Chart）
-- [ ] 分类 / 标签 Donut
+- [x] 分类 / 标签 Donut
 - [ ] Top 排行
 - [ ] 点击图表跳转交易列表（带筛选）
 
@@ -368,6 +385,7 @@
 | 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐      | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测  |
 | 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾） | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测     |
 | 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                   | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测         |
+| 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut            | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测     |
 
 ---
 
