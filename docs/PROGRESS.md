@@ -22,6 +22,7 @@
 
 **子任务**：
 
+- [x] UI界面设计大调整
 - [x] `presentation/about_page.dart`：图标 + App 名 + 版本 1.0.0 + tagline + 描述 + 致谢段
 - [x] `presentation/legal_page.dart`：隐私（强调零网络）+ 服务条款两段
 - [x] go_router `/settings/about` + `/settings/legal` 替换占位（占位列表清空）
@@ -30,16 +31,16 @@
 - [x] `flutter analyze` + `flutter test` 通过（133 tests）
 
 **下一步接入点**：Phase 7 — 打磨与上架。
-- 7.1 App 图标 + 启动页（`flutter_launcher_icons` + `flutter_native_splash`）
-- 7.2 国际化全量回归 + 200% 字号 + 深色（手动 QA + 文档化 checklist）
-- 7.3 性能基准（冷启动 + Stats 聚合）
-- 7.4 隐私清单（Apple Privacy Manifest / Google Data Safety）
-- 7.5 应用商店素材
-- 7.6 上架审核
+
+- 7.1 UI界面设计大调整
+- 7.2 App 图标 + 启动页（`flutter_launcher_icons` + `flutter_native_splash`）
+- 7.3 国际化全量回归 + 200% 字号 + 深色（手动 QA + 文档化 checklist）
+- 7.4 性能基准（冷启动 + Stats 聚合）
+- 7.5 隐私清单（Apple Privacy Manifest / Google Data Safety）
+- 7.6 应用商店素材
+- 7.7 上架审核
 
 **已完成 Step 6.3**：
-
-
 
 **子任务**：
 
@@ -55,14 +56,13 @@
 - [x] `flutter analyze` + `flutter test` 通过（133 tests）
 
 **下一步接入点**：6.4 关于 / 法律页 — 静态文案。
+
 - `presentation/about_page.dart`：App 名 + 版本（package_info_plus 可选；先硬编码 1.0.0）+ 简短介绍 + 致谢
 - `presentation/legal_page.dart`：隐私政策 + 服务条款（两段简短，强调本地存储）
 - 路由 `/settings/about` + `/settings/legal` 替换占位
 - ARB
 
 **已完成 Step 6.2**：
-
-
 
 **子任务**：
 
@@ -74,14 +74,13 @@
 - [x] `flutter analyze` + `flutter test` 通过（124 tests）
 
 **下一步接入点**：6.3 应用锁。`flutter_secure_storage` + `local_auth` 已在依赖中。流程：
+
 - `AppLockController`（PIN hash + bool isEnabled，存在 secure_storage）
 - 启动时若启用 → MaterialApp 包一层 `_LockGate`（Riverpod listen，未解锁时盖一层 Scaffold 输入 PIN / 触发生物识别）
 - `/settings/security`：开关 + 设置/修改 PIN + 生物识别 toggle
 - ARB + 测试（PIN hash 函数）
 
 **已完成 Step 6.1**：
-
-
 
 **子任务**：
 
@@ -97,14 +96,13 @@
 - [x] `flutter analyze` + `flutter test` 通过（120 tests）
 
 **下一步接入点**：6.2 默认货币。
+
 - 新增 `application/default_currency_provider.dart`（key `app.defaultCurrency`，默认 'CAD'）
 - `presentation/currency_page.dart`：List of `Currency.all` 单选
 - 接入点：`TransactionFormController` 新建时优先用默认币种（来源选择前的预览金额前缀），`SourceFormController` 新建时默认币种
 - ARB + 单测
 
 **已完成 Step 5.4**：
-
-
 
 **子任务**：
 
@@ -117,11 +115,10 @@
 - [x] `flutter analyze` + `flutter test` 通过（111 tests）
 
 **下一步接入点**：Phase 6 — 设置与体验。子项：① 个人偏好（昵称、头像 initials/本地图片）② 默认货币 / 语言 / 外观 ③ 应用锁（PIN + 生物识别）④ 关于页、法律页 ⑤ 触感反馈（HapticFeedback）。
+
 - 第一步 6.1：个人偏好 + 外观（最简）。在 SharedPreferences 加 `profile.nickname` + `profile.avatarInitials` + 已有 `app.locale`。新增 `themeMode` provider 覆盖 ThemeMode（system/light/dark）。把 `/settings/profile` 和 `/settings/appearance` 占位替换成实页。
 
 **已完成 Step 5.3**：
-
-
 
 **子任务**：
 
@@ -137,8 +134,6 @@
 
 **已完成 Step 5.2**：
 
-
-
 **子任务**：
 
 - [x] 新依赖 `file_picker: ^11.0.2`（注意 11.x 静态 API `FilePicker.pickFiles`）
@@ -152,6 +147,7 @@
 - [x] `flutter analyze` + `flutter test` 通过（102 tests）
 
 **下一步接入点**：5.3 备份 / 恢复。一键导出全库快照（`.shbak` = JSON + 可选压缩）：
+
 - 新增依赖 `archive`（zip）或先做不压缩 JSON
 - `backup_writer.dart`：把所有 5 张表 + transaction_tags 序列化为 JSON（含 schemaVersion）
 - `backup_reader.dart`：解析 → 校验 schemaVersion → 清空 + 重建（或合并）
@@ -159,8 +155,6 @@
 - 测试：序列化 round-trip + 版本不匹配抛错
 
 **已完成 Step 5.1**：
-
-
 
 **子任务**：
 
@@ -178,8 +172,6 @@
 
 **已完成 Step 4.4**：
 
-
-
 **子任务**：
 
 - [x] `TransactionsFilter` 值对象 + `transactionsFilterProvider`（State）+ `filteredTransactionsProvider`（派生 stream）
@@ -193,14 +185,13 @@
 - [x] `flutter analyze` + `flutter test` 通过（89 tests）
 
 **下一步接入点**：Phase 5 — 导入 / 导出 / 备份。子项：① Excel/CSV 导出 → 系统分享 ② 数据导入（含冲突合并）③ 一键备份 `.shbak` / 恢复 ④ 备份提醒。先做 5.1 CSV 导出（最小可用）：
+
 - 新增依赖：`csv` + `share_plus` + `path_provider`（已有）
 - 在 `lib/features/data_io/` 下建 `csv_exporter.dart`（纯函数 → 字符串）+ `share_handler.dart`（写临时文件 → 调用 share）
 - `/settings/export` 落地：选月份 + 按钮触发 → 系统分享面板
 - ARB + 单测（CSV 列头 / 行格式）
 
 **已完成 Step 4.3**：
-
-
 
 **子任务**：
 
@@ -213,8 +204,6 @@
 **下一步接入点**：4.4 图表点击跳转 — 给 BarChart / PieChart 行加 onTap：① 柱状图点某日 → push `/transactions?date=YYYY-MM-DD`（需扩展 transactions list 支持单日筛选）② Donut 切片 / Top 行 → push `/transactions?category=:id`。考虑：交易列表当前只支持月份切换，需要新增「临时筛选」状态（query 参数解析 + 顶部 chip 可清除）。
 
 **已完成 Step 4.2**：
-
-
 
 **子任务**：
 
@@ -231,8 +220,6 @@
 
 **已完成 Step 4.1**：
 
-
-
 **子任务**：
 
 - [x] 新增依赖 `fl_chart: ^0.69.0`（钉 0.69 — 1.x 引用了当前 Flutter SDK 没有的 `Matrix4.translateByDouble`）
@@ -247,8 +234,6 @@
 
 **已完成 Step 3.5**：
 
-
-
 **子任务**：
 
 - [x] `TransactionDao.watchBetween(startIso, endIso)`：闭区间流式查询
@@ -262,8 +247,6 @@
 **下一步接入点**：Phase 4 — 统计分析。子项：① 趋势图（Bar Chart，按日/周/月聚合金额）② 分类 / 标签 Donut（金额占比）③ Top 排行（按支出金额 / 笔数）④ 点击图表跳交易列表（带筛选）。第三方依赖：`fl_chart`（轻量、零网络、纯 Flutter，先评估）。建议先做 4.1 趋势图：在 Stats tab 落地，复用 `transactionsOfMonthProvider` 起步，再决定是否加 `byDateRange` 范围 picker。
 
 **已完成 Step 3.4**：
-
-
 
 **子任务**：
 
@@ -559,39 +542,39 @@
 
 ## 决策与变更日志
 
-| 日期       | 事项                                              | 备注                                                        |
-| ---------- | ------------------------------------------------- | ----------------------------------------------------------- |
-| 2026-05-12 | 产品定位调整：移除登录/会员/Admin，全功能终身可用 | 重写 PRODUCT_SPEC v2.0                                      |
-| 2026-05-12 | 实现平台选定：Flutter（iOS + Android）            | 暂不发布 Web / 桌面端                                       |
-| 2026-05-12 | DESIGN_STANDARDS 重写为 Flutter 版                | v2.0                                                        |
-| 2026-05-12 | 完成 Step 1：依赖与目录骨架                       | 新增 TECH_STACK.md / PROGRESS.md                            |
-| 2026-05-12 | 完成 Step 2：设计 token 落地                      | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页           |
-| 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                 | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测            |
-| 2026-05-13 | 完成 Step 4：i18n 基础                            | en/zh ARB + localeController + nameKey resolver + 12 单测   |
-| 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）         | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
-| 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                  | appDatabaseProvider + DAO/stream providers + 启动 seed      |
-| 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                      | StateNotifier 控制器 + 9 字段表单 + 9 单测                  |
-| 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                      | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后     |
-| 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                | SelectionController + bulkSoftDelete + 选择模式 AppBar      |
-| 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线   |
-| 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）        | watchTrashed/restore/purge + 启动自动 30 天清理             |
-| 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                 | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测         |
-| 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                 | name + color；4 单测                                        |
-| 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                 | name + icon + color + 币种（18 种）；4 单测                 |
-| 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐      | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测  |
-| 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾） | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测     |
-| 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                   | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测         |
-| 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut            | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测     |
-| 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                     | countByCategory + 金额/笔数切换 + 2 单测                     |
-| 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）         | TransactionsFilter + chart taps + 顶部 chip + 4 单测         |
-| 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                     | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测                |
-| 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                     | parseCsv + 复合 key dedupe + ImportSummary + 8 单测          |
-| 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak           | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测        |
-| 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）     | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测           |
-| 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言       | 昵称 + initials + ThemeMode 持久化 + 9 单测                  |
-| 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                     | 持久化 + Source/Budget 新建套用默认 + 4 单测                 |
-| 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）     | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
-| 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾）| AboutPage + LegalPage + 3 处 HapticFeedback                  |
+| 日期       | 事项                                               | 备注                                                        |
+| ---------- | -------------------------------------------------- | ----------------------------------------------------------- |
+| 2026-05-12 | 产品定位调整：移除登录/会员/Admin，全功能终身可用  | 重写 PRODUCT_SPEC v2.0                                      |
+| 2026-05-12 | 实现平台选定：Flutter（iOS + Android）             | 暂不发布 Web / 桌面端                                       |
+| 2026-05-12 | DESIGN_STANDARDS 重写为 Flutter 版                 | v2.0                                                        |
+| 2026-05-12 | 完成 Step 1：依赖与目录骨架                        | 新增 TECH_STACK.md / PROGRESS.md                            |
+| 2026-05-12 | 完成 Step 2：设计 token 落地                       | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页           |
+| 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                  | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测            |
+| 2026-05-13 | 完成 Step 4：i18n 基础                             | en/zh ARB + localeController + nameKey resolver + 12 单测   |
+| 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）          | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
+| 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                   | appDatabaseProvider + DAO/stream providers + 启动 seed      |
+| 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                       | StateNotifier 控制器 + 9 字段表单 + 9 单测                  |
+| 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                       | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后     |
+| 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                 | SelectionController + bulkSoftDelete + 选择模式 AppBar      |
+| 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                 | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线   |
+| 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）         | watchTrashed/restore/purge + 启动自动 30 天清理             |
+| 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                  | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测         |
+| 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                  | name + color；4 单测                                        |
+| 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                  | name + icon + color + 币种（18 种）；4 单测                 |
+| 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐       | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测  |
+| 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾）   | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测    |
+| 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                     | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测        |
+| 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut              | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测    |
+| 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                       | countByCategory + 金额/笔数切换 + 2 单测                    |
+| 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）           | TransactionsFilter + chart taps + 顶部 chip + 4 单测        |
+| 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                       | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测               |
+| 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                       | parseCsv + 复合 key dedupe + ImportSummary + 8 单测         |
+| 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak             | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测       |
+| 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）       | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测           |
+| 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言         | 昵称 + initials + ThemeMode 持久化 + 9 单测                 |
+| 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                       | 持久化 + Source/Budget 新建套用默认 + 4 单测                |
+| 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）       | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
+| 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾） | AboutPage + LegalPage + 3 处 HapticFeedback                 |
 
 ---
 
