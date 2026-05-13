@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 6 ✅ 全部完成
-- **当前 Step**：6.4 关于 / 法律页 + 6.5 触感反馈 ✅；准备进入 Phase 7（打磨与上架）
+- **当前阶段**：Phase 7 进行中
+- **当前 Step**：7.2 App 图标 + 启动页 ✅；准备进入 7.3 国际化 / 字号 / 深色回归
 - **最近更新**：2026-05-13
 
 ---
@@ -18,27 +18,34 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 6 · 6.4 + 6.5 — 关于 / 法律 / 触感反馈 ✅（Phase 6 收尾）
+**当前 Step**：Phase 7 · 7.2 — App 图标 + 启动页 ✅
 
 **子任务**：
 
-- [x] UI界面设计大调整
-- [x] `presentation/about_page.dart`：图标 + App 名 + 版本 1.0.0 + tagline + 描述 + 致谢段
-- [x] `presentation/legal_page.dart`：隐私（强调零网络）+ 服务条款两段
-- [x] go_router `/settings/about` + `/settings/legal` 替换占位（占位列表清空）
-- [x] ARB：about{Version, Tagline, Description, CreditsTitle, CreditsBody} + legal{Privacy, Terms}{Title, Body}（en + zh）
-- [x] 触感反馈：底部 tab 切换 → `selectionClick`；FAB 新建交易 → `lightImpact`；交易行长按进选择模式 → `mediumImpact`
-- [x] `flutter analyze` + `flutter test` 通过（133 tests）
+- [x] 品牌图源 `assets/branding/spend_harbor_logo.png`（钱袋 + 柱状图渐变 logo）
+- [x] 用 PIL 生成 iOS / Android adaptive / splash 三套规格变体（白底不透明 + 透明前景层 + 1152 splash）
+- [x] `pubspec.yaml` 加 `flutter_launcher_icons` + `flutter_native_splash` dev_deps + 配置块（白底 + 深色 `#0F1115`，web 关闭）
+- [x] `dart run flutter_launcher_icons` 生成 iOS Assets.xcassets + Android mipmap/drawable
+- [x] `dart run flutter_native_splash:create` 生成启动页（iOS storyboard + Android v21/v31 + 深色模式）
+- [x] `flutter analyze` + `flutter test` 通过（134 tests）
+- [ ] 实机验证（用户自己跑，发现问题再回头改）
 
-**下一步接入点**：Phase 7 — 打磨与上架。
+**下一步接入点**：Phase 7 · 7.3 — 国际化 / 字号 / 深色全量回归。
 
-- 7.1 UI界面设计大调整
-- 7.2 App 图标 + 启动页（`flutter_launcher_icons` + `flutter_native_splash`）
-- 7.3 国际化全量回归 + 200% 字号 + 深色（手动 QA + 文档化 checklist）
-- 7.4 性能基准（冷启动 + Stats 聚合）
-- 7.5 隐私清单（Apple Privacy Manifest / Google Data Safety）
-- 7.6 应用商店素材
-- 7.7 上架审核
+- 手动 QA checklist 文档化：每个 route 在 en / zh × light / dark × 100% / 200% 字号下截图核对
+- 建议新建 `docs/QA_CHECKLIST.md`：列所有 route + ARB key 缺失检查（grep ARB 文件覆盖率）+ TextScaler 200% 关键页面（Dashboard / Stats / Settings 表单 / Onboarding）
+- 程序化部分：写一个测试遍历 ARB en/zh keys 一致性（已有 `flutter_localizations`，可基于 `app_en.arb` / `app_zh.arb` 做 diff）
+
+**Phase 7 全部子项**：
+
+- [x] 7.2 App 图标 + 启动页
+- [ ] 7.3 国际化全量回归 + 200% 字号 + 深色（手动 QA + 文档化 checklist）
+- [ ] 7.4 性能基准（冷启动 + Stats 聚合）
+- [ ] 7.5 隐私清单（Apple Privacy Manifest / Google Data Safety）
+- [ ] 7.6 应用商店素材
+- [ ] 7.7 上架审核
+
+> 注：原 7.1「UI 界面设计大调整」已在 6.4 子任务中完成，Phase 7 不再单列。
 
 **已完成 Step 6.3**：
 
@@ -530,7 +537,7 @@
 
 ## Phase 7 — 打磨与上架
 
-- [ ] App 图标 + 启动页
+- [x] App 图标 + 启动页
 - [ ] 国际化全量回归（中英 + 200% 字号 + 深色）
 - [ ] 多设备 viewport 回归
 - [ ] 性能基准（冷启动、Stats 聚合）
@@ -575,6 +582,7 @@
 | 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                       | 持久化 + Source/Budget 新建套用默认 + 4 单测                |
 | 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）       | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
 | 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾） | AboutPage + LegalPage + 3 处 HapticFeedback                 |
+| 2026-05-13 | 完成 Phase 7 · 7.2：App 图标 + 启动页              | flutter_launcher_icons + flutter_native_splash 白底品牌 logo |
 
 ---
 
