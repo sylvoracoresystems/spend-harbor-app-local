@@ -12,6 +12,9 @@ import '../../features/data_io/presentation/backup_page.dart';
 import '../../features/data_io/presentation/import_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
+import '../../features/settings/presentation/appearance_page.dart';
+import '../../features/settings/presentation/language_page.dart';
+import '../../features/settings/presentation/profile_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
 import '../../features/sources/presentation/source_edit_page.dart';
 import '../../features/sources/presentation/sources_page.dart';
@@ -32,7 +35,7 @@ final _rootKey = GlobalKey<NavigatorState>();
 typedef _SettingsRoute = ({String path, String Function(AppL10n) title});
 
 const _settingsRoutes = <_SettingsRoute>[
-  (path: '/settings/profile', title: _profile),
+  // profile / appearance / language 已实现，从占位列表中移除
   // categories 已实现，从占位列表中移除
   // tags 已实现，从占位列表中移除
   // sources 已实现，从占位列表中移除
@@ -41,17 +44,14 @@ const _settingsRoutes = <_SettingsRoute>[
   // import 已实现，从占位列表中移除
   // backup 已实现，从占位列表中移除
   (path: '/settings/currency', title: _currency),
-  (path: '/settings/language', title: _language),
-  (path: '/settings/appearance', title: _appearance),
+  // language 已实现
+  // appearance 已实现
   (path: '/settings/security', title: _security),
   (path: '/settings/about', title: _about),
   (path: '/settings/legal', title: _legal),
 ];
 
-String _profile(AppL10n l) => l.settingsProfile;
 String _currency(AppL10n l) => l.settingsCurrency;
-String _language(AppL10n l) => l.settingsLanguage;
-String _appearance(AppL10n l) => l.settingsAppearance;
 String _security(AppL10n l) => l.settingsSecurity;
 String _about(AppL10n l) => l.settingsAbout;
 String _legal(AppL10n l) => l.settingsLegal;
@@ -156,6 +156,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings/backup',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const BackupPage(),
+      ),
+      GoRoute(
+        path: '/settings/profile',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const ProfilePage(),
+      ),
+      GoRoute(
+        path: '/settings/appearance',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const AppearancePage(),
+      ),
+      GoRoute(
+        path: '/settings/language',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const LanguagePage(),
       ),
       GoRoute(
         path: '/settings/budgets',

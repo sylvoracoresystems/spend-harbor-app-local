@@ -731,6 +731,42 @@ abstract class AppL10n {
   /// **'Last backup {days} days ago.'**
   String backupRecent(int days);
 
+  /// No description provided for @profileFieldNickname.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get profileFieldNickname;
+
+  /// No description provided for @profileNicknameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Used only on your device for greeting and avatar initials.'**
+  String get profileNicknameHint;
+
+  /// No description provided for @profileGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {nickname}'**
+  String profileGreeting(String nickname);
+
+  /// No description provided for @appearanceSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow system'**
+  String get appearanceSystem;
+
+  /// No description provided for @appearanceLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appearanceLight;
+
+  /// No description provided for @appearanceDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appearanceDark;
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

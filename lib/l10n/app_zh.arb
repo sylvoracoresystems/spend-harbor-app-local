@@ -162,6 +162,17 @@
     "placeholders": { "days": { "type": "int" } }
   },
 
+  "profileFieldNickname": "昵称",
+  "profileNicknameHint": "仅用于本机问候与头像缩写，不会上传。",
+  "profileGreeting": "你好，{nickname}",
+  "@profileGreeting": {
+    "placeholders": { "nickname": { "type": "String" } }
+  },
+
+  "appearanceSystem": "跟随系统",
+  "appearanceLight": "浅色",
+  "appearanceDark": "深色",
+
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",
   "recycleBinDaysLeft": "剩 {days} 天",

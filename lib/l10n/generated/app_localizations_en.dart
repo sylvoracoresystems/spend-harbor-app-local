@@ -353,6 +353,26 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get profileFieldNickname => 'Nickname';
+
+  @override
+  String get profileNicknameHint => 'Used only on your device for greeting and avatar initials.';
+
+  @override
+  String profileGreeting(String nickname) {
+    return 'Hello, $nickname';
+  }
+
+  @override
+  String get appearanceSystem => 'Follow system';
+
+  @override
+  String get appearanceLight => 'Light';
+
+  @override
+  String get appearanceDark => 'Dark';
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

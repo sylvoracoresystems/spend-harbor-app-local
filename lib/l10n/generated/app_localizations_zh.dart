@@ -352,6 +352,26 @@ class AppL10nZh extends AppL10n {
   }
 
   @override
+  String get profileFieldNickname => '昵称';
+
+  @override
+  String get profileNicknameHint => '仅用于本机问候与头像缩写，不会上传。';
+
+  @override
+  String profileGreeting(String nickname) {
+    return '你好，$nickname';
+  }
+
+  @override
+  String get appearanceSystem => '跟随系统';
+
+  @override
+  String get appearanceLight => '浅色';
+
+  @override
+  String get appearanceDark => '深色';
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

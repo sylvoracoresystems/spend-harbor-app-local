@@ -165,6 +165,17 @@
     "placeholders": { "days": { "type": "int" } }
   },
 
+  "profileFieldNickname": "Nickname",
+  "profileNicknameHint": "Used only on your device for greeting and avatar initials.",
+  "profileGreeting": "Hello, {nickname}",
+  "@profileGreeting": {
+    "placeholders": { "nickname": { "type": "String" } }
+  },
+
+  "appearanceSystem": "Follow system",
+  "appearanceLight": "Light",
+  "appearanceDark": "Dark",
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",

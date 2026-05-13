@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 5 ✅ 全部完成
-- **当前 Step**：5.4 备份提醒 ✅；准备进入 Phase 6（设置与体验）
+- **当前阶段**：Phase 6 — 设置与体验
+- **当前 Step**：6.1 个人偏好 + 外观 + 语言 ✅；准备进入 6.2 默认货币
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,30 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 5 · 5.4 — 备份提醒 ✅（Phase 5 收尾）
+**当前 Step**：Phase 6 · 6.1 — 个人偏好 + 外观 + 语言 ✅
+
+**子任务**：
+
+- [x] `application/profile_provider.dart`：昵称读写 prefs（`profile.nickname`）+ 纯函数 `initialsFor`（支持中文 runes + 西文双词）
+- [x] `application/theme_mode_provider.dart`：ThemeMode 持久化（system/light/dark）
+- [x] `app.dart` 注入 `themeMode` provider 替代硬编码 `ThemeMode.system`
+- [x] `presentation/profile_page.dart`：圆形头像 initials + 昵称输入
+- [x] `presentation/appearance_page.dart`：RadioListTile 切换 3 种模式
+- [x] `presentation/language_page.dart`：RadioListTile 切换 system / en / zh
+- [x] go_router：`/settings/profile` + `/appearance` + `/language` 替换占位
+- [x] ARB：profileFieldNickname / Hint / Greeting (ICU) + appearance{System,Light,Dark}（en + zh）
+- [x] 单测 9 例（initialsFor 5 + ProfileController 1 + ThemeMode 3）
+- [x] `flutter analyze` + `flutter test` 通过（120 tests）
+
+**下一步接入点**：6.2 默认货币。
+- 新增 `application/default_currency_provider.dart`（key `app.defaultCurrency`，默认 'CAD'）
+- `presentation/currency_page.dart`：List of `Currency.all` 单选
+- 接入点：`TransactionFormController` 新建时优先用默认币种（来源选择前的预览金额前缀），`SourceFormController` 新建时默认币种
+- ARB + 单测
+
+**已完成 Step 5.4**：
+
+
 
 **子任务**：
 
@@ -451,8 +474,8 @@
 
 ## Phase 6 — 设置与体验
 
-- [ ] 个人偏好（昵称、头像）
-- [ ] 默认货币、语言、外观主题
+- [x] 个人偏好（昵称、头像 initials）
+- [x] 语言、外观主题（默认货币延到 6.2）
 - [ ] 应用锁（PIN + 生物识别）
 - [ ] 关于页、法律页
 - [ ] 触感反馈（HapticFeedback）接入
@@ -502,6 +525,7 @@
 | 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                     | parseCsv + 复合 key dedupe + ImportSummary + 8 单测          |
 | 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak           | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测        |
 | 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）     | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测           |
+| 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言       | 昵称 + initials + ThemeMode 持久化 + 9 单测                  |
 
 ---
 
