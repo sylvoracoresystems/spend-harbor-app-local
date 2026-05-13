@@ -33,6 +33,81 @@ class AppL10nZh extends AppL10n {
   String get languageSystem => '跟随系统';
 
   @override
+  String get tabDashboard => '概览';
+
+  @override
+  String get tabStats => '统计';
+
+  @override
+  String get tabTransactions => '交易';
+
+  @override
+  String get tabSettings => '设置';
+
+  @override
+  String get fabAddTransaction => '新建交易';
+
+  @override
+  String get newTransactionTitle => '新建交易';
+
+  @override
+  String get editTransactionTitle => '编辑交易';
+
+  @override
+  String get onboardingTitle => '欢迎使用 SpendHarbor';
+
+  @override
+  String get onboardingSubtitle => '纯本地记账，永久属于你。';
+
+  @override
+  String get onboardingGetStarted => '开始使用';
+
+  @override
+  String get settingsProfile => '个人偏好';
+
+  @override
+  String get settingsCategories => '分类管理';
+
+  @override
+  String get settingsTags => '标签管理';
+
+  @override
+  String get settingsSources => '来源管理';
+
+  @override
+  String get settingsBudgets => '预算管理';
+
+  @override
+  String get settingsExport => '数据导出';
+
+  @override
+  String get settingsImport => '数据导入';
+
+  @override
+  String get settingsBackup => '备份与恢复';
+
+  @override
+  String get settingsCurrency => '默认货币';
+
+  @override
+  String get settingsLanguage => '语言';
+
+  @override
+  String get settingsAppearance => '外观';
+
+  @override
+  String get settingsSecurity => '应用锁';
+
+  @override
+  String get settingsAbout => '关于';
+
+  @override
+  String get settingsLegal => '隐私与条款';
+
+  @override
+  String get comingSoon => '即将上线';
+
+  @override
   String get catFood => '餐饮';
 
   @override

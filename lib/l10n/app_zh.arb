@@ -12,6 +12,36 @@
   "languageChinese": "中文",
   "languageSystem": "跟随系统",
 
+  "tabDashboard": "概览",
+  "tabStats": "统计",
+  "tabTransactions": "交易",
+  "tabSettings": "设置",
+
+  "fabAddTransaction": "新建交易",
+  "newTransactionTitle": "新建交易",
+  "editTransactionTitle": "编辑交易",
+
+  "onboardingTitle": "欢迎使用 SpendHarbor",
+  "onboardingSubtitle": "纯本地记账，永久属于你。",
+  "onboardingGetStarted": "开始使用",
+
+  "settingsProfile": "个人偏好",
+  "settingsCategories": "分类管理",
+  "settingsTags": "标签管理",
+  "settingsSources": "来源管理",
+  "settingsBudgets": "预算管理",
+  "settingsExport": "数据导出",
+  "settingsImport": "数据导入",
+  "settingsBackup": "备份与恢复",
+  "settingsCurrency": "默认货币",
+  "settingsLanguage": "语言",
+  "settingsAppearance": "外观",
+  "settingsSecurity": "应用锁",
+  "settingsAbout": "关于",
+  "settingsLegal": "隐私与条款",
+
+  "comingSoon": "即将上线",
+
   "catFood": "餐饮",
   "catTransport": "交通",
   "catShopping": "购物",

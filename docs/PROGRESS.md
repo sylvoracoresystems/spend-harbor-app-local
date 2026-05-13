@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 1 — 脚手架（Scaffolding）
-- **当前 Step**：Step 4 已完成；准备进入 Step 5（路由与主框架）
+- **当前阶段**：Phase 1 — 脚手架（Scaffolding） ✅ 全部完成
+- **当前 Step**：Step 5 已完成；Phase 1 收尾，准备进入 Phase 2（核心交易链路 MVP）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,24 +18,24 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Step 4 — i18n 基础 ✅
+**当前 Step**：Step 5 — 路由与主框架 ✅
 
 **子任务**：
 
-- [x] `pubspec.yaml` 开启 `generate: true` + 顶层 `l10n.yaml`
-- [x] `lib/l10n/app_en.arb` / `app_zh.arb`（含默认分类/标签/来源命名）
-- [x] `flutter gen-l10n` 生成 `lib/l10n/generated/`
-- [x] `app.dart` 接入 `supportedLocales` / `localizationsDelegates` / `locale`
-- [x] `shared_preferences` 依赖 + `sharedPreferencesProvider` + `localeControllerProvider`（持久化）
-- [x] `main.dart` 在 `ProviderScope` 覆盖 prefs provider
-- [x] `lib/data/seed/default_name_resolver.dart`：nameKey → ARB 字符串映射
-- [x] 把 seed 的 nameKey 改为驼峰，对齐 ARB id
-- [x] `test/shared/locale_provider_test.dart`（4 tests）
-- [x] `flutter analyze` + `flutter test` 通过（12 tests）
+- [x] `lib/shared/router/app_router.dart`：go_router + StatefulShellRoute（4 tab）+ 全部 §3.1 路由
+- [x] `lib/shared/router/app_shell.dart`：移动端 NavigationBar / 平板 NavigationRail（768pt 断点）
+- [x] FAB（设置页隐藏）→ `/transactions/new`
+- [x] 占位页：Dashboard / Stats / Transactions / Settings（列表导航到子设置）/ TransactionEdit / Onboarding
+- [x] `shared/widgets/placeholder_page.dart` 统一占位样式
+- [x] `shared/providers/onboarding_provider.dart`：首次启动标记 + 持久化
+- [x] go_router `redirect` 实现 onboarding 流程；`refreshListenable` 桥接 Riverpod
+- [x] `app.dart` 切换为 `MaterialApp.router`
+- [x] `widget_test` 验证 onboarding 重定向 + 主框架渲染
+- [x] `flutter analyze` + `flutter test` 通过（13 tests）
 
-**下一步接入点**：Step 5 — 在 `lib/shared/router/` 下建 `app_router.dart`（go_router 配置），在 `lib/features/` 下建占位 Scaffold（Dashboard / Stats / Transactions / Settings），把 `app.dart` 的 `home` 替换为 `MaterialApp.router`。
+**下一步接入点**：Phase 2 — 在 `lib/features/transactions/` 下实现交易表单（`TransactionEditPage` 替换占位），先建 `application/transaction_form_controller.dart`（Riverpod 状态）与 `presentation/transaction_form.dart`（UI）。
 
-**未提交改动**：Step 4 全部改动均未 commit
+**未提交改动**：Step 5 全部改动均未 commit
 
 **已知阻塞**：无
 
@@ -84,13 +84,13 @@
 - [x] 语言切换的 Riverpod provider + 本地持久化
 - [x] 默认分类 `nameKey` ↔ ARB 接通
 
-### Step 5：路由与主框架
+### Step 5：路由与主框架 ✅
 
-- [ ] go_router 配置（按 PRODUCT_SPEC §3.1 路由表）
-- [ ] `Scaffold` + 底部 4 tab（Dashboard / Stats / Transactions / Settings）
-- [ ] FAB 占位 → 跳新建交易
-- [ ] 平板布局：宽度 ≥ 768pt 切换为顶部菜单（`LayoutBuilder`）
-- [ ] Onboarding 首次启动判断（读取本地标记）
+- [x] go_router 配置（按 PRODUCT_SPEC §3.1 路由表）
+- [x] `Scaffold` + 底部 4 tab（Dashboard / Stats / Transactions / Settings）
+- [x] FAB 占位 → 跳新建交易
+- [x] 平板布局：宽度 ≥ 768pt 切换为 NavigationRail（`LayoutBuilder`）
+- [x] Onboarding 首次启动判断（读取本地标记）
 
 ---
 
@@ -167,6 +167,7 @@
 | 2026-05-12 | 完成 Step 2：设计 token 落地                      | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页 |
 | 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测   |
 | 2026-05-13 | 完成 Step 4：i18n 基础                            | en/zh ARB + localeController + nameKey resolver + 12 单测 |
+| 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）         | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
 
 ---
 

@@ -15,6 +15,36 @@
   "languageChinese": "中文",
   "languageSystem": "System",
 
+  "tabDashboard": "Dashboard",
+  "tabStats": "Stats",
+  "tabTransactions": "Transactions",
+  "tabSettings": "Settings",
+
+  "fabAddTransaction": "Add transaction",
+  "newTransactionTitle": "New Transaction",
+  "editTransactionTitle": "Edit Transaction",
+
+  "onboardingTitle": "Welcome to SpendHarbor",
+  "onboardingSubtitle": "Track your spending. Fully offline. Yours forever.",
+  "onboardingGetStarted": "Get Started",
+
+  "settingsProfile": "Profile",
+  "settingsCategories": "Categories",
+  "settingsTags": "Tags",
+  "settingsSources": "Sources",
+  "settingsBudgets": "Budgets",
+  "settingsExport": "Export Data",
+  "settingsImport": "Import Data",
+  "settingsBackup": "Backup & Restore",
+  "settingsCurrency": "Default Currency",
+  "settingsLanguage": "Language",
+  "settingsAppearance": "Appearance",
+  "settingsSecurity": "App Lock",
+  "settingsAbout": "About",
+  "settingsLegal": "Privacy & Terms",
+
+  "comingSoon": "Coming soon",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",

@@ -1,0 +1,132 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../features/dashboard/presentation/dashboard_page.dart';
+import '../../features/onboarding/presentation/onboarding_page.dart';
+import '../../features/settings/presentation/settings_page.dart';
+import '../../features/stats/presentation/stats_page.dart';
+import '../../features/transactions/presentation/transaction_edit_page.dart';
+import '../../features/transactions/presentation/transactions_page.dart';
+import '../../l10n/generated/app_localizations.dart';
+import '../providers/onboarding_provider.dart';
+import '../widgets/placeholder_page.dart';
+import 'app_shell.dart';
+
+final _rootKey = GlobalKey<NavigatorState>();
+
+/// Settings 子路由配置：路径 + 标题构造器（用 ARB 解析）。
+typedef _SettingsRoute = ({String path, String Function(AppL10n) title});
+
+const _settingsRoutes = <_SettingsRoute>[
+  (path: '/settings/profile', title: _profile),
+  (path: '/settings/categories', title: _categories),
+  (path: '/settings/tags', title: _tags),
+  (path: '/settings/sources', title: _sources),
+  (path: '/settings/budgets', title: _budgets),
+  (path: '/settings/export', title: _export),
+  (path: '/settings/import', title: _import),
+  (path: '/settings/backup', title: _backup),
+  (path: '/settings/currency', title: _currency),
+  (path: '/settings/language', title: _language),
+  (path: '/settings/appearance', title: _appearance),
+  (path: '/settings/security', title: _security),
+  (path: '/settings/about', title: _about),
+  (path: '/settings/legal', title: _legal),
+];
+
+String _profile(AppL10n l) => l.settingsProfile;
+String _categories(AppL10n l) => l.settingsCategories;
+String _tags(AppL10n l) => l.settingsTags;
+String _sources(AppL10n l) => l.settingsSources;
+String _budgets(AppL10n l) => l.settingsBudgets;
+String _export(AppL10n l) => l.settingsExport;
+String _import(AppL10n l) => l.settingsImport;
+String _backup(AppL10n l) => l.settingsBackup;
+String _currency(AppL10n l) => l.settingsCurrency;
+String _language(AppL10n l) => l.settingsLanguage;
+String _appearance(AppL10n l) => l.settingsAppearance;
+String _security(AppL10n l) => l.settingsSecurity;
+String _about(AppL10n l) => l.settingsAbout;
+String _legal(AppL10n l) => l.settingsLegal;
+
+final appRouterProvider = Provider<GoRouter>((ref) {
+  return GoRouter(
+    navigatorKey: _rootKey,
+    initialLocation: '/',
+    refreshListenable: _OnboardingListenable(ref),
+    redirect: (context, state) {
+      final done = ref.read(onboardingControllerProvider);
+      final atOnboarding = state.matchedLocation == '/onboarding';
+      if (!done && !atOnboarding) return '/onboarding';
+      if (done && atOnboarding) return '/';
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: '/onboarding',
+        builder: (_, __) => const OnboardingPage(),
+      ),
+      GoRoute(
+        path: '/transactions/new',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const TransactionEditPage(),
+      ),
+      GoRoute(
+        path: '/transactions/:id/edit',
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) =>
+            TransactionEditPage(id: state.pathParameters['id']),
+      ),
+      for (final r in _settingsRoutes)
+        GoRoute(
+          path: r.path,
+          parentNavigatorKey: _rootKey,
+          builder: (context, _) =>
+              PlaceholderPage(title: r.title(AppL10n.of(context))),
+        ),
+      StatefulShellRoute.indexedStack(
+        builder: (_, __, shell) => AppShell(navigationShell: shell),
+        branches: [
+          StatefulShellBranch(routes: [
+            GoRoute(path: '/', builder: (_, __) => const DashboardPage()),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(path: '/stats', builder: (_, __) => const StatsPage()),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/transactions',
+              builder: (_, __) => const TransactionsPage(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/settings',
+              builder: (_, __) => const SettingsPage(),
+            ),
+          ]),
+        ],
+      ),
+    ],
+  );
+});
+
+/// 把 Riverpod 的 onboarding 状态桥接到 go_router 的 refreshListenable。
+class _OnboardingListenable extends ChangeNotifier {
+  _OnboardingListenable(this._ref) {
+    _sub = _ref.listen<bool>(
+      onboardingControllerProvider,
+      (_, __) => notifyListeners(),
+    );
+  }
+
+  final Ref _ref;
+  late final ProviderSubscription<bool> _sub;
+
+  @override
+  void dispose() {
+    _sub.close();
+    super.dispose();
+  }
+}

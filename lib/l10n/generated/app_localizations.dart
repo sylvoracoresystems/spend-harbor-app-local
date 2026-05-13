@@ -143,6 +143,156 @@ abstract class AppL10n {
   /// **'System'**
   String get languageSystem;
 
+  /// No description provided for @tabDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get tabDashboard;
+
+  /// No description provided for @tabStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get tabStats;
+
+  /// No description provided for @tabTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get tabTransactions;
+
+  /// No description provided for @tabSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get tabSettings;
+
+  /// No description provided for @fabAddTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add transaction'**
+  String get fabAddTransaction;
+
+  /// No description provided for @newTransactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Transaction'**
+  String get newTransactionTitle;
+
+  /// No description provided for @editTransactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Transaction'**
+  String get editTransactionTitle;
+
+  /// No description provided for @onboardingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to SpendHarbor'**
+  String get onboardingTitle;
+
+  /// No description provided for @onboardingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your spending. Fully offline. Yours forever.'**
+  String get onboardingSubtitle;
+
+  /// No description provided for @onboardingGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboardingGetStarted;
+
+  /// No description provided for @settingsProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get settingsProfile;
+
+  /// No description provided for @settingsCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get settingsCategories;
+
+  /// No description provided for @settingsTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get settingsTags;
+
+  /// No description provided for @settingsSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get settingsSources;
+
+  /// No description provided for @settingsBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get settingsBudgets;
+
+  /// No description provided for @settingsExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Data'**
+  String get settingsExport;
+
+  /// No description provided for @settingsImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Data'**
+  String get settingsImport;
+
+  /// No description provided for @settingsBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Restore'**
+  String get settingsBackup;
+
+  /// No description provided for @settingsCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Currency'**
+  String get settingsCurrency;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock'**
+  String get settingsSecurity;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Terms'**
+  String get settingsLegal;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoon;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:
