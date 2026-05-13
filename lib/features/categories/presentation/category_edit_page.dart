@@ -29,10 +29,6 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   void initState() {
     super.initState();
     _nameCtrl = TextEditingController();
-    final notifier = ref.read(_provider().notifier);
-    if (widget.id == null && widget.initialType != null) {
-      notifier.setType(widget.initialType!);
-    }
     ref.listenManual<CategoryFormState>(_provider(), (prev, next) {
       if (prev?.name != next.name && _nameCtrl.text != next.name) {
         _nameCtrl.text = next.name;
@@ -47,8 +43,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   }
 
   AutoDisposeStateNotifierProvider<CategoryFormController, CategoryFormState>
-      _provider() =>
-          categoryFormControllerProvider(widget.id);
+  _provider() =>
+      categoryFormControllerProvider((widget.id, widget.initialType));
 
   @override
   Widget build(BuildContext context) {
@@ -99,31 +95,35 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
           _ColorPicker(value: state.color, onPicked: notifier.setColor),
           const SizedBox(height: AppSpacing.x6),
           FilledButton(
-            onPressed: state.submitting
-                ? null
-                : () async {
-                    final err = await notifier.submit();
-                    if (!context.mounted) return;
-                    if (err == null) {
-                      Navigator.of(context).pop(true);
-                      return;
-                    }
-                    final msg = switch (err) {
-                      CategoryFormError.nameRequired => l.catErrNameRequired,
-                      CategoryFormError.nameDuplicate => l.catErrNameDuplicate,
-                    };
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(msg)));
-                  },
+            onPressed:
+                state.submitting
+                    ? null
+                    : () async {
+                      final err = await notifier.submit();
+                      if (!context.mounted) return;
+                      if (err == null) {
+                        Navigator.of(context).pop(true);
+                        return;
+                      }
+                      final msg = switch (err) {
+                        CategoryFormError.nameRequired => l.catErrNameRequired,
+                        CategoryFormError.nameDuplicate =>
+                          l.catErrNameDuplicate,
+                      };
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(msg)));
+                    },
             child: Text(l.txSave),
           ),
           if (state.isEditing) ...[
             const SizedBox(height: AppSpacing.x3),
             OutlinedButton(
               style: OutlinedButton.styleFrom(foregroundColor: c.expense),
-              onPressed: state.submitting
-                  ? null
-                  : () => _confirmDelete(context, notifier),
+              onPressed:
+                  state.submitting
+                      ? null
+                      : () => _confirmDelete(context, notifier),
               child: Text(l.txDelete),
             ),
           ],
@@ -139,20 +139,21 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
     final l = AppL10n.of(context);
     final yes = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l.catDeleteConfirmTitle),
-        content: Text(l.catDeleteConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l.txCancel),
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(l.catDeleteConfirmTitle),
+            content: Text(l.catDeleteConfirmBody),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(l.txCancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(l.txDelete),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l.txDelete),
-          ),
-        ],
-      ),
     );
     if (yes == true) {
       await notifier.delete();
@@ -200,14 +201,16 @@ class _IconPicker extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: value == entry.key
-                    ? color.withValues(alpha: 0.18)
-                    : Theme.of(context).colorScheme.surfaceContainerHighest,
+                color:
+                    value == entry.key
+                        ? color.withValues(alpha: 0.18)
+                        : Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: AppRadius.brFull,
                 border: Border.all(
-                  color: value == entry.key
-                      ? color
-                      : Theme.of(context).colorScheme.outlineVariant,
+                  color:
+                      value == entry.key
+                          ? color
+                          : Theme.of(context).colorScheme.outlineVariant,
                 ),
               ),
               child: Icon(entry.value, size: 18, color: color),
@@ -240,9 +243,10 @@ class _ColorPicker extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(
                   width: value == hex ? 3 : 1,
-                  color: value == hex
-                      ? Theme.of(context).colorScheme.onSurface
-                      : Theme.of(context).colorScheme.outline,
+                  color:
+                      value == hex
+                          ? Theme.of(context).colorScheme.onSurface
+                          : Theme.of(context).colorScheme.outline,
                 ),
               ),
             ),

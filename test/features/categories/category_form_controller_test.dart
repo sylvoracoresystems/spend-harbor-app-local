@@ -7,9 +7,9 @@ import 'package:spend_harbor_app_local/domain/enums/transaction_type.dart';
 import 'package:spend_harbor_app_local/features/categories/application/category_form_controller.dart';
 
 ProviderContainer _container(AppDatabase db) {
-  final c = ProviderContainer(overrides: [
-    appDatabaseProvider.overrideWithValue(db),
-  ]);
+  final c = ProviderContainer(
+    overrides: [appDatabaseProvider.overrideWithValue(db)],
+  );
   addTearDown(c.dispose);
   addTearDown(db.close);
   return c;
@@ -18,16 +18,22 @@ ProviderContainer _container(AppDatabase db) {
 void main() {
   test('validateSync: 空名 → nameRequired', () async {
     final c = _container(AppDatabase.forTesting(NativeDatabase.memory()));
-    final n =
-        c.read(categoryFormControllerProvider(null).notifier);
+    final n = c.read(categoryFormControllerProvider((null, null)).notifier);
     expect(n.validateSync(), CategoryFormError.nameRequired);
+  });
+
+  test('new form respects initialType', () async {
+    final c = _container(AppDatabase.forTesting(NativeDatabase.memory()));
+    final state = c.read(
+      categoryFormControllerProvider((null, TransactionType.income)),
+    );
+    expect(state.type, TransactionType.income);
   });
 
   test('submit 新建：写入 DB；同名再 submit → nameDuplicate', () async {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     final c = _container(db);
-    final n =
-        c.read(categoryFormControllerProvider(null).notifier);
+    final n = c.read(categoryFormControllerProvider((null, null)).notifier);
     n.setName('Coffee');
     n.setType(TransactionType.expense);
     n.setIcon('coffee');
@@ -41,7 +47,7 @@ void main() {
     expect(rows.first.icon, 'coffee');
 
     // 第二次同名（不同 id）→ duplicate
-    final n2 = c.read(categoryFormControllerProvider(null).notifier);
+    final n2 = c.read(categoryFormControllerProvider((null, null)).notifier);
     n2.setName('coffee'); // 大小写不敏感
     n2.setType(TransactionType.expense);
     final err2 = await n2.submit();
@@ -52,7 +58,7 @@ void main() {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     final c = _container(db);
     // 先建一个
-    final n0 = c.read(categoryFormControllerProvider(null).notifier);
+    final n0 = c.read(categoryFormControllerProvider((null, null)).notifier);
     n0.setName('Food');
     n0.setIcon('utensils');
     n0.setColor('#10b981');
@@ -60,9 +66,10 @@ void main() {
     final cat = (await db.categoryDao.watchAll().first).first;
 
     // 改名
-    c.listen(categoryFormControllerProvider(cat.id), (_, __) {});
-    final notifier =
-        c.read(categoryFormControllerProvider(cat.id).notifier);
+    c.listen(categoryFormControllerProvider((cat.id, null)), (_, __) {});
+    final notifier = c.read(
+      categoryFormControllerProvider((cat.id, null)).notifier,
+    );
     await Future<void>.delayed(const Duration(milliseconds: 30));
     notifier.setName('Restaurants');
     notifier.setColor('#ef4444');
@@ -78,14 +85,15 @@ void main() {
   test('delete 软删', () async {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     final c = _container(db);
-    final n0 = c.read(categoryFormControllerProvider(null).notifier);
+    final n0 = c.read(categoryFormControllerProvider((null, null)).notifier);
     n0.setName('Misc');
     await n0.submit();
     final cat = (await db.categoryDao.watchAll().first).first;
 
-    c.listen(categoryFormControllerProvider(cat.id), (_, __) {});
-    final notifier =
-        c.read(categoryFormControllerProvider(cat.id).notifier);
+    c.listen(categoryFormControllerProvider((cat.id, null)), (_, __) {});
+    final notifier = c.read(
+      categoryFormControllerProvider((cat.id, null)).notifier,
+    );
     await Future<void>.delayed(const Duration(milliseconds: 30));
     await notifier.delete();
 

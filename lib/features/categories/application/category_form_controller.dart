@@ -33,22 +33,29 @@ class CategoryFormState {
     String? icon,
     String? color,
     bool? submitting,
-  }) =>
-      CategoryFormState(
-        id: id,
-        name: name ?? this.name,
-        type: type ?? this.type,
-        icon: icon ?? this.icon,
-        color: color ?? this.color,
-        submitting: submitting ?? this.submitting,
-      );
+  }) => CategoryFormState(
+    id: id,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    icon: icon ?? this.icon,
+    color: color ?? this.color,
+    submitting: submitting ?? this.submitting,
+  );
 }
 
 enum CategoryFormError { nameRequired, nameDuplicate }
 
 class CategoryFormController extends StateNotifier<CategoryFormState> {
-  CategoryFormController(this._ref, {String? editId})
-      : super(CategoryFormState(id: editId)) {
+  CategoryFormController(
+    this._ref, {
+    String? editId,
+    TransactionType? initialType,
+  }) : super(
+         CategoryFormState(
+           id: editId,
+           type: initialType ?? TransactionType.expense,
+         ),
+       ) {
     if (editId != null) _load(editId);
   }
 
@@ -103,13 +110,15 @@ class CategoryFormController extends StateNotifier<CategoryFormState> {
           color: state.color,
         );
       } else {
-        await dao.insertCategory(CategoriesCompanion.insert(
-          id: _uuid.v4(),
-          name: state.name.trim(),
-          type: state.type,
-          icon: state.icon,
-          color: state.color,
-        ));
+        await dao.insertCategory(
+          CategoriesCompanion.insert(
+            id: _uuid.v4(),
+            name: state.name.trim(),
+            type: state.type,
+            icon: state.icon,
+            color: state.color,
+          ),
+        );
       }
       return null;
     } finally {
@@ -123,16 +132,20 @@ class CategoryFormController extends StateNotifier<CategoryFormState> {
   }
 }
 
-final categoryFormControllerProvider = StateNotifierProvider.autoDispose
-    .family<CategoryFormController, CategoryFormState, String?>(
-  (ref, editId) => CategoryFormController(ref, editId: editId),
+final categoryFormControllerProvider = StateNotifierProvider.autoDispose.family<
+  CategoryFormController,
+  CategoryFormState,
+  (String?, TransactionType?)
+>(
+  (ref, args) =>
+      CategoryFormController(ref, editId: args.$1, initialType: args.$2),
 );
 
 /// 监听某 type 的存活分类（CategoriesPage / 表单选择器都可复用）。
-final categoriesByTypeProvider = StreamProvider.family<List<Category>,
-    TransactionType>((ref, type) {
-  return ref.watch(categoryDaoProvider).watchByType(type);
-});
+final categoriesByTypeProvider =
+    StreamProvider.family<List<Category>, TransactionType>((ref, type) {
+      return ref.watch(categoryDaoProvider).watchByType(type);
+    });
 
 /// 默认调色板（供 UI 引用，避免直接依赖 shared/icons）。
 const defaultIconKey = 'tag';
