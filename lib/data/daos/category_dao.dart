@@ -41,6 +41,27 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
     return update(categories).replace(entry);
   }
 
+  /// 仅更新可编辑字段；保留 `createdAt` / `isDefault` / `nameKey`。
+  /// 用户重命名默认项后清空 `nameKey`（脱离 i18n 默认名）。
+  Future<int> updateName({
+    required String id,
+    required String name,
+    required TransactionType type,
+    required String icon,
+    required String color,
+  }) {
+    return (update(categories)..where((t) => t.id.equals(id))).write(
+      CategoriesCompanion(
+        name: Value(name),
+        type: Value(type),
+        icon: Value(icon),
+        color: Value(color),
+        nameKey: const Value(null),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
   /// 软删除（标记 deletedAt = now）。
   Future<int> softDelete(String id) {
     return (update(categories)..where((t) => t.id.equals(id))).write(

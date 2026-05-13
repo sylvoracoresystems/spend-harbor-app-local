@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/enums/transaction_type.dart';
+import '../../features/categories/presentation/categories_page.dart';
+import '../../features/categories/presentation/category_edit_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
@@ -21,7 +24,7 @@ typedef _SettingsRoute = ({String path, String Function(AppL10n) title});
 
 const _settingsRoutes = <_SettingsRoute>[
   (path: '/settings/profile', title: _profile),
-  (path: '/settings/categories', title: _categories),
+  // categories 已实现，从占位列表中移除
   (path: '/settings/tags', title: _tags),
   (path: '/settings/sources', title: _sources),
   (path: '/settings/budgets', title: _budgets),
@@ -37,7 +40,6 @@ const _settingsRoutes = <_SettingsRoute>[
 ];
 
 String _profile(AppL10n l) => l.settingsProfile;
-String _categories(AppL10n l) => l.settingsCategories;
 String _tags(AppL10n l) => l.settingsTags;
 String _sources(AppL10n l) => l.settingsSources;
 String _budgets(AppL10n l) => l.settingsBudgets;
@@ -77,6 +79,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/transactions/recycle-bin',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const RecycleBinPage(),
+      ),
+      GoRoute(
+        path: '/settings/categories',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const CategoriesPage(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootKey,
+            builder: (_, state) => CategoryEditPage(
+              initialType: state.extra is TransactionType
+                  ? state.extra as TransactionType
+                  : null,
+            ),
+          ),
+          GoRoute(
+            path: ':id/edit',
+            parentNavigatorKey: _rootKey,
+            builder: (_, state) => CategoryEditPage(
+              id: state.pathParameters['id'],
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/transactions/:id/edit',

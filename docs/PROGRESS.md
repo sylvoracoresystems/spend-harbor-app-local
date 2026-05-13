@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 2 ✅ 全部完成
-- **当前 Step**：2.6 回收站 ✅；准备进入 Phase 3（Taxonomy 与预算）
+- **当前阶段**：Phase 3 — Taxonomy 与预算
+- **当前 Step**：3.1 分类管理 CRUD ✅；准备进入 3.2 标签管理
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,26 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 2 · 2.6 — 回收站 ✅（Phase 2 收尾）
+**当前 Step**：Phase 3 · 3.1 — 分类管理 CRUD ✅
+
+**子任务**：
+
+- [x] `lib/shared/icons/icon_registry.dart`：白名单图标（27 个）+ 调色板（10 色）+ `iconFor(key)` 渲染辅助
+- [x] `CategoryDao.updateName`：仅更新可编辑字段，编辑默认项时清空 `nameKey`
+- [x] `application/category_form_controller.dart`：`CategoryFormState` + autoDispose family，`validateSync` + 异步同名校验（`existsName`，大小写不敏感）+ submit/delete
+- [x] `categoriesByTypeProvider`（StreamProvider.family）
+- [x] `presentation/categories_page.dart`：TabBar 切换 expense/income，列表 + 圆形彩色图标 + FAB「Add」
+- [x] `presentation/category_edit_page.dart`：SegmentedButton 类型 + 名称 + 图标网格 + 颜色网格 + 保存 + 编辑模式下「删除（带确认）」
+- [x] go_router：`/settings/categories` + `/new` + `/:id/edit`（root navigator），从占位列表中摘除
+- [x] ARB：catNewTitle / catEditTitle / catFieldName / type / icon / color / errors / 删除确认 / catEmpty* / catAdd（en + zh）
+- [x] 单测 4 例（validate / 同名 duplicate / 编辑保留 createdAt / 软删）
+- [x] `flutter analyze` + `flutter test` 通过（46 tests）
+
+**下一步接入点**：3.2 标签管理 — 复用同样的模式：`lib/features/tags/`（`application/tag_form_controller.dart` + `presentation/tags_page.dart` / `tag_edit_page.dart`）。标签字段更少：name + color（无 type、无 icon）。`TagDao` 需要补 `updateName` + `existsName`（如已存在则跳过；DAO 当前已有 `watchAll` 与 `insertTag` / `softDelete`）。
+
+**已完成 Step 2.6**：
+
+
 
 **子任务**：
 
@@ -212,7 +231,7 @@
 
 ## Phase 3 — Taxonomy 与预算
 
-- [ ] 分类管理 CRUD + 同名去重
+- [x] 分类管理 CRUD + 同名去重
 - [ ] 标签管理 CRUD
 - [ ] 来源管理 CRUD（带币种）
 - [ ] 预算管理 CRUD + 周期对齐
@@ -278,6 +297,7 @@
 | 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                | SelectionController + bulkSoftDelete + 选择模式 AppBar     |
 | 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线  |
 | 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）       | watchTrashed/restore/purge + 启动自动 30 天清理            |
+| 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测         |
 
 ---
 

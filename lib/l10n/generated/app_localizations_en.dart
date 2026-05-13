@@ -249,6 +249,45 @@ class AppL10nEn extends AppL10n {
   String get recycleBinPurgeConfirmBody => 'This transaction will be permanently removed and cannot be recovered.';
 
   @override
+  String get catNewTitle => 'New Category';
+
+  @override
+  String get catEditTitle => 'Edit Category';
+
+  @override
+  String get catFieldName => 'Name';
+
+  @override
+  String get catFieldType => 'Type';
+
+  @override
+  String get catFieldIcon => 'Icon';
+
+  @override
+  String get catFieldColor => 'Color';
+
+  @override
+  String get catErrNameRequired => 'Enter a name';
+
+  @override
+  String get catErrNameDuplicate => 'A category with this name already exists';
+
+  @override
+  String get catDeleteConfirmTitle => 'Delete this category?';
+
+  @override
+  String get catDeleteConfirmBody => 'Existing transactions keep their reference but this category will no longer appear in pickers.';
+
+  @override
+  String get catEmptyExpense => 'No expense categories yet';
+
+  @override
+  String get catEmptyIncome => 'No income categories yet';
+
+  @override
+  String get catAdd => 'Add category';
+
+  @override
   String get catFood => 'Food';
 
   @override

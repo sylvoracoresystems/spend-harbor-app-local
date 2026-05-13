@@ -563,6 +563,84 @@ abstract class AppL10n {
   /// **'This transaction will be permanently removed and cannot be recovered.'**
   String get recycleBinPurgeConfirmBody;
 
+  /// No description provided for @catNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Category'**
+  String get catNewTitle;
+
+  /// No description provided for @catEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get catEditTitle;
+
+  /// No description provided for @catFieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get catFieldName;
+
+  /// No description provided for @catFieldType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get catFieldType;
+
+  /// No description provided for @catFieldIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get catFieldIcon;
+
+  /// No description provided for @catFieldColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get catFieldColor;
+
+  /// No description provided for @catErrNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get catErrNameRequired;
+
+  /// No description provided for @catErrNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'A category with this name already exists'**
+  String get catErrNameDuplicate;
+
+  /// No description provided for @catDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this category?'**
+  String get catDeleteConfirmTitle;
+
+  /// No description provided for @catDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing transactions keep their reference but this category will no longer appear in pickers.'**
+  String get catDeleteConfirmBody;
+
+  /// No description provided for @catEmptyExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'No expense categories yet'**
+  String get catEmptyExpense;
+
+  /// No description provided for @catEmptyIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'No income categories yet'**
+  String get catEmptyIncome;
+
+  /// No description provided for @catAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add category'**
+  String get catAdd;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

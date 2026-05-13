@@ -249,6 +249,45 @@ class AppL10nZh extends AppL10n {
   String get recycleBinPurgeConfirmBody => '这笔交易将被永久删除且不可恢复。';
 
   @override
+  String get catNewTitle => '新建分类';
+
+  @override
+  String get catEditTitle => '编辑分类';
+
+  @override
+  String get catFieldName => '名称';
+
+  @override
+  String get catFieldType => '类型';
+
+  @override
+  String get catFieldIcon => '图标';
+
+  @override
+  String get catFieldColor => '颜色';
+
+  @override
+  String get catErrNameRequired => '请输入名称';
+
+  @override
+  String get catErrNameDuplicate => '已存在同名分类';
+
+  @override
+  String get catDeleteConfirmTitle => '删除该分类？';
+
+  @override
+  String get catDeleteConfirmBody => '已有交易仍保留对该分类的引用，但此分类将不再出现在选择列表中。';
+
+  @override
+  String get catEmptyExpense => '暂无支出分类';
+
+  @override
+  String get catEmptyIncome => '暂无收入分类';
+
+  @override
+  String get catAdd => '新建分类';
+
+  @override
   String get catFood => '餐饮';
 
   @override
