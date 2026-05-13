@@ -605,6 +605,36 @@ abstract class AppL10n {
   /// **'{count, plural, =1{1 entry} other{{count} entries}}'**
   String statsCountUnit(int count);
 
+  /// No description provided for @exportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Data'**
+  String get exportTitle;
+
+  /// No description provided for @exportMonthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Exports the currently selected month ({month}).'**
+  String exportMonthHint(String month);
+
+  /// No description provided for @exportButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV'**
+  String get exportButton;
+
+  /// No description provided for @exportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions in this month to export.'**
+  String get exportEmpty;
+
+  /// No description provided for @exportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Share sheet opened'**
+  String get exportDone;
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

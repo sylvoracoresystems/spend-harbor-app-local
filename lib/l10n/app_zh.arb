@@ -115,6 +115,15 @@
     "placeholders": { "count": { "type": "int" } }
   },
 
+  "exportTitle": "数据导出",
+  "exportMonthHint": "导出当前选定的月份（{month}）。",
+  "@exportMonthHint": {
+    "placeholders": { "month": { "type": "String" } }
+  },
+  "exportButton": "导出 CSV",
+  "exportEmpty": "本月暂无交易可导出。",
+  "exportDone": "已唤起分享面板",
+
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",
   "recycleBinDaysLeft": "剩 {days} 天",

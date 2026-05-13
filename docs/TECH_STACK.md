@@ -45,6 +45,8 @@
 | `uuid`                        | ^4.5.0     | 本地实体主键生成                         | 避免依赖自增 ID，便于导入合并                                  |
 | `shared_preferences`          | ^2.3.2     | 非敏感本地偏好（locale、themeMode）      | 比 secure_storage 更轻量；敏感数据仍走 secure_storage          |
 | `fl_chart`                    | ^0.69.0    | 柱状图 / 环形图（Stats 统计分析）        | 轻量、纯 Flutter、零网络；钉 0.69 避免 1.x 与当前 Flutter SDK 冲突 |
+| `csv`                         | ^6.0.0     | CSV 导出 / 导入                          | RFC 4180 引号/逗号处理；纯 Dart 不联网                      |
+| `share_plus`                  | ^12.x      | 调起系统分享面板（导出 / 备份分享）       | 跨平台官方维护；通过临时文件 + XFile 分享                    |
 
 ### 2.2 开发时依赖（`dev_dependencies`）
 

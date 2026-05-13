@@ -280,6 +280,23 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get exportTitle => 'Export Data';
+
+  @override
+  String exportMonthHint(String month) {
+    return 'Exports the currently selected month ($month).';
+  }
+
+  @override
+  String get exportButton => 'Export CSV';
+
+  @override
+  String get exportEmpty => 'No transactions in this month to export.';
+
+  @override
+  String get exportDone => 'Share sheet opened';
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

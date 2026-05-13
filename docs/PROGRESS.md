@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 4 ✅ 全部完成
-- **当前 Step**：4.4 图表点击跳转 ✅；准备进入 Phase 5（导入 / 导出 / 备份）
+- **当前阶段**：Phase 5 — 导入 / 导出 / 备份
+- **当前 Step**：5.1 CSV 导出 ✅；准备进入 5.2 数据导入
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,25 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 4 · 4.4 — 图表点击跳转 ✅（Phase 4 收尾）
+**当前 Step**：Phase 5 · 5.1 — CSV 导出 ✅
+
+**子任务**：
+
+- [x] 新依赖 `csv: ^6.0.0` + `share_plus: ^12`
+- [x] `application/csv_exporter.dart`：纯函数 `rowsToCsv` (RFC 4180 + CRLF) + `toCsvRow`（id → 名映射，金额两位小数）
+- [x] `application/export_controller.dart`：取当月交易 + 字典联表 → 临时文件 → SharePlus 分享
+- [x] `presentation/export_page.dart`：当月提示 + 「导出 CSV」按钮 + 空状态 + busy/snackbar
+- [x] go_router：`/settings/export` 替换占位
+- [x] ARB：exportTitle / exportMonthHint / button / empty / done（en + zh）
+- [x] TECH_STACK §2.1 追加 csv + share_plus
+- [x] 单测 5 例（rowsToCsv 空/单行/引号字段 + toCsvRow 字典命中/缺失）
+- [x] `flutter analyze` + `flutter test` 通过（94 tests）
+
+**下一步接入点**：5.2 数据导入。流程：file_picker 选 CSV → 解析（沿用 `csv` 包） → 与现有数据合并（按 `transactedOn + amountCents + categoryId + sourceId + note` 复合 key 去重，已存在的跳过）→ 写库。需要新依赖 `file_picker`。先做 import_controller + 纯函数 `parseCsv` + `mergeStrategy`（保守：跳过冲突），再做页面。
+
+**已完成 Step 4.4**：
+
+
 
 **子任务**：
 
@@ -368,7 +386,7 @@
 
 ## Phase 5 — 导入 / 导出 / 备份
 
-- [ ] Excel / CSV 导出 → 系统分享面板
+- [x] Excel / CSV 导出 → 系统分享面板（先做 CSV；Excel 推迟）
 - [ ] 数据导入（含冲突合并策略）
 - [ ] 一键备份 / 恢复 `.shbak`
 - [ ] 备份提醒
@@ -424,6 +442,7 @@
 | 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut            | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测     |
 | 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                     | countByCategory + 金额/笔数切换 + 2 单测                     |
 | 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）         | TransactionsFilter + chart taps + 顶部 chip + 4 单测         |
+| 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                     | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测                |
 
 ---
 

@@ -118,6 +118,15 @@
     "placeholders": { "count": { "type": "int" } }
   },
 
+  "exportTitle": "Export Data",
+  "exportMonthHint": "Exports the currently selected month ({month}).",
+  "@exportMonthHint": {
+    "placeholders": { "month": { "type": "String" } }
+  },
+  "exportButton": "Export CSV",
+  "exportEmpty": "No transactions in this month to export.",
+  "exportDone": "Share sheet opened",
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",

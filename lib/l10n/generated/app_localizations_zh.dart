@@ -279,6 +279,23 @@ class AppL10nZh extends AppL10n {
   }
 
   @override
+  String get exportTitle => '数据导出';
+
+  @override
+  String exportMonthHint(String month) {
+    return '导出当前选定的月份（$month）。';
+  }
+
+  @override
+  String get exportButton => '导出 CSV';
+
+  @override
+  String get exportEmpty => '本月暂无交易可导出。';
+
+  @override
+  String get exportDone => '已唤起分享面板';
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override
