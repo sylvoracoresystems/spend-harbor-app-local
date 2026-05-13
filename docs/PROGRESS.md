@@ -9,8 +9,8 @@
 ## 当前状态
 
 - **当前阶段**：Phase 1 — 脚手架（Scaffolding）
-- **当前 Step**：Step 2 已完成；准备进入 Step 3（数据库 Schema + Seed）
-- **最近更新**：2026-05-12
+- **当前 Step**：Step 3 已完成；准备进入 Step 4（i18n 基础）
+- **最近更新**：2026-05-13
 
 ---
 
@@ -18,22 +18,22 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Step 3 — 数据库 Schema + Seed（未开始）
+**当前 Step**：Step 3 — 数据库 Schema + Seed ✅
 
 **子任务**：
 
-- [ ] `lib/data/database/app_database.dart`：drift Database 定义
-- [ ] 5 张表（Category / Tag / Source / Budget / Transaction）+ 多对多 `TransactionTags`
-- [ ] 软删除字段（`deletedAt`）+ 必要索引
-- [ ] `lib/data/seed/default_data.dart`：按 locale 注入默认分类/标签/来源
-- [ ] DAO 文件（每张表一个）
-- [ ] `build_runner` 生成 `*.g.dart`
-- [ ] `test/data/` DAO 基础单元测试
-- [ ] `flutter analyze` + `flutter test` 通过
+- [x] `lib/data/database/app_database.dart`：drift Database 定义
+- [x] 5 张表（Category / Tag / Source / Budget / Transaction）+ 多对多 `TransactionTags`
+- [x] 软删除字段（`deletedAt`）+ 必要索引
+- [x] `lib/data/seed/default_data.dart`：按 locale 注入默认分类/标签/来源
+- [x] DAO 文件（每张表一个）
+- [x] `build_runner` 生成 `*.g.dart`
+- [x] `test/data/` DAO 基础单元测试（7 tests）
+- [x] `flutter analyze` + `flutter test` 通过
 
-**下一步接入点**：先在 `lib/data/database/` 下建 `tables.dart`（定义所有 drift Table），再建 `app_database.dart` 把表装配并配置 `path_provider` 打开数据库。
+**下一步接入点**：Step 4 — 在 `lib/l10n/` 下创建 `app_en.arb` 与 `app_zh.arb`，在 `pubspec.yaml` 启用 `generate: true`，再到 `app.dart` 接入 `supportedLocales` 与 `localizationsDelegates`。
 
-**未提交改动**：Step 1 + Step 2 全部改动均未 commit
+**未提交改动**：Step 1 + Step 2 + Step 3 全部改动均未 commit
 
 **已知阻塞**：无
 
@@ -66,14 +66,14 @@
 - [x] `lib/theme/app_theme.dart`：装配 `lightTheme` + `darkTheme`，统一 AppBar/Input/Button/Dialog/Snackbar 风格
 - [x] `app.dart` 接入 theme + 临时 Theme Preview 页（含浅/深模式切换按钮）
 
-### Step 3：数据库 Schema + Seed
+### Step 3：数据库 Schema + Seed ✅
 
-- [ ] drift 数据库 + 5 张表（Category / Tag / Source / Budget / Transaction）
-- [ ] 多对多表（TransactionTags）
-- [ ] 软删除字段 + 索引
-- [ ] 首次启动 seed 默认分类 / 标签 / 来源（按 locale 中英两版）
-- [ ] `test/data/` 写 DAO 单元测试
-- [ ] 配置 build_runner，生成 `*.g.dart`
+- [x] drift 数据库 + 5 张表（Category / Tag / Source / Budget / Transaction）
+- [x] 多对多表（TransactionTags）
+- [x] 软删除字段 + 索引
+- [x] 首次启动 seed 默认分类 / 标签 / 来源（按 locale 中英两版）
+- [x] `test/data/` 写 DAO 单元测试
+- [x] 配置 build_runner，生成 `*.g.dart`
 
 ### Step 4：i18n 基础
 
@@ -163,6 +163,7 @@
 | 2026-05-12 | DESIGN_STANDARDS 重写为 Flutter 版                | v2.0                                             |
 | 2026-05-12 | 完成 Step 1：依赖与目录骨架                       | 新增 TECH_STACK.md / PROGRESS.md                 |
 | 2026-05-12 | 完成 Step 2：设计 token 落地                      | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页 |
+| 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测   |
 
 ---
 
