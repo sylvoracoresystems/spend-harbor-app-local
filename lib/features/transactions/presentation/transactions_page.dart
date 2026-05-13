@@ -23,7 +23,8 @@ class TransactionsPage extends ConsumerWidget {
     final l = AppL10n.of(context);
     final c = context.appColors;
     final ym = ref.watch(currentMonthProvider);
-    final async = ref.watch(transactionsOfMonthProvider);
+    final async = ref.watch(filteredTransactionsProvider);
+    final filter = ref.watch(transactionsFilterProvider);
     final selection = ref.watch(selectionControllerProvider);
     final selecting = selection.isNotEmpty;
 
@@ -48,19 +49,29 @@ class TransactionsPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
         data: (rows) {
-          if (rows.isEmpty) {
-            return Center(
-              child: Text(
-                l.txListEmpty,
-                style: AppTypography.sm.copyWith(color: c.textMuted),
-              ),
-            );
-          }
-          final groups = groupByDay(rows);
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
-            itemCount: groups.length,
-            itemBuilder: (context, i) => _DayGroupView(group: groups[i]),
+          final body = rows.isEmpty
+              ? Center(
+                  child: Text(
+                    l.txListEmpty,
+                    style: AppTypography.sm.copyWith(color: c.textMuted),
+                  ),
+                )
+              : Builder(builder: (_) {
+                  final groups = groupByDay(rows);
+                  return ListView.builder(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: AppSpacing.x2),
+                    itemCount: groups.length,
+                    itemBuilder: (context, i) =>
+                        _DayGroupView(group: groups[i]),
+                  );
+                });
+          if (filter == null || filter.isEmpty) return body;
+          return Column(
+            children: [
+              _FilterChip(filter: filter),
+              Expanded(child: body),
+            ],
           );
         },
       ),
@@ -326,4 +337,42 @@ String _formatDayLabel(BuildContext context, DateTime date) {
   if (isToday) return '${l.dayToday} · $ds';
   if (isYesterday) return '${l.dayYesterday} · $ds';
   return ds;
+}
+
+class _FilterChip extends ConsumerWidget {
+  const _FilterChip({required this.filter});
+  final TransactionsFilter filter;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.appColors;
+    final categories = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
+    final cat = filter.categoryId == null
+        ? null
+        : categories.where((x) => x.id == filter.categoryId).firstOrNull;
+    String label;
+    if (filter.dayIso != null) {
+      label = filter.dayIso!;
+    } else if (cat != null) {
+      label = resolveDefaultName(AppL10n.of(context), cat.nameKey) ?? cat.name;
+    } else {
+      label = '—';
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.x3,
+        vertical: AppSpacing.x2,
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: InputChip(
+          label: Text(label),
+          avatar: Icon(LucideIcons.filter, size: 14, color: c.actionInk),
+          onDeleted: () => ref
+              .read(transactionsFilterProvider.notifier)
+              .state = null,
+        ),
+      ),
+    );
+  }
 }

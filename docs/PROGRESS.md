@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 4 — 统计分析
-- **当前 Step**：4.3 Top 排行 ✅；准备进入 4.4 图表点击跳转
+- **当前阶段**：Phase 4 ✅ 全部完成
+- **当前 Step**：4.4 图表点击跳转 ✅；准备进入 Phase 5（导入 / 导出 / 备份）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,29 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 4 · 4.3 — Top 排行 ✅
+**当前 Step**：Phase 4 · 4.4 — 图表点击跳转 ✅（Phase 4 收尾）
+
+**子任务**：
+
+- [x] `TransactionsFilter` 值对象 + `transactionsFilterProvider`（State）+ `filteredTransactionsProvider`（派生 stream）
+- [x] 月份切换自动清空筛选（避免月外残留）
+- [x] TransactionsPage 顶部 `_FilterChip`（带 X 清除）
+- [x] BarChart 柱子点击 → 用「该月 + 该日」生成 ISO 日期 → 切到 `/transactions` + 设 filter
+- [x] CategoryDonut 切片 + legend 行点击 → 设 categoryId filter
+- [x] Top 5 行（按金额 / 按笔数）点击 → 设 categoryId filter
+- [x] TagDonut 切片暂不响应（标签筛选未实现，先留接口 `onTapId=null`）
+- [x] 单测 4 例（filter 匹配规则：empty / day / category / 双重 AND）
+- [x] `flutter analyze` + `flutter test` 通过（89 tests）
+
+**下一步接入点**：Phase 5 — 导入 / 导出 / 备份。子项：① Excel/CSV 导出 → 系统分享 ② 数据导入（含冲突合并）③ 一键备份 `.shbak` / 恢复 ④ 备份提醒。先做 5.1 CSV 导出（最小可用）：
+- 新增依赖：`csv` + `share_plus` + `path_provider`（已有）
+- 在 `lib/features/data_io/` 下建 `csv_exporter.dart`（纯函数 → 字符串）+ `share_handler.dart`（写临时文件 → 调用 share）
+- `/settings/export` 落地：选月份 + 按钮触发 → 系统分享面板
+- ARB + 单测（CSV 列头 / 行格式）
+
+**已完成 Step 4.3**：
+
+
 
 **子任务**：
 
@@ -340,7 +362,7 @@
 - [x] 趋势图（Bar Chart）
 - [x] 分类 / 标签 Donut
 - [x] Top 排行
-- [ ] 点击图表跳转交易列表（带筛选）
+- [x] 点击图表跳转交易列表（带筛选）
 
 ---
 
@@ -401,6 +423,7 @@
 | 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                   | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测         |
 | 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut            | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测     |
 | 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                     | countByCategory + 金额/笔数切换 + 2 单测                     |
+| 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）         | TransactionsFilter + chart taps + 顶部 chip + 4 单测         |
 
 ---
 

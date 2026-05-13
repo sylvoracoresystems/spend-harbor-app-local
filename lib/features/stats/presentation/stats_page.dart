@@ -11,8 +11,23 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../transactions/application/transactions_list_controller.dart';
 import '../application/stats_controller.dart';
+
+void _filterAndGo(
+  BuildContext context,
+  WidgetRef ref, {
+  String? dayIso,
+  String? categoryId,
+}) {
+  ref.read(transactionsFilterProvider.notifier).state = TransactionsFilter(
+    dayIso: dayIso,
+    categoryId: categoryId,
+  );
+  context.go('/transactions');
+}
 
 class StatsPage extends ConsumerWidget {
   const StatsPage({super.key});
@@ -70,15 +85,16 @@ class StatsPage extends ConsumerWidget {
   }
 }
 
-class _TrendCard extends StatelessWidget {
+class _TrendCard extends ConsumerWidget {
   const _TrendCard({required this.bars, required this.currency});
   final List<DailyExpenseBar> bars;
   final String currency;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final c = context.appColors;
+    final ym = ref.watch(currentMonthProvider);
     final maxValue = bars
         .map((b) => b.totalCentsForCurrency(currency))
         .fold<int>(0, (a, b) => b > a ? b : a);
@@ -118,6 +134,19 @@ class _TrendCard extends StatelessWidget {
                 minY: 0,
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  handleBuiltInTouches: true,
+                  touchCallback: (event, response) {
+                    if (!event.isInterestedForInteractions) return;
+                    final spot = response?.spot;
+                    if (spot == null) return;
+                    final d = spot.touchedBarGroup.x + 1;
+                    final dayIso =
+                        '${ym.year.toString().padLeft(4, '0')}-${ym.month.toString().padLeft(2, '0')}-${d.toString().padLeft(2, '0')}';
+                    _filterAndGo(context, ref, dayIso: dayIso);
+                  },
+                ),
                 titlesData: FlTitlesData(
                   rightTitles: const AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
@@ -232,10 +261,12 @@ class _CategoryDonutCard extends ConsumerWidget {
             label: labelOf(slices[i].categoryId),
             valueCents: slices[i].totalCents,
             color: Color(_kDonutPalette[i % _kDonutPalette.length]),
+            id: slices[i].categoryId,
           ),
       ],
       muted: c.textMuted,
       ink: c.actionInk,
+      onTapId: (id) => _filterAndGo(context, ref, categoryId: id),
     );
   }
 }
@@ -290,10 +321,13 @@ class _TagDonutCard extends ConsumerWidget {
                     label: labelOf(slices[i].tagId),
                     valueCents: slices[i].totalCents,
                     color: Color(_kDonutPalette[i % _kDonutPalette.length]),
+                    id: slices[i].tagId,
                   ),
               ],
               muted: c.textMuted,
               ink: c.actionInk,
+              // 标签筛选暂未实现，先不处理点击
+              onTapId: null,
             ),
     );
   }
@@ -304,10 +338,12 @@ class _DonutEntry {
     required this.label,
     required this.valueCents,
     required this.color,
+    required this.id,
   });
   final String label;
   final int valueCents;
   final Color color;
+  final String id;
 }
 
 class _DonutCard extends StatelessWidget {
@@ -317,12 +353,14 @@ class _DonutCard extends StatelessWidget {
     required this.entries,
     required this.muted,
     required this.ink,
+    this.onTapId,
   });
   final String title;
   final String currency;
   final List<_DonutEntry> entries;
   final Color muted;
   final Color ink;
+  final ValueChanged<String>? onTapId;
 
   @override
   Widget build(BuildContext context) {
@@ -340,6 +378,7 @@ class _DonutCard extends StatelessWidget {
         entries: entries,
         muted: muted,
         ink: ink,
+        onTapId: onTapId,
       ),
     );
   }
@@ -352,12 +391,14 @@ class _DonutBody extends StatelessWidget {
     required this.entries,
     required this.muted,
     required this.ink,
+    this.onTapId,
   });
   final String title;
   final String currency;
   final List<_DonutEntry> entries;
   final Color muted;
   final Color ink;
+  final ValueChanged<String>? onTapId;
 
   @override
   Widget build(BuildContext context) {
@@ -380,6 +421,15 @@ class _DonutBody extends StatelessWidget {
             PieChartData(
               sectionsSpace: 2,
               centerSpaceRadius: 48,
+              pieTouchData: PieTouchData(
+                enabled: onTapId != null,
+                touchCallback: (event, response) {
+                  if (!event.isInterestedForInteractions) return;
+                  final idx = response?.touchedSection?.touchedSectionIndex;
+                  if (idx == null || idx < 0 || idx >= entries.length) return;
+                  onTapId?.call(entries[idx].id);
+                },
+              ),
               sections: [
                 for (final e in entries)
                   PieChartSectionData(
@@ -394,33 +444,36 @@ class _DonutBody extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.x3),
         for (final e in entries)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              children: [
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: e.color,
-                    shape: BoxShape.circle,
+          InkWell(
+            onTap: onTapId == null ? null : () => onTapId!(e.id),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: e.color,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                const SizedBox(width: AppSpacing.x2),
-                Expanded(
-                  child: Text(
-                    e.label,
-                    style: AppTypography.xs.copyWith(color: ink),
+                  const SizedBox(width: AppSpacing.x2),
+                  Expanded(
+                    child: Text(
+                      e.label,
+                      style: AppTypography.xs.copyWith(color: ink),
+                    ),
                   ),
-                ),
-                Text(
-                  '$symbol${(e.valueCents / 100).toStringAsFixed(2)}'
-                  '  ·  ${total == 0 ? 0 : ((e.valueCents / total) * 100).toStringAsFixed(0)}%',
-                  style: AppTypography.xs
-                      .merge(AppTypography.mono)
-                      .copyWith(color: muted),
-                ),
-              ],
+                  Text(
+                    '$symbol${(e.valueCents / 100).toStringAsFixed(2)}'
+                    '  ·  ${total == 0 ? 0 : ((e.valueCents / total) * 100).toStringAsFixed(0)}%',
+                    style: AppTypography.xs
+                        .merge(AppTypography.mono)
+                        .copyWith(color: muted),
+                  ),
+                ],
+              ),
             ),
           ),
       ],
@@ -469,6 +522,8 @@ class _TopCategoriesCardState extends ConsumerState<_TopCategoriesCard> {
                     '$symbol${(top[i].totalCents / 100).toStringAsFixed(2)}',
                 ink: c.actionInk,
                 muted: c.textMuted,
+                onTap: () => _filterAndGo(context, ref,
+                    categoryId: top[i].categoryId),
               ),
           ],
         );
@@ -488,6 +543,8 @@ class _TopCategoriesCardState extends ConsumerState<_TopCategoriesCard> {
                 trailing: l.statsCountUnit(top[i].count),
                 ink: c.actionInk,
                 muted: c.textMuted,
+                onTap: () => _filterAndGo(context, ref,
+                    categoryId: top[i].categoryId),
               ),
           ],
         );
@@ -542,17 +599,21 @@ class _TopRow extends StatelessWidget {
     required this.trailing,
     required this.ink,
     required this.muted,
+    this.onTap,
   });
   final int rank;
   final String name;
   final String trailing;
   final Color ink;
   final Color muted;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           SizedBox(
@@ -580,6 +641,7 @@ class _TopRow extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

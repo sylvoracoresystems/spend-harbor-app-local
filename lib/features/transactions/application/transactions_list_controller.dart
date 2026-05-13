@@ -61,6 +61,43 @@ final transactionsOfMonthProvider = StreamProvider<List<Transaction>>((ref) {
   return ref.watch(transactionDaoProvider).watchByMonth(ym.key);
 });
 
+/// 临时筛选：单日 / 单分类，二选一或都为 null。
+class TransactionsFilter {
+  const TransactionsFilter({this.dayIso, this.categoryId});
+  final String? dayIso;
+  final String? categoryId;
+
+  bool get isEmpty => dayIso == null && categoryId == null;
+
+  bool matches(Transaction t) {
+    if (dayIso != null && t.transactedOn != dayIso) return false;
+    if (categoryId != null && t.categoryId != categoryId) return false;
+    return true;
+  }
+}
+
+/// 临时筛选状态（从 Stats 跳转时设置，TransactionsPage 顶部 chip 可清除）。
+final transactionsFilterProvider =
+    StateProvider<TransactionsFilter?>((ref) => null);
+
+/// 月份切换时自动清空筛选（避免月外 day 残留）。
+final _monthChangeListenerProvider = Provider<void>((ref) {
+  ref.listen(currentMonthProvider, (_, __) {
+    ref.read(transactionsFilterProvider.notifier).state = null;
+  });
+});
+
+/// 月份内交易经过 filter 后的视图。
+final filteredTransactionsProvider =
+    Provider<AsyncValue<List<Transaction>>>((ref) {
+  ref.watch(_monthChangeListenerProvider);
+  final filter = ref.watch(transactionsFilterProvider);
+  return ref.watch(transactionsOfMonthProvider).whenData((rows) {
+    if (filter == null || filter.isEmpty) return rows;
+    return rows.where(filter.matches).toList();
+  });
+});
+
 /// DayGroup：同一日期的交易聚合。
 class DayGroup {
   const DayGroup({
