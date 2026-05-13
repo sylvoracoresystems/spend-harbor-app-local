@@ -70,6 +70,18 @@
   "dayToday": "今天",
   "dayYesterday": "昨天",
 
+  "selectionTitle": "已选 {count} 项",
+  "@selectionTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "selectionCancel": "取消选择",
+  "selectionDelete": "删除",
+  "selectionDeleteConfirmTitle": "删除 {count} 笔交易？",
+  "@selectionDeleteConfirmTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "selectionDeleteConfirmBody": "将进入回收站，30 天内可恢复。",
+
   "catFood": "餐饮",
   "catTransport": "交通",
   "catShopping": "购物",

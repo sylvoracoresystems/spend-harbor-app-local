@@ -186,6 +186,25 @@ class AppL10nZh extends AppL10n {
   String get dayYesterday => '昨天';
 
   @override
+  String selectionTitle(int count) {
+    return '已选 $count 项';
+  }
+
+  @override
+  String get selectionCancel => '取消选择';
+
+  @override
+  String get selectionDelete => '删除';
+
+  @override
+  String selectionDeleteConfirmTitle(int count) {
+    return '删除 $count 笔交易？';
+  }
+
+  @override
+  String get selectionDeleteConfirmBody => '将进入回收站，30 天内可恢复。';
+
+  @override
   String get catFood => '餐饮';
 
   @override

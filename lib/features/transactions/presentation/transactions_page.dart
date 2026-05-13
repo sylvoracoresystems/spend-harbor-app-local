@@ -24,15 +24,19 @@ class TransactionsPage extends ConsumerWidget {
     final c = context.appColors;
     final ym = ref.watch(currentMonthProvider);
     final async = ref.watch(transactionsOfMonthProvider);
+    final selection = ref.watch(selectionControllerProvider);
+    final selecting = selection.isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l.tabTransactions),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: _MonthSwitcher(value: ym),
-        ),
-      ),
+      appBar: selecting
+          ? _buildSelectionAppBar(context, ref, selection)
+          : AppBar(
+              title: Text(l.tabTransactions),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(48),
+                child: _MonthSwitcher(value: ym),
+              ),
+            ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
@@ -55,6 +59,60 @@ class TransactionsPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+PreferredSizeWidget _buildSelectionAppBar(
+  BuildContext context,
+  WidgetRef ref,
+  Set<String> selection,
+) {
+  final l = AppL10n.of(context);
+  return AppBar(
+    leading: IconButton(
+      tooltip: l.selectionCancel,
+      icon: const Icon(LucideIcons.x),
+      onPressed: () =>
+          ref.read(selectionControllerProvider.notifier).clear(),
+    ),
+    title: Text(l.selectionTitle(selection.length)),
+    actions: [
+      IconButton(
+        tooltip: l.selectionDelete,
+        icon: const Icon(LucideIcons.trash2),
+        onPressed: () => _confirmBulkDelete(context, ref, selection),
+      ),
+    ],
+  );
+}
+
+Future<void> _confirmBulkDelete(
+  BuildContext context,
+  WidgetRef ref,
+  Set<String> selection,
+) async {
+  final l = AppL10n.of(context);
+  final yes = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(l.selectionDeleteConfirmTitle(selection.length)),
+      content: Text(l.selectionDeleteConfirmBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(l.txCancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(l.selectionDelete),
+        ),
+      ],
+    ),
+  );
+  if (yes != true) return;
+  await ref
+      .read(transactionDaoProvider)
+      .bulkSoftDelete(selection.toList());
+  ref.read(selectionControllerProvider.notifier).clear();
 }
 
 class _MonthSwitcher extends ConsumerWidget {
@@ -163,17 +221,37 @@ class _TransactionRow extends ConsumerWidget {
     final symbol = Currency.byCode(tx.currency).symbol;
     final amount =
         '$sign$symbol${(tx.amountCents / 100).toStringAsFixed(2)}';
+    final selection = ref.watch(selectionControllerProvider);
+    final selectionCtrl = ref.read(selectionControllerProvider.notifier);
+    final selecting = selection.isNotEmpty;
+    final selected = selection.contains(tx.id);
 
     return InkWell(
-      onTap: () => context.push('/transactions/${tx.id}/edit'),
+      onTap: () {
+        if (selecting) {
+          selectionCtrl.toggle(tx.id);
+        } else {
+          context.push('/transactions/${tx.id}/edit');
+        }
+      },
+      onLongPress: () => selectionCtrl.toggle(tx.id),
       borderRadius: AppRadius.brXl,
-      child: Padding(
+      child: Container(
+        color: selected ? c.mintSoft : null,
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.x4,
           vertical: AppSpacing.x3,
         ),
         child: Row(
           children: [
+            if (selecting) ...[
+              Icon(
+                selected ? LucideIcons.checkCircle2 : LucideIcons.circle,
+                size: 20,
+                color: selected ? c.action : c.textMuted,
+              ),
+              const SizedBox(width: AppSpacing.x3),
+            ],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

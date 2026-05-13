@@ -186,6 +186,25 @@ class AppL10nEn extends AppL10n {
   String get dayYesterday => 'Yesterday';
 
   @override
+  String selectionTitle(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get selectionCancel => 'Cancel selection';
+
+  @override
+  String get selectionDelete => 'Delete';
+
+  @override
+  String selectionDeleteConfirmTitle(int count) {
+    return 'Delete $count transactions?';
+  }
+
+  @override
+  String get selectionDeleteConfirmBody => 'They will move to the recycle bin for 30 days.';
+
+  @override
   String get catFood => 'Food';
 
   @override

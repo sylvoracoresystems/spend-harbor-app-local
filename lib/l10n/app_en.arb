@@ -73,6 +73,18 @@
   "dayToday": "Today",
   "dayYesterday": "Yesterday",
 
+  "selectionTitle": "{count} selected",
+  "@selectionTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "selectionCancel": "Cancel selection",
+  "selectionDelete": "Delete",
+  "selectionDeleteConfirmTitle": "Delete {count} transactions?",
+  "@selectionDeleteConfirmTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "selectionDeleteConfirmBody": "They will move to the recycle bin for 30 days.",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",

@@ -71,6 +71,26 @@ class DayGroup {
   final List<Transaction> items;
 }
 
+/// 交易列表选择模式状态：空集 = 未进入选择模式。
+class SelectionController extends StateNotifier<Set<String>> {
+  SelectionController() : super(const <String>{});
+
+  bool get isActive => state.isNotEmpty;
+
+  void toggle(String id) {
+    final next = {...state};
+    if (!next.add(id)) next.remove(id);
+    state = next;
+  }
+
+  void clear() => state = const <String>{};
+}
+
+final selectionControllerProvider =
+    StateNotifierProvider<SelectionController, Set<String>>(
+  (ref) => SelectionController(),
+);
+
 /// 把交易按 `transactedOn` 分组，日期降序。
 List<DayGroup> groupByDay(List<Transaction> rows) {
   final byDate = <String, List<Transaction>>{};

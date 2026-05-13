@@ -449,6 +449,36 @@ abstract class AppL10n {
   /// **'Yesterday'**
   String get dayYesterday;
 
+  /// No description provided for @selectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String selectionTitle(int count);
+
+  /// No description provided for @selectionCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel selection'**
+  String get selectionCancel;
+
+  /// No description provided for @selectionDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get selectionDelete;
+
+  /// No description provided for @selectionDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} transactions?'**
+  String selectionDeleteConfirmTitle(int count);
+
+  /// No description provided for @selectionDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'They will move to the recycle bin for 30 days.'**
+  String get selectionDeleteConfirmBody;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

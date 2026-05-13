@@ -97,6 +97,18 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     );
   }
 
+  /// 批量软删除：把所有 id 一次性标记为已删除。
+  Future<int> bulkSoftDelete(List<String> ids) {
+    if (ids.isEmpty) return Future.value(0);
+    final now = DateTime.now();
+    return (update(transactions)..where((t) => t.id.isIn(ids))).write(
+      TransactionsCompanion(
+        deletedAt: Value(now),
+        updatedAt: Value(now),
+      ),
+    );
+  }
+
   /// 获取某笔交易关联的所有标签 id。
   Future<List<String>> tagIdsOf(String transactionId) async {
     final rows = await (select(transactionTags)

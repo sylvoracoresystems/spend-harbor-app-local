@@ -52,6 +52,59 @@ void main() {
     });
   });
 
+  group('SelectionController', () {
+    test('toggle 切换 + clear 清空', () {
+      final c = SelectionController();
+      expect(c.isActive, isFalse);
+      c.toggle('a');
+      c.toggle('b');
+      expect(c.state, {'a', 'b'});
+      expect(c.isActive, isTrue);
+      c.toggle('a');
+      expect(c.state, {'b'});
+      c.clear();
+      expect(c.state, isEmpty);
+      expect(c.isActive, isFalse);
+    });
+  });
+
+  test('bulkSoftDelete 软删除多笔', () async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+    await db.categoryDao.insertCategory(CategoriesCompanion.insert(
+      id: 'c1',
+      name: 'Food',
+      type: TransactionType.expense,
+      icon: 'utensils',
+      color: '#f97316',
+    ));
+    await db.sourceDao.insertSource(SourcesCompanion.insert(
+      id: 's1',
+      name: 'Cash',
+      icon: 'wallet',
+      color: '#10b981',
+      currency: 'CAD',
+    ));
+    for (final id in ['a', 'b', 'c']) {
+      await db.transactionDao.insertWithTags(
+        TransactionsCompanion.insert(
+          id: id,
+          amountCents: 100,
+          currency: 'CAD',
+          type: TransactionType.expense,
+          categoryId: 'c1',
+          sourceId: 's1',
+          transactedOn: '2026-05-13',
+        ),
+        const [],
+      );
+    }
+    final affected = await db.transactionDao.bulkSoftDelete(['a', 'c']);
+    expect(affected, 2);
+    final remaining = await db.transactionDao.watchAll().first;
+    expect(remaining.map((r) => r.id).toList(), ['b']);
+  });
+
   test('transactionsOfMonthProvider 跟随 currentMonth 切换数据', () async {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     final container = ProviderContainer(overrides: [

@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 2 — 核心交易链路 MVP
-- **当前 Step**：2.3 交易列表 ✅；准备进入 2.4 多选与批量删除
+- **当前 Step**：2.4 多选与批量删除 ✅；准备进入 2.5 Dashboard
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,23 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 2 · 2.3 — 交易列表 ✅
+**当前 Step**：Phase 2 · 2.4 — 多选与批量删除 ✅
+
+**子任务**：
+
+- [x] `SelectionController`（StateNotifier<Set<String>>）+ `selectionControllerProvider`
+- [x] `TransactionDao.bulkSoftDelete(List<String>)`：一次性 IN 查询软删除
+- [x] 行长按 → 进入选择模式；点击行在选择模式下切换勾选，否则跳编辑
+- [x] AppBar 替换：左叉 / 「N 已选」/ 删除按钮
+- [x] 删除二次确认 + ARB 复数文案（en + zh，含 ICU placeholder）
+- [x] 单测 2 例（toggle/clear + bulkSoftDelete）
+- [x] `flutter analyze` + `flutter test` 通过（34 tests）
+
+**下一步接入点**：2.5 Dashboard — 在 `lib/features/dashboard/` 下建 `application/dashboard_summary_controller.dart`（聚合本月：收入总额、支出总额、净额、笔数；按币种分行）和 `presentation/dashboard_page.dart` 渲染 4 张指标卡 + 近期交易列表（≤10 条）。注意多币种不换算。
+
+**已完成 Step 2.3**：
+
+
 
 **子任务**：
 
@@ -151,7 +167,7 @@
 
 - [x] 交易表单（`/transactions/new` 与 `/edit`）：字段、验证、提交
 - [x] 交易列表（`/transactions`）：DayGroup 分组、月份切换（无限滚动延后 — 单月数据量小，按月翻页够用）
-- [ ] 长按进入选择模式 + 批量删除
+- [x] 长按进入选择模式 + 批量删除
 - [ ] Dashboard：4 张指标卡 + 近期交易
 - [ ] 回收站（30 天）
 
@@ -222,6 +238,7 @@
 | 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                  | appDatabaseProvider + DAO/stream providers + 启动 seed     |
 | 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                      | StateNotifier 控制器 + 9 字段表单 + 9 单测                  |
 | 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                      | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后    |
+| 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                | SelectionController + bulkSoftDelete + 选择模式 AppBar     |
 
 ---
 
