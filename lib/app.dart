@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/settings/application/theme_mode_provider.dart';
+import 'features/settings/presentation/app_lock_gate.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'shared/providers/locale_provider.dart';
 import 'shared/router/app_router.dart';
@@ -25,6 +26,8 @@ class SpendHarborApp extends ConsumerWidget {
       supportedLocales: AppL10n.supportedLocales,
       localizationsDelegates: AppL10n.localizationsDelegates,
       routerConfig: router,
+      builder: (context, child) =>
+          AppLockGate(child: child ?? const SizedBox.shrink()),
     );
   }
 }

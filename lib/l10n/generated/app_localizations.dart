@@ -767,6 +767,90 @@ abstract class AppL10n {
   /// **'Dark'**
   String get appearanceDark;
 
+  /// No description provided for @lockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock'**
+  String get lockTitle;
+
+  /// No description provided for @lockEnableToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Require PIN to open'**
+  String get lockEnableToggle;
+
+  /// No description provided for @lockBiometricToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow biometrics'**
+  String get lockBiometricToggle;
+
+  /// No description provided for @lockSetPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Set PIN'**
+  String get lockSetPin;
+
+  /// No description provided for @lockChangePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get lockChangePin;
+
+  /// No description provided for @lockRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off app lock'**
+  String get lockRemove;
+
+  /// No description provided for @lockEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter PIN'**
+  String get lockEnterPin;
+
+  /// No description provided for @lockConfirmPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get lockConfirmPin;
+
+  /// No description provided for @lockMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'PINs don\'t match'**
+  String get lockMismatch;
+
+  /// No description provided for @lockTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN must be at least 4 digits'**
+  String get lockTooShort;
+
+  /// No description provided for @lockWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect PIN'**
+  String get lockWrong;
+
+  /// No description provided for @lockUnlockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock SpendHarbor'**
+  String get lockUnlockTitle;
+
+  /// No description provided for @lockUseBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Use biometrics'**
+  String get lockUseBiometric;
+
+  /// No description provided for @lockBiometricReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock SpendHarbor'**
+  String get lockBiometricReason;
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

@@ -372,6 +372,48 @@ class AppL10nZh extends AppL10n {
   String get appearanceDark => '深色';
 
   @override
+  String get lockTitle => '应用锁';
+
+  @override
+  String get lockEnableToggle => '打开应用需要 PIN';
+
+  @override
+  String get lockBiometricToggle => '允许生物识别';
+
+  @override
+  String get lockSetPin => '设置 PIN';
+
+  @override
+  String get lockChangePin => '修改 PIN';
+
+  @override
+  String get lockRemove => '关闭应用锁';
+
+  @override
+  String get lockEnterPin => '输入 PIN';
+
+  @override
+  String get lockConfirmPin => '确认 PIN';
+
+  @override
+  String get lockMismatch => '两次输入不一致';
+
+  @override
+  String get lockTooShort => 'PIN 至少 4 位';
+
+  @override
+  String get lockWrong => 'PIN 错误';
+
+  @override
+  String get lockUnlockTitle => '解锁 SpendHarbor';
+
+  @override
+  String get lockUseBiometric => '使用生物识别';
+
+  @override
+  String get lockBiometricReason => '解锁 SpendHarbor';
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

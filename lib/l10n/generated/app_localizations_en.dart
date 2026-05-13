@@ -373,6 +373,48 @@ class AppL10nEn extends AppL10n {
   String get appearanceDark => 'Dark';
 
   @override
+  String get lockTitle => 'App Lock';
+
+  @override
+  String get lockEnableToggle => 'Require PIN to open';
+
+  @override
+  String get lockBiometricToggle => 'Allow biometrics';
+
+  @override
+  String get lockSetPin => 'Set PIN';
+
+  @override
+  String get lockChangePin => 'Change PIN';
+
+  @override
+  String get lockRemove => 'Turn off app lock';
+
+  @override
+  String get lockEnterPin => 'Enter PIN';
+
+  @override
+  String get lockConfirmPin => 'Confirm PIN';
+
+  @override
+  String get lockMismatch => 'PINs don\'t match';
+
+  @override
+  String get lockTooShort => 'PIN must be at least 4 digits';
+
+  @override
+  String get lockWrong => 'Incorrect PIN';
+
+  @override
+  String get lockUnlockTitle => 'Unlock SpendHarbor';
+
+  @override
+  String get lockUseBiometric => 'Use biometrics';
+
+  @override
+  String get lockBiometricReason => 'Unlock SpendHarbor';
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

@@ -16,6 +16,7 @@ import '../../features/settings/presentation/appearance_page.dart';
 import '../../features/settings/presentation/currency_page.dart';
 import '../../features/settings/presentation/language_page.dart';
 import '../../features/settings/presentation/profile_page.dart';
+import '../../features/settings/presentation/security_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
 import '../../features/sources/presentation/source_edit_page.dart';
 import '../../features/sources/presentation/sources_page.dart';
@@ -47,12 +48,11 @@ const _settingsRoutes = <_SettingsRoute>[
   // currency 已实现
   // language 已实现
   // appearance 已实现
-  (path: '/settings/security', title: _security),
+  // security 已实现
   (path: '/settings/about', title: _about),
   (path: '/settings/legal', title: _legal),
 ];
 
-String _security(AppL10n l) => l.settingsSecurity;
 String _about(AppL10n l) => l.settingsAbout;
 String _legal(AppL10n l) => l.settingsLegal;
 
@@ -176,6 +176,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings/currency',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const CurrencyPage(),
+      ),
+      GoRoute(
+        path: '/settings/security',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const SecurityPage(),
       ),
       GoRoute(
         path: '/settings/budgets',

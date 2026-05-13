@@ -48,6 +48,7 @@
 | `csv`                         | ^6.0.0     | CSV 导出 / 导入                          | RFC 4180 引号/逗号处理；纯 Dart 不联网                      |
 | `share_plus`                  | ^12.x      | 调起系统分享面板（导出 / 备份分享）       | 跨平台官方维护；通过临时文件 + XFile 分享                    |
 | `file_picker`                 | ^11.0.2    | 选择 CSV 导入文件                        | 跨平台；11.x 改为 `FilePicker.pickFiles` 静态调用             |
+| `crypto`                      | ^3.0.6     | PIN SHA-256 哈希                          | 标准实现；纯 Dart 不联网                                      |
 
 ### 2.2 开发时依赖（`dev_dependencies`）
 

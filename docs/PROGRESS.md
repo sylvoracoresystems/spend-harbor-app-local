@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 6 — 设置与体验
-- **当前 Step**：6.2 默认货币 ✅；准备进入 6.3 应用锁
+- **当前 Step**：6.3 应用锁 ✅；准备进入 6.4 关于 / 法律页
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,30 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 6 · 6.2 — 默认货币 ✅
+**当前 Step**：Phase 6 · 6.3 — 应用锁（PIN + 生物识别）✅
+
+**子任务**：
+
+- [x] 新依赖 `crypto: ^3.0.6`（PIN SHA-256 哈希）
+- [x] `application/app_lock_controller.dart`：纯函数 `hashPin(pin)` (salt + sha256) + `AppLockController`（StateNotifier<AppLockState>，bootstrap 从 secure_storage 读 hash + 生物识别开关）
+- [x] `LockStorage` 接口（生产 = secure_storage；测试可注入内存实现）+ `localAuthProvider` 包装 LocalAuthentication
+- [x] `presentation/app_lock_gate.dart`：`Stack` 覆盖锁屏；`WidgetsBindingObserver` 在 paused/detached 时调用 `lock()`；启动时自动尝试生物识别
+- [x] `presentation/security_page.dart`：开关 + 设置/修改 PIN（弹窗输入两次校验）+ 生物识别 toggle
+- [x] `app.dart` `MaterialApp.router.builder` 用 `AppLockGate` 包裹全局
+- [x] go_router `/settings/security` 替换占位
+- [x] ARB：lockTitle / EnableToggle / Biometric / SetPin / ChangePin / Remove / EnterPin / ConfirmPin / Mismatch / TooShort / Wrong / UnlockTitle / UseBiometric / Reason（en + zh）
+- [x] 单测 9 例（hashPin 3 + bootstrap 2 + setPin/verify/clear + 长度校验 + biometric 联动 + lock()）
+- [x] `flutter analyze` + `flutter test` 通过（133 tests）
+
+**下一步接入点**：6.4 关于 / 法律页 — 静态文案。
+- `presentation/about_page.dart`：App 名 + 版本（package_info_plus 可选；先硬编码 1.0.0）+ 简短介绍 + 致谢
+- `presentation/legal_page.dart`：隐私政策 + 服务条款（两段简短，强调本地存储）
+- 路由 `/settings/about` + `/settings/legal` 替换占位
+- ARB
+
+**已完成 Step 6.2**：
+
+
 
 **子任务**：
 
@@ -495,7 +518,7 @@
 
 - [x] 个人偏好（昵称、头像 initials）
 - [x] 默认货币、语言、外观主题
-- [ ] 应用锁（PIN + 生物识别）
+- [x] 应用锁（PIN + 生物识别）
 - [ ] 关于页、法律页
 - [ ] 触感反馈（HapticFeedback）接入
 
@@ -546,6 +569,7 @@
 | 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）     | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测           |
 | 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言       | 昵称 + initials + ThemeMode 持久化 + 9 单测                  |
 | 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                     | 持久化 + Source/Budget 新建套用默认 + 4 单测                 |
+| 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）     | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
 
 ---
 
