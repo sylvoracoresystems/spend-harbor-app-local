@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="spend_harbor_app_local"
+        android:label="SpendHarbor"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

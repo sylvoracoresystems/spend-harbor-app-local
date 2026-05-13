@@ -4,10 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:spend_harbor_app_local/app.dart';
 
 void main() {
-  testWidgets('App boots and shows placeholder', (WidgetTester tester) async {
+  testWidgets('App boots and renders theme preview', (WidgetTester tester) async {
     await tester.pumpWidget(
       const ProviderScope(child: SpendHarborApp()),
     );
-    expect(find.text('SpendHarbor — scaffold ready'), findsOneWidget);
+    await tester.pump();
+    expect(find.text('Theme Preview'), findsOneWidget);
+    expect(find.text('Typography'), findsOneWidget);
+    expect(find.text('Buttons'), findsOneWidget);
   });
 }

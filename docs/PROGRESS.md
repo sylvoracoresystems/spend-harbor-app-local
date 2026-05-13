@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 1 — 脚手架（Scaffolding）
-- **当前 Step**：Step 1 已完成；准备进入 Step 2（设计 token 落地）
+- **当前 Step**：Step 2 已完成；准备进入 Step 3（数据库 Schema + Seed）
 - **最近更新**：2026-05-12
 
 ---
@@ -18,22 +18,22 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Step 2 — 设计 token 落地（未开始）
+**当前 Step**：Step 3 — 数据库 Schema + Seed（未开始）
 
 **子任务**：
 
-- [ ] `lib/theme/app_colors.dart`
-- [ ] `lib/theme/app_spacing.dart`
-- [ ] `lib/theme/app_radius.dart`
-- [ ] `lib/theme/app_typography.dart`
-- [ ] `lib/theme/app_shadows.dart`
-- [ ] `lib/theme/app_theme.dart`（装配 lightTheme + darkTheme）
-- [ ] `app.dart` 接入 theme
+- [ ] `lib/data/database/app_database.dart`：drift Database 定义
+- [ ] 5 张表（Category / Tag / Source / Budget / Transaction）+ 多对多 `TransactionTags`
+- [ ] 软删除字段（`deletedAt`）+ 必要索引
+- [ ] `lib/data/seed/default_data.dart`：按 locale 注入默认分类/标签/来源
+- [ ] DAO 文件（每张表一个）
+- [ ] `build_runner` 生成 `*.g.dart`
+- [ ] `test/data/` DAO 基础单元测试
 - [ ] `flutter analyze` + `flutter test` 通过
 
-**下一步接入点**：从 `lib/theme/app_colors.dart` 开始，照 DESIGN_STANDARDS §2.1 写颜色 token。
+**下一步接入点**：先在 `lib/data/database/` 下建 `tables.dart`（定义所有 drift Table），再建 `app_database.dart` 把表装配并配置 `path_provider` 打开数据库。
 
-**未提交改动**：无（Step 1 改动待用户决定何时 commit）
+**未提交改动**：Step 1 + Step 2 全部改动均未 commit
 
 **已知阻塞**：无
 
@@ -56,15 +56,15 @@
 - [x] `flutter analyze` 0 issues
 - [x] `flutter test` 占位 widget 测试通过
 
-### Step 2：设计 token 落地
+### Step 2：设计 token 落地 ✅
 
-- [ ] `lib/theme/app_colors.dart`：颜色 token（浅色 + 深色）
-- [ ] `lib/theme/app_spacing.dart`：4pt 网格间距常量
-- [ ] `lib/theme/app_radius.dart`：圆角常量
-- [ ] `lib/theme/app_typography.dart`：字号/字重
-- [ ] `lib/theme/app_shadows.dart`：BoxShadow 预设
-- [ ] `lib/theme/app_theme.dart`：装配 `lightTheme` + `darkTheme`
-- [ ] `app.dart` 接入 theme，验证浅/深模式切换
+- [x] `lib/theme/app_colors.dart`：颜色 token（浅色 + 深色，ThemeExtension）
+- [x] `lib/theme/app_spacing.dart`：4pt 网格 + 常用 EdgeInsets 预设
+- [x] `lib/theme/app_radius.dart`：圆角常量 + BorderRadius 预设
+- [x] `lib/theme/app_typography.dart`：字号阶梯 + 字重 + 等宽 + TextTheme builder
+- [x] `lib/theme/app_shadows.dart`：BoxShadow 预设（sm/md/lg）
+- [x] `lib/theme/app_theme.dart`：装配 `lightTheme` + `darkTheme`，统一 AppBar/Input/Button/Dialog/Snackbar 风格
+- [x] `app.dart` 接入 theme + 临时 Theme Preview 页（含浅/深模式切换按钮）
 
 ### Step 3：数据库 Schema + Seed
 
@@ -162,6 +162,7 @@
 | 2026-05-12 | 实现平台选定：Flutter（iOS + Android）            | 暂不发布 Web / 桌面端                            |
 | 2026-05-12 | DESIGN_STANDARDS 重写为 Flutter 版                | v2.0                                             |
 | 2026-05-12 | 完成 Step 1：依赖与目录骨架                       | 新增 TECH_STACK.md / PROGRESS.md                 |
+| 2026-05-12 | 完成 Step 2：设计 token 落地                      | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页 |
 
 ---
 
