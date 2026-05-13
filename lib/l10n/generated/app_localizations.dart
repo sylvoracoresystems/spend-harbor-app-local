@@ -479,6 +479,48 @@ abstract class AppL10n {
   /// **'They will move to the recycle bin for 30 days.'**
   String get selectionDeleteConfirmBody;
 
+  /// No description provided for @dashIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get dashIncome;
+
+  /// No description provided for @dashExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get dashExpense;
+
+  /// No description provided for @dashNet.
+  ///
+  /// In en, this message translates to:
+  /// **'Net'**
+  String get dashNet;
+
+  /// No description provided for @dashCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get dashCount;
+
+  /// No description provided for @dashRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get dashRecent;
+
+  /// No description provided for @dashViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get dashViewAll;
+
+  /// No description provided for @dashEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet — tap + to add one.'**
+  String get dashEmpty;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

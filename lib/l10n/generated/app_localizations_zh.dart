@@ -205,6 +205,27 @@ class AppL10nZh extends AppL10n {
   String get selectionDeleteConfirmBody => '将进入回收站，30 天内可恢复。';
 
   @override
+  String get dashIncome => '收入';
+
+  @override
+  String get dashExpense => '支出';
+
+  @override
+  String get dashNet => '净额';
+
+  @override
+  String get dashCount => '笔数';
+
+  @override
+  String get dashRecent => '近期';
+
+  @override
+  String get dashViewAll => '查看全部';
+
+  @override
+  String get dashEmpty => '本月暂无交易，点击 + 新建一笔。';
+
+  @override
   String get catFood => '餐饮';
 
   @override

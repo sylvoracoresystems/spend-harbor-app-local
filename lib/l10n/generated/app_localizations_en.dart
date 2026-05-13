@@ -205,6 +205,27 @@ class AppL10nEn extends AppL10n {
   String get selectionDeleteConfirmBody => 'They will move to the recycle bin for 30 days.';
 
   @override
+  String get dashIncome => 'Income';
+
+  @override
+  String get dashExpense => 'Expense';
+
+  @override
+  String get dashNet => 'Net';
+
+  @override
+  String get dashCount => 'Transactions';
+
+  @override
+  String get dashRecent => 'Recent';
+
+  @override
+  String get dashViewAll => 'View all';
+
+  @override
+  String get dashEmpty => 'No transactions yet — tap + to add one.';
+
+  @override
   String get catFood => 'Food';
 
   @override

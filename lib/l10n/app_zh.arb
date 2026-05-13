@@ -82,6 +82,14 @@
   },
   "selectionDeleteConfirmBody": "将进入回收站，30 天内可恢复。",
 
+  "dashIncome": "收入",
+  "dashExpense": "支出",
+  "dashNet": "净额",
+  "dashCount": "笔数",
+  "dashRecent": "近期",
+  "dashViewAll": "查看全部",
+  "dashEmpty": "本月暂无交易，点击 + 新建一笔。",
+
   "catFood": "餐饮",
   "catTransport": "交通",
   "catShopping": "购物",

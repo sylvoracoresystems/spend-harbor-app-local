@@ -85,6 +85,14 @@
   },
   "selectionDeleteConfirmBody": "They will move to the recycle bin for 30 days.",
 
+  "dashIncome": "Income",
+  "dashExpense": "Expense",
+  "dashNet": "Net",
+  "dashCount": "Transactions",
+  "dashRecent": "Recent",
+  "dashViewAll": "View all",
+  "dashEmpty": "No transactions yet — tap + to add one.",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",
