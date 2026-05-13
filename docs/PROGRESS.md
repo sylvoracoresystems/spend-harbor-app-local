@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 1 — 脚手架（Scaffolding） ✅ 全部完成
-- **当前 Step**：Step 5 已完成；Phase 1 收尾，准备进入 Phase 2（核心交易链路 MVP）
+- **当前阶段**：Phase 2 — 核心交易链路 MVP
+- **当前 Step**：2.1 数据访问基础 ✅；准备进入 2.2 交易表单
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,21 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Step 5 — 路由与主框架 ✅
+**当前 Step**：Phase 2 · 2.1 — 数据访问基础 ✅
+
+**子任务**：
+
+- [x] `lib/data/database/app_database_provider.dart`：`appDatabaseProvider` + 5 个 DAO provider + 3 个 stream provider
+- [x] `lib/data/seed/seed_locale_from_platform.dart`：平台 locale → SeedLocale
+- [x] `main.dart`：启动时创建 DB + 跑 seed（按平台 locale）+ 覆盖 provider
+- [x] `widget_test` 适配 DB override；`app_database_provider_test`（3 tests）
+- [x] `flutter analyze` + `flutter test` 通过（16 tests）
+
+**下一步接入点**：2.2 交易表单 — 在 `lib/features/transactions/application/` 下建 `transaction_form_controller.dart`（Riverpod `StateNotifier<TransactionFormState>`），`presentation/transaction_form.dart` 替换占位的 `TransactionEditPage`。字段：金额（minor units 输入）、币种（从来源派生）、类型（segmented）、分类（按 type 过滤）、来源（来源决定币种）、日期（默认今天）、标签（多选）、备注。
+
+**已完成 Step 5**：
+
+
 
 **子任务**：
 
@@ -168,6 +182,7 @@
 | 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测   |
 | 2026-05-13 | 完成 Step 4：i18n 基础                            | en/zh ARB + localeController + nameKey resolver + 12 单测 |
 | 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）         | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
+| 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                  | appDatabaseProvider + DAO/stream providers + 启动 seed     |
 
 ---
 
