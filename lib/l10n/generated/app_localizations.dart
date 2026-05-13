@@ -521,6 +521,48 @@ abstract class AppL10n {
   /// **'No transactions yet — tap + to add one.'**
   String get dashEmpty;
 
+  /// No description provided for @recycleBinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recycle Bin'**
+  String get recycleBinTitle;
+
+  /// No description provided for @recycleBinEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here. Deleted transactions stay for 30 days.'**
+  String get recycleBinEmpty;
+
+  /// No description provided for @recycleBinDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days left'**
+  String recycleBinDaysLeft(int days);
+
+  /// No description provided for @recycleBinRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get recycleBinRestore;
+
+  /// No description provided for @recycleBinPurge.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever'**
+  String get recycleBinPurge;
+
+  /// No description provided for @recycleBinPurgeConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever?'**
+  String get recycleBinPurgeConfirmTitle;
+
+  /// No description provided for @recycleBinPurgeConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This transaction will be permanently removed and cannot be recovered.'**
+  String get recycleBinPurgeConfirmBody;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:

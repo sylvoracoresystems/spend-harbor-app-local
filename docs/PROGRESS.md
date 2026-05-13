@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 2 — 核心交易链路 MVP
-- **当前 Step**：2.5 Dashboard ✅；准备进入 2.6 回收站（Phase 2 收尾）
+- **当前阶段**：Phase 2 ✅ 全部完成
+- **当前 Step**：2.6 回收站 ✅；准备进入 Phase 3（Taxonomy 与预算）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,25 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 2 · 2.5 — Dashboard 闭环 ✅
+**当前 Step**：Phase 2 · 2.6 — 回收站 ✅（Phase 2 收尾）
+
+**子任务**：
+
+- [x] `TransactionDao`：`watchTrashed(cutoff)` / `restore(id)` / `purge(id)` / `purgeOlderThan(cutoff)`（事务内删除标签关联）
+- [x] `application/recycle_bin_controller.dart`：`trashedTransactionsProvider`（30 天保留期）+ `RecycleBinController` + 纯函数 `daysLeft`
+- [x] `presentation/recycle_bin_page.dart`：列表 + 每行「恢复 / 彻底删除」+ 「剩 N 天」 + 二次确认
+- [x] go_router：`/transactions/recycle-bin` 路由（root navigator）
+- [x] TransactionsPage AppBar 右上角加入回收站图标入口
+- [x] `main.dart` 启动时 `unawaited(purgeOlderThan(...))` 自动清理
+- [x] ARB：recycleBinTitle / Empty / DaysLeft（ICU placeholder）/ Restore / Purge / 确认（en + zh）
+- [x] 单测 6 例（daysLeft 边界 + restore / purge / purgeOlderThan）
+- [x] `flutter analyze` + `flutter test` 通过（42 tests）
+
+**下一步接入点**：Phase 3 — Taxonomy 与预算。先做 3.1 分类管理 CRUD：替换 `/settings/categories` 的占位页，建 `lib/features/categories/`（`application/category_form_controller.dart` + `presentation/categories_page.dart` + `category_edit_page.dart`），复用 `categoryDaoProvider`，新增 sort/reorder + 同名校验（已在 DAO `existsName` 中实现）。
+
+**已完成 Step 2.5**：
+
+
 
 **子任务**：
 
@@ -188,7 +206,7 @@
 - [x] 交易列表（`/transactions`）：DayGroup 分组、月份切换（无限滚动延后 — 单月数据量小，按月翻页够用）
 - [x] 长按进入选择模式 + 批量删除
 - [x] Dashboard：4 张指标卡 + 近期交易
-- [ ] 回收站（30 天）
+- [x] 回收站（30 天）
 
 ---
 
@@ -259,6 +277,7 @@
 | 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                      | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后    |
 | 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                | SelectionController + bulkSoftDelete + 选择模式 AppBar     |
 | 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线  |
+| 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）       | watchTrashed/restore/purge + 启动自动 30 天清理            |
 
 ---
 

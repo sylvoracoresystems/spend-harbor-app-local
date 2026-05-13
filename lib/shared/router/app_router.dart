@@ -6,6 +6,7 @@ import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
 import '../../features/stats/presentation/stats_page.dart';
+import '../../features/transactions/presentation/recycle_bin_page.dart';
 import '../../features/transactions/presentation/transaction_edit_page.dart';
 import '../../features/transactions/presentation/transactions_page.dart';
 import '../../l10n/generated/app_localizations.dart';
@@ -71,6 +72,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/transactions/new',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const TransactionEditPage(),
+      ),
+      GoRoute(
+        path: '/transactions/recycle-bin',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const RecycleBinPage(),
       ),
       GoRoute(
         path: '/transactions/:id/edit',

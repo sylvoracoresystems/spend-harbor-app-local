@@ -226,6 +226,29 @@ class AppL10nEn extends AppL10n {
   String get dashEmpty => 'No transactions yet — tap + to add one.';
 
   @override
+  String get recycleBinTitle => 'Recycle Bin';
+
+  @override
+  String get recycleBinEmpty => 'Nothing here. Deleted transactions stay for 30 days.';
+
+  @override
+  String recycleBinDaysLeft(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String get recycleBinRestore => 'Restore';
+
+  @override
+  String get recycleBinPurge => 'Delete forever';
+
+  @override
+  String get recycleBinPurgeConfirmTitle => 'Delete forever?';
+
+  @override
+  String get recycleBinPurgeConfirmBody => 'This transaction will be permanently removed and cannot be recovered.';
+
+  @override
   String get catFood => 'Food';
 
   @override

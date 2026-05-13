@@ -32,6 +32,13 @@ class TransactionsPage extends ConsumerWidget {
           ? _buildSelectionAppBar(context, ref, selection)
           : AppBar(
               title: Text(l.tabTransactions),
+              actions: [
+                IconButton(
+                  tooltip: l.recycleBinTitle,
+                  icon: const Icon(LucideIcons.trash2),
+                  onPressed: () => context.push('/transactions/recycle-bin'),
+                ),
+              ],
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(48),
                 child: _MonthSwitcher(value: ym),

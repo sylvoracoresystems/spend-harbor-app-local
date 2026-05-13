@@ -226,6 +226,29 @@ class AppL10nZh extends AppL10n {
   String get dashEmpty => '本月暂无交易，点击 + 新建一笔。';
 
   @override
+  String get recycleBinTitle => '回收站';
+
+  @override
+  String get recycleBinEmpty => '回收站空着。删除的交易会保留 30 天。';
+
+  @override
+  String recycleBinDaysLeft(int days) {
+    return '剩 $days 天';
+  }
+
+  @override
+  String get recycleBinRestore => '恢复';
+
+  @override
+  String get recycleBinPurge => '彻底删除';
+
+  @override
+  String get recycleBinPurgeConfirmTitle => '彻底删除？';
+
+  @override
+  String get recycleBinPurgeConfirmBody => '这笔交易将被永久删除且不可恢复。';
+
+  @override
   String get catFood => '餐饮';
 
   @override

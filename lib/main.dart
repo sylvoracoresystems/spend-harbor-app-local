@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +21,12 @@ Future<void> main() async {
     db,
     locale: seedLocaleFromPlatform(
       WidgetsBinding.instance.platformDispatcher.locale,
+    ),
+  );
+  // 启动时清理过期回收站项（> 30 天），与 UI 无关，可静默失败。
+  unawaited(
+    db.transactionDao.purgeOlderThan(
+      DateTime.now().subtract(const Duration(days: 30)),
     ),
   );
 

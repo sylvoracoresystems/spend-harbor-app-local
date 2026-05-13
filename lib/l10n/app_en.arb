@@ -93,6 +93,17 @@
   "dashViewAll": "View all",
   "dashEmpty": "No transactions yet — tap + to add one.",
 
+  "recycleBinTitle": "Recycle Bin",
+  "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
+  "recycleBinDaysLeft": "{days} days left",
+  "@recycleBinDaysLeft": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "recycleBinRestore": "Restore",
+  "recycleBinPurge": "Delete forever",
+  "recycleBinPurgeConfirmTitle": "Delete forever?",
+  "recycleBinPurgeConfirmBody": "This transaction will be permanently removed and cannot be recovered.",
+
   "catFood": "Food",
   "catTransport": "Transport",
   "catShopping": "Shopping",

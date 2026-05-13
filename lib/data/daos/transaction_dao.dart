@@ -109,6 +109,59 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     );
   }
 
+  /// 监听回收站内的交易：`deletedAt >= cutoff` 且非 null。
+  ///
+  /// 调用方传入 `now - 30 days` 即可拿到 30 天保留期内的项。
+  Stream<List<Transaction>> watchTrashed(DateTime cutoff) {
+    return (select(transactions)
+          ..where((t) =>
+              t.deletedAt.isNotNull() &
+              t.deletedAt.isBiggerOrEqualValue(cutoff))
+          ..orderBy([(t) => OrderingTerm.desc(t.deletedAt)]))
+        .watch();
+  }
+
+  /// 恢复一笔交易：清空 `deletedAt`。
+  Future<int> restore(String id) {
+    return (update(transactions)..where((t) => t.id.equals(id))).write(
+      TransactionsCompanion(
+        deletedAt: const Value(null),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  /// 物理删除一笔交易及其标签关联。
+  Future<void> purge(String id) async {
+    await transaction(() async {
+      await (delete(transactionTags)
+            ..where((t) => t.transactionId.equals(id)))
+          .go();
+      await (delete(transactions)..where((t) => t.id.equals(id))).go();
+    });
+  }
+
+  /// 批量物理删除：把 `deletedAt < cutoff` 的交易及其标签关联清掉。
+  /// 返回删除的交易行数。
+  Future<int> purgeOlderThan(DateTime cutoff) async {
+    return await transaction(() async {
+      final ids = await (select(transactions)
+            ..where((t) =>
+                t.deletedAt.isNotNull() &
+                t.deletedAt.isSmallerThanValue(cutoff)))
+          .map((row) => row.id)
+          .get();
+      if (ids.isEmpty) return 0;
+      await (delete(transactionTags)
+            ..where((t) => t.transactionId.isIn(ids)))
+          .go();
+      final n = await (delete(transactions)
+            ..where((t) => t.id.isIn(ids)))
+          .go();
+      return n;
+    });
+  }
+
   /// 获取某笔交易关联的所有标签 id。
   Future<List<String>> tagIdsOf(String transactionId) async {
     final rows = await (select(transactionTags)
