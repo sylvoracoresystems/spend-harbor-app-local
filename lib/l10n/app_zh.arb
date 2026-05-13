@@ -1,0 +1,37 @@
+{
+  "@@locale": "zh",
+
+  "appName": "SpendHarbor",
+
+  "themePreviewTitle": "主题预览",
+  "themeToggleLight": "浅色",
+  "themeToggleDark": "深色",
+  "themeToggleSystem": "跟随系统",
+
+  "languageEnglish": "English",
+  "languageChinese": "中文",
+  "languageSystem": "跟随系统",
+
+  "catFood": "餐饮",
+  "catTransport": "交通",
+  "catShopping": "购物",
+  "catEntertainment": "娱乐",
+  "catHome": "居家",
+  "catMedical": "医疗",
+  "catEducation": "教育",
+  "catTelecom": "通讯",
+  "catTravel": "旅行",
+  "catOther": "其他",
+  "catSalary": "工资",
+  "catBonus": "奖金",
+  "catInvestment": "投资",
+  "catOtherIncome": "其他收入",
+
+  "tagWork": "工作",
+  "tagPersonal": "私人",
+  "tagFamily": "家庭",
+  "tagImportant": "重要",
+  "tagReimburse": "可报销",
+
+  "srcCash": "现金"
+}

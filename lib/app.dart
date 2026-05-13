@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'l10n/generated/app_localizations.dart';
+import 'shared/providers/locale_provider.dart';
 import 'theme/app_colors.dart';
 import 'theme/app_radius.dart';
 import 'theme/app_shadows.dart';
@@ -13,12 +15,16 @@ class SpendHarborApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeControllerProvider);
     return MaterialApp(
-      title: 'SpendHarbor',
+      onGenerateTitle: (context) => AppL10n.of(context).appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
+      locale: locale,
+      supportedLocales: AppL10n.supportedLocales,
+      localizationsDelegates: AppL10n.localizationsDelegates,
       home: const _ThemePreviewPage(),
     );
   }
@@ -47,7 +53,7 @@ class _ThemePreviewPageState extends State<_ThemePreviewPage> {
           final c = context.appColors;
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Theme Preview'),
+              title: Text(AppL10n.of(context).themePreviewTitle),
               actions: [
                 IconButton(
                   tooltip: 'Toggle theme',

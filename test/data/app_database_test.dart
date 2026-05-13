@@ -102,13 +102,13 @@ void main() {
       expect(tags.length, 5);
       expect(sources.length, 1);
       expect(cats.every((c) => c.isDefault), isTrue);
-      expect(cats.firstWhere((c) => c.nameKey == 'cat.food').name, 'Food');
+      expect(cats.firstWhere((c) => c.nameKey == 'catFood').name, 'Food');
     });
 
     test('注入中文 seed', () async {
       await seedDefaultData(db, locale: SeedLocale.zhCN);
       final food = await (db.select(db.categories)
-            ..where((t) => t.nameKey.equals('cat.food')))
+            ..where((t) => t.nameKey.equals('catFood')))
           .getSingle();
       expect(food.name, '餐饮');
     });

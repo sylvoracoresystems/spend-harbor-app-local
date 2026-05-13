@@ -43,6 +43,7 @@
 | `lucide_icons`                | ^0.257.0   | Lucide 图标集                            | DESIGN_STANDARDS 指定的唯一图标库                              |
 | `collection`                  | ^1.18.0    | 集合工具（groupBy、firstWhereOrNull）    | 常用                                                           |
 | `uuid`                        | ^4.5.0     | 本地实体主键生成                         | 避免依赖自增 ID，便于导入合并                                  |
+| `shared_preferences`          | ^2.3.2     | 非敏感本地偏好（locale、themeMode）      | 比 secure_storage 更轻量；敏感数据仍走 secure_storage          |
 
 ### 2.2 开发时依赖（`dev_dependencies`）
 

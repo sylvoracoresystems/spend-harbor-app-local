@@ -1,0 +1,40 @@
+{
+  "@@locale": "en",
+
+  "appName": "SpendHarbor",
+  "@appName": {
+    "description": "Application display name"
+  },
+
+  "themePreviewTitle": "Theme Preview",
+  "themeToggleLight": "Light",
+  "themeToggleDark": "Dark",
+  "themeToggleSystem": "System",
+
+  "languageEnglish": "English",
+  "languageChinese": "中文",
+  "languageSystem": "System",
+
+  "catFood": "Food",
+  "catTransport": "Transport",
+  "catShopping": "Shopping",
+  "catEntertainment": "Entertainment",
+  "catHome": "Home",
+  "catMedical": "Medical",
+  "catEducation": "Education",
+  "catTelecom": "Telecom",
+  "catTravel": "Travel",
+  "catOther": "Other",
+  "catSalary": "Salary",
+  "catBonus": "Bonus",
+  "catInvestment": "Investment",
+  "catOtherIncome": "Other Income",
+
+  "tagWork": "Work",
+  "tagPersonal": "Personal",
+  "tagFamily": "Family",
+  "tagImportant": "Important",
+  "tagReimburse": "Reimburse",
+
+  "srcCash": "Cash"
+}

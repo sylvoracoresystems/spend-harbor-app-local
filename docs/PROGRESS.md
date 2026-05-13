@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 1 — 脚手架（Scaffolding）
-- **当前 Step**：Step 3 已完成；准备进入 Step 4（i18n 基础）
+- **当前 Step**：Step 4 已完成；准备进入 Step 5（路由与主框架）
 - **最近更新**：2026-05-13
 
 ---
@@ -18,22 +18,24 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Step 3 — 数据库 Schema + Seed ✅
+**当前 Step**：Step 4 — i18n 基础 ✅
 
 **子任务**：
 
-- [x] `lib/data/database/app_database.dart`：drift Database 定义
-- [x] 5 张表（Category / Tag / Source / Budget / Transaction）+ 多对多 `TransactionTags`
-- [x] 软删除字段（`deletedAt`）+ 必要索引
-- [x] `lib/data/seed/default_data.dart`：按 locale 注入默认分类/标签/来源
-- [x] DAO 文件（每张表一个）
-- [x] `build_runner` 生成 `*.g.dart`
-- [x] `test/data/` DAO 基础单元测试（7 tests）
-- [x] `flutter analyze` + `flutter test` 通过
+- [x] `pubspec.yaml` 开启 `generate: true` + 顶层 `l10n.yaml`
+- [x] `lib/l10n/app_en.arb` / `app_zh.arb`（含默认分类/标签/来源命名）
+- [x] `flutter gen-l10n` 生成 `lib/l10n/generated/`
+- [x] `app.dart` 接入 `supportedLocales` / `localizationsDelegates` / `locale`
+- [x] `shared_preferences` 依赖 + `sharedPreferencesProvider` + `localeControllerProvider`（持久化）
+- [x] `main.dart` 在 `ProviderScope` 覆盖 prefs provider
+- [x] `lib/data/seed/default_name_resolver.dart`：nameKey → ARB 字符串映射
+- [x] 把 seed 的 nameKey 改为驼峰，对齐 ARB id
+- [x] `test/shared/locale_provider_test.dart`（4 tests）
+- [x] `flutter analyze` + `flutter test` 通过（12 tests）
 
-**下一步接入点**：Step 4 — 在 `lib/l10n/` 下创建 `app_en.arb` 与 `app_zh.arb`，在 `pubspec.yaml` 启用 `generate: true`，再到 `app.dart` 接入 `supportedLocales` 与 `localizationsDelegates`。
+**下一步接入点**：Step 5 — 在 `lib/shared/router/` 下建 `app_router.dart`（go_router 配置），在 `lib/features/` 下建占位 Scaffold（Dashboard / Stats / Transactions / Settings），把 `app.dart` 的 `home` 替换为 `MaterialApp.router`。
 
-**未提交改动**：Step 1 + Step 2 + Step 3 全部改动均未 commit
+**未提交改动**：Step 4 全部改动均未 commit
 
 **已知阻塞**：无
 
@@ -75,12 +77,12 @@
 - [x] `test/data/` 写 DAO 单元测试
 - [x] 配置 build_runner，生成 `*.g.dart`
 
-### Step 4：i18n 基础
+### Step 4：i18n 基础 ✅
 
-- [ ] `flutter_localizations` + ARB 文件（en-US / zh-CN）
-- [ ] `app.dart` 接入 `supportedLocales` + `localizationsDelegates`
-- [ ] 语言切换的 Riverpod provider + 本地持久化
-- [ ] 默认分类 `nameKey` ↔ ARB 接通
+- [x] `flutter_localizations` + ARB 文件（en-US / zh-CN）
+- [x] `app.dart` 接入 `supportedLocales` + `localizationsDelegates`
+- [x] 语言切换的 Riverpod provider + 本地持久化
+- [x] 默认分类 `nameKey` ↔ ARB 接通
 
 ### Step 5：路由与主框架
 
@@ -164,6 +166,7 @@
 | 2026-05-12 | 完成 Step 1：依赖与目录骨架                       | 新增 TECH_STACK.md / PROGRESS.md                 |
 | 2026-05-12 | 完成 Step 2：设计 token 落地                      | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页 |
 | 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测   |
+| 2026-05-13 | 完成 Step 4：i18n 基础                            | en/zh ARB + localeController + nameKey resolver + 12 单测 |
 
 ---
 

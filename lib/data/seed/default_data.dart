@@ -38,22 +38,22 @@ Future<void> seedDefaultData(
 
 List<CategoriesCompanion> _defaultCategories(SeedLocale locale) {
   const expenseSeeds = <_CatSeed>[
-    _CatSeed('cat.food', 'Food', '餐饮', 'utensils', '#f97316'),
-    _CatSeed('cat.transport', 'Transport', '交通', 'car', '#0ea5e9'),
-    _CatSeed('cat.shopping', 'Shopping', '购物', 'shopping-bag', '#ec4899'),
-    _CatSeed('cat.entertainment', 'Entertainment', '娱乐', 'music', '#8b5cf6'),
-    _CatSeed('cat.home', 'Home', '居家', 'home', '#10b981'),
-    _CatSeed('cat.medical', 'Medical', '医疗', 'heart-pulse', '#ef4444'),
-    _CatSeed('cat.education', 'Education', '教育', 'graduation-cap', '#6366f1'),
-    _CatSeed('cat.telecom', 'Telecom', '通讯', 'smartphone', '#14b8a6'),
-    _CatSeed('cat.travel', 'Travel', '旅行', 'plane', '#f59e0b'),
-    _CatSeed('cat.other', 'Other', '其他', 'box', '#64748b'),
+    _CatSeed('catFood', 'Food', '餐饮', 'utensils', '#f97316'),
+    _CatSeed('catTransport', 'Transport', '交通', 'car', '#0ea5e9'),
+    _CatSeed('catShopping', 'Shopping', '购物', 'shopping-bag', '#ec4899'),
+    _CatSeed('catEntertainment', 'Entertainment', '娱乐', 'music', '#8b5cf6'),
+    _CatSeed('catHome', 'Home', '居家', 'home', '#10b981'),
+    _CatSeed('catMedical', 'Medical', '医疗', 'heart-pulse', '#ef4444'),
+    _CatSeed('catEducation', 'Education', '教育', 'graduation-cap', '#6366f1'),
+    _CatSeed('catTelecom', 'Telecom', '通讯', 'smartphone', '#14b8a6'),
+    _CatSeed('catTravel', 'Travel', '旅行', 'plane', '#f59e0b'),
+    _CatSeed('catOther', 'Other', '其他', 'box', '#64748b'),
   ];
   const incomeSeeds = <_CatSeed>[
-    _CatSeed('cat.salary', 'Salary', '工资', 'briefcase', '#10b981'),
-    _CatSeed('cat.bonus', 'Bonus', '奖金', 'gift', '#f59e0b'),
-    _CatSeed('cat.investment', 'Investment', '投资', 'trending-up', '#0ea5e9'),
-    _CatSeed('cat.other_income', 'Other Income', '其他收入', 'circle-plus',
+    _CatSeed('catSalary', 'Salary', '工资', 'briefcase', '#10b981'),
+    _CatSeed('catBonus', 'Bonus', '奖金', 'gift', '#f59e0b'),
+    _CatSeed('catInvestment', 'Investment', '投资', 'trending-up', '#0ea5e9'),
+    _CatSeed('catOtherIncome', 'Other Income', '其他收入', 'circle-plus',
         '#64748b'),
   ];
 
@@ -91,11 +91,11 @@ List<CategoriesCompanion> _defaultCategories(SeedLocale locale) {
 
 List<TagsCompanion> _defaultTags(SeedLocale locale) {
   const seeds = <_TagSeed>[
-    _TagSeed('tag.work', 'Work', '工作', '#0ea5e9'),
-    _TagSeed('tag.personal', 'Personal', '私人', '#8b5cf6'),
-    _TagSeed('tag.family', 'Family', '家庭', '#ec4899'),
-    _TagSeed('tag.important', 'Important', '重要', '#ef4444'),
-    _TagSeed('tag.reimburse', 'Reimburse', '可报销', '#10b981'),
+    _TagSeed('tagWork', 'Work', '工作', '#0ea5e9'),
+    _TagSeed('tagPersonal', 'Personal', '私人', '#8b5cf6'),
+    _TagSeed('tagFamily', 'Family', '家庭', '#ec4899'),
+    _TagSeed('tagImportant', 'Important', '重要', '#ef4444'),
+    _TagSeed('tagReimburse', 'Reimburse', '可报销', '#10b981'),
   ];
   var order = 0;
   return seeds
@@ -117,7 +117,7 @@ List<SourcesCompanion> _defaultSources(
   String defaultCurrency,
 ) {
   const seeds = <_SrcSeed>[
-    _SrcSeed('src.cash', 'Cash', '现金', 'wallet', '#10b981'),
+    _SrcSeed('srcCash', 'Cash', '现金', 'wallet', '#10b981'),
   ];
   var order = 0;
   return seeds
