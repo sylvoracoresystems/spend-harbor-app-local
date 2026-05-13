@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/enums/transaction_type.dart';
+import '../../features/budgets/presentation/budget_edit_page.dart';
+import '../../features/budgets/presentation/budgets_page.dart';
 import '../../features/categories/presentation/categories_page.dart';
 import '../../features/categories/presentation/category_edit_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
@@ -31,7 +33,7 @@ const _settingsRoutes = <_SettingsRoute>[
   // categories 已实现，从占位列表中移除
   // tags 已实现，从占位列表中移除
   // sources 已实现，从占位列表中移除
-  (path: '/settings/budgets', title: _budgets),
+  // budgets 已实现，从占位列表中移除
   (path: '/settings/export', title: _export),
   (path: '/settings/import', title: _import),
   (path: '/settings/backup', title: _backup),
@@ -44,7 +46,6 @@ const _settingsRoutes = <_SettingsRoute>[
 ];
 
 String _profile(AppL10n l) => l.settingsProfile;
-String _budgets(AppL10n l) => l.settingsBudgets;
 String _export(AppL10n l) => l.settingsExport;
 String _import(AppL10n l) => l.settingsImport;
 String _backup(AppL10n l) => l.settingsBackup;
@@ -138,6 +139,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             parentNavigatorKey: _rootKey,
             builder: (_, state) =>
                 SourceEditPage(id: state.pathParameters['id']),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/settings/budgets',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const BudgetsPage(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootKey,
+            builder: (_, __) => const BudgetEditPage(),
+          ),
+          GoRoute(
+            path: ':id/edit',
+            parentNavigatorKey: _rootKey,
+            builder: (_, state) =>
+                BudgetEditPage(id: state.pathParameters['id']),
           ),
         ],
       ),

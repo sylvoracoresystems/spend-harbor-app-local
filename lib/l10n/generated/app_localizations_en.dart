@@ -339,6 +339,63 @@ class AppL10nEn extends AppL10n {
   String get srcAdd => 'Add source';
 
   @override
+  String get budgetNewTitle => 'New Budget';
+
+  @override
+  String get budgetEditTitle => 'Edit Budget';
+
+  @override
+  String get budgetFieldPeriod => 'Period';
+
+  @override
+  String get budgetFieldScope => 'Scope';
+
+  @override
+  String get budgetFieldAmount => 'Amount';
+
+  @override
+  String get budgetFieldCurrency => 'Currency';
+
+  @override
+  String get budgetFieldCategory => 'Category';
+
+  @override
+  String get budgetFieldStartsOn => 'Starts on';
+
+  @override
+  String get budgetPeriodWeek => 'Weekly';
+
+  @override
+  String get budgetPeriodMonth => 'Monthly';
+
+  @override
+  String get budgetPeriodYear => 'Yearly';
+
+  @override
+  String get budgetScopeTotal => 'Total';
+
+  @override
+  String get budgetScopeCategory => 'Category';
+
+  @override
+  String get budgetErrAmount => 'Amount must be greater than 0';
+
+  @override
+  String get budgetErrCategoryRequired => 'Pick a category';
+
+  @override
+  String get budgetDeleteConfirmTitle => 'Delete this budget?';
+
+  @override
+  String get budgetDeleteConfirmBody => 'This budget will be removed. Transactions stay untouched.';
+
+  @override
+  String get budgetEmpty => 'No budgets yet';
+
+  @override
+  String get budgetAdd => 'Add budget';
+
+  @override
   String get catFood => 'Food';
 
   @override

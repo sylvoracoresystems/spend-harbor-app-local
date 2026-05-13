@@ -339,6 +339,63 @@ class AppL10nZh extends AppL10n {
   String get srcAdd => '新建来源';
 
   @override
+  String get budgetNewTitle => '新建预算';
+
+  @override
+  String get budgetEditTitle => '编辑预算';
+
+  @override
+  String get budgetFieldPeriod => '周期';
+
+  @override
+  String get budgetFieldScope => '范围';
+
+  @override
+  String get budgetFieldAmount => '金额';
+
+  @override
+  String get budgetFieldCurrency => '币种';
+
+  @override
+  String get budgetFieldCategory => '分类';
+
+  @override
+  String get budgetFieldStartsOn => '起始日';
+
+  @override
+  String get budgetPeriodWeek => '周';
+
+  @override
+  String get budgetPeriodMonth => '月';
+
+  @override
+  String get budgetPeriodYear => '年';
+
+  @override
+  String get budgetScopeTotal => '总额';
+
+  @override
+  String get budgetScopeCategory => '分类';
+
+  @override
+  String get budgetErrAmount => '金额必须大于 0';
+
+  @override
+  String get budgetErrCategoryRequired => '请选择分类';
+
+  @override
+  String get budgetDeleteConfirmTitle => '删除该预算？';
+
+  @override
+  String get budgetDeleteConfirmBody => '该预算将被删除，交易不受影响。';
+
+  @override
+  String get budgetEmpty => '暂无预算';
+
+  @override
+  String get budgetAdd => '新建预算';
+
+  @override
   String get catFood => '餐饮';
 
   @override

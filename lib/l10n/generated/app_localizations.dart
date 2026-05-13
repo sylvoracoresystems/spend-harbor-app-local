@@ -743,6 +743,120 @@ abstract class AppL10n {
   /// **'Add source'**
   String get srcAdd;
 
+  /// No description provided for @budgetNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Budget'**
+  String get budgetNewTitle;
+
+  /// No description provided for @budgetEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Budget'**
+  String get budgetEditTitle;
+
+  /// No description provided for @budgetFieldPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get budgetFieldPeriod;
+
+  /// No description provided for @budgetFieldScope.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope'**
+  String get budgetFieldScope;
+
+  /// No description provided for @budgetFieldAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get budgetFieldAmount;
+
+  /// No description provided for @budgetFieldCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get budgetFieldCurrency;
+
+  /// No description provided for @budgetFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get budgetFieldCategory;
+
+  /// No description provided for @budgetFieldStartsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts on'**
+  String get budgetFieldStartsOn;
+
+  /// No description provided for @budgetPeriodWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get budgetPeriodWeek;
+
+  /// No description provided for @budgetPeriodMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get budgetPeriodMonth;
+
+  /// No description provided for @budgetPeriodYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get budgetPeriodYear;
+
+  /// No description provided for @budgetScopeTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get budgetScopeTotal;
+
+  /// No description provided for @budgetScopeCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get budgetScopeCategory;
+
+  /// No description provided for @budgetErrAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than 0'**
+  String get budgetErrAmount;
+
+  /// No description provided for @budgetErrCategoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a category'**
+  String get budgetErrCategoryRequired;
+
+  /// No description provided for @budgetDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this budget?'**
+  String get budgetDeleteConfirmTitle;
+
+  /// No description provided for @budgetDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This budget will be removed. Transactions stay untouched.'**
+  String get budgetDeleteConfirmBody;
+
+  /// No description provided for @budgetEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No budgets yet'**
+  String get budgetEmpty;
+
+  /// No description provided for @budgetAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add budget'**
+  String get budgetAdd;
+
   /// No description provided for @catFood.
   ///
   /// In en, this message translates to:
