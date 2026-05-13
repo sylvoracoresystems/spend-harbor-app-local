@@ -6,6 +6,7 @@ import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
+import '../../settings/application/default_currency_provider.dart';
 import 'budget_period_alignment.dart';
 
 const _uuid = Uuid();
@@ -72,8 +73,19 @@ enum BudgetFormError { amountInvalid, categoryRequired }
 
 class BudgetFormController extends StateNotifier<BudgetFormState> {
   BudgetFormController(this._ref, {String? editId})
-      : super(BudgetFormState(id: editId)) {
+      : super(BudgetFormState(
+          id: editId,
+          currency: editId == null ? _readDefault(_ref) : 'CAD',
+        )) {
     if (editId != null) _load(editId);
+  }
+
+  static String _readDefault(Ref ref) {
+    try {
+      return ref.read(defaultCurrencyProvider);
+    } catch (_) {
+      return 'CAD';
+    }
   }
 
   final Ref _ref;

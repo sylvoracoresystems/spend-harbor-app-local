@@ -13,6 +13,7 @@ import '../../features/data_io/presentation/import_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/appearance_page.dart';
+import '../../features/settings/presentation/currency_page.dart';
 import '../../features/settings/presentation/language_page.dart';
 import '../../features/settings/presentation/profile_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
@@ -43,7 +44,7 @@ const _settingsRoutes = <_SettingsRoute>[
   // export 已实现，从占位列表中移除
   // import 已实现，从占位列表中移除
   // backup 已实现，从占位列表中移除
-  (path: '/settings/currency', title: _currency),
+  // currency 已实现
   // language 已实现
   // appearance 已实现
   (path: '/settings/security', title: _security),
@@ -51,7 +52,6 @@ const _settingsRoutes = <_SettingsRoute>[
   (path: '/settings/legal', title: _legal),
 ];
 
-String _currency(AppL10n l) => l.settingsCurrency;
 String _security(AppL10n l) => l.settingsSecurity;
 String _about(AppL10n l) => l.settingsAbout;
 String _legal(AppL10n l) => l.settingsLegal;
@@ -171,6 +171,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings/language',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const LanguagePage(),
+      ),
+      GoRoute(
+        path: '/settings/currency',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const CurrencyPage(),
       ),
       GoRoute(
         path: '/settings/budgets',

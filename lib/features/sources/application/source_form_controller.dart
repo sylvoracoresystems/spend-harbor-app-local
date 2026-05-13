@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
+import '../../settings/application/default_currency_provider.dart';
 
 const _uuid = Uuid();
 
@@ -46,8 +47,20 @@ enum SourceFormError { nameRequired, nameDuplicate }
 
 class SourceFormController extends StateNotifier<SourceFormState> {
   SourceFormController(this._ref, {String? editId})
-      : super(SourceFormState(id: editId)) {
+      : super(SourceFormState(
+          id: editId,
+          currency: editId == null ? _readDefault(_ref) : 'CAD',
+        )) {
     if (editId != null) _load(editId);
+  }
+
+  static String _readDefault(Ref ref) {
+    try {
+      return ref.read(defaultCurrencyProvider);
+    } catch (_) {
+      // 测试场景下 prefs provider 未 override → 落回 CAD
+      return 'CAD';
+    }
   }
 
   final Ref _ref;
