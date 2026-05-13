@@ -659,6 +659,60 @@ abstract class AppL10n {
   /// **'Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}'**
   String importSummary(int parsed, int imported, int duplicates, int invalid);
 
+  /// No description provided for @backupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Restore'**
+  String get backupTitle;
+
+  /// No description provided for @backupExportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a full snapshot of your data as a .shbak file.'**
+  String get backupExportHint;
+
+  /// No description provided for @backupExportButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Export backup'**
+  String get backupExportButton;
+
+  /// No description provided for @backupRestoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a .shbak file. This replaces ALL current data.'**
+  String get backupRestoreHint;
+
+  /// No description provided for @backupRestoreButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get backupRestoreButton;
+
+  /// No description provided for @backupRestoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace all data?'**
+  String get backupRestoreConfirmTitle;
+
+  /// No description provided for @backupRestoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current categories, tags, sources, budgets, and transactions will be replaced by the backup. This cannot be undone.'**
+  String get backupRestoreConfirmBody;
+
+  /// No description provided for @backupRestoreDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore completed'**
+  String get backupRestoreDone;
+
+  /// No description provided for @backupVersionMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup version {found} cannot be restored (expected {expected}).'**
+  String backupVersionMismatch(int found, int expected);
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

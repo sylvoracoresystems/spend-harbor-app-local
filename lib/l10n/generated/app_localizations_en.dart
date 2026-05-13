@@ -311,6 +311,35 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get backupTitle => 'Backup & Restore';
+
+  @override
+  String get backupExportHint => 'Save a full snapshot of your data as a .shbak file.';
+
+  @override
+  String get backupExportButton => 'Export backup';
+
+  @override
+  String get backupRestoreHint => 'Restore from a .shbak file. This replaces ALL current data.';
+
+  @override
+  String get backupRestoreButton => 'Restore from backup';
+
+  @override
+  String get backupRestoreConfirmTitle => 'Replace all data?';
+
+  @override
+  String get backupRestoreConfirmBody => 'Your current categories, tags, sources, budgets, and transactions will be replaced by the backup. This cannot be undone.';
+
+  @override
+  String get backupRestoreDone => 'Restore completed';
+
+  @override
+  String backupVersionMismatch(int found, int expected) {
+    return 'Backup version $found cannot be restored (expected $expected).';
+  }
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

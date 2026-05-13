@@ -53,7 +53,7 @@ void main() {
   });
 
   group('dedupe', () {
-    Transaction _tx(String id, {String? note, int cents = 1000}) =>
+    Transaction makeTx(String id, {String? note, int cents = 1000}) =>
         Transaction(
           id: id,
           amountCents: cents,
@@ -114,7 +114,7 @@ void main() {
     });
 
     test('existingDedupeKeys 反映现有库', () {
-      final keys = existingDedupeKeys([_tx('a'), _tx('b', cents: 2000)]);
+      final keys = existingDedupeKeys([makeTx('a'), makeTx('b', cents: 2000)]);
       expect(keys.length, 2);
     });
   });

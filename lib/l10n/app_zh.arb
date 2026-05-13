@@ -137,6 +137,22 @@
     }
   },
 
+  "backupTitle": "备份与恢复",
+  "backupExportHint": "把数据完整快照保存为 .shbak 文件。",
+  "backupExportButton": "导出备份",
+  "backupRestoreHint": "从 .shbak 文件恢复，将**完全替换**当前所有数据。",
+  "backupRestoreButton": "从备份恢复",
+  "backupRestoreConfirmTitle": "替换全部数据？",
+  "backupRestoreConfirmBody": "当前的分类、标签、来源、预算和交易将被备份中的数据替换。此操作不可撤销。",
+  "backupRestoreDone": "已完成恢复",
+  "backupVersionMismatch": "备份版本 {found} 无法恢复（期望 {expected}）。",
+  "@backupVersionMismatch": {
+    "placeholders": {
+      "found": { "type": "int" },
+      "expected": { "type": "int" }
+    }
+  },
+
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",
   "recycleBinDaysLeft": "剩 {days} 天",

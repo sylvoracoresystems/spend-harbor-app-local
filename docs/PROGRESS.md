@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 5 — 导入 / 导出 / 备份
-- **当前 Step**：5.2 CSV 导入 ✅；准备进入 5.3 备份 / 恢复
+- **当前 Step**：5.3 备份 / 恢复 ✅；准备进入 5.4 备份提醒
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,23 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 5 · 5.2 — CSV 导入 ✅
+**当前 Step**：Phase 5 · 5.3 — 备份 / 恢复 ✅
+
+**子任务**：
+
+- [x] `application/backup_serializer.dart`：纯函数 `encodeBackup` / `decodeBackup`（6 张表全部字段；带 `schemaVersion` + `exportedAt`）+ `BackupVersionException`
+- [x] `application/backup_controller.dart`：`exportBackup`（读全库 → `.shbak` 临时文件 → SharePlus）+ `restoreBackup`（file_picker → decode → 事务内清空 + batch insert）
+- [x] `presentation/backup_page.dart`：导出 / 恢复双按钮 + 二次确认（红色警告文案）+ snackbar 反馈 + 版本错误特别提示
+- [x] go_router `/settings/backup` 替换占位
+- [x] ARB：backupTitle / Hint / Button / Confirm / Done / VersionMismatch (ICU)（en + zh）
+- [x] 单测 3 例（round-trip / 版本不匹配 / 缺 schemaVersion）
+- [x] `flutter analyze` + `flutter test` 通过（105 tests）
+
+**下一步接入点**：5.4 备份提醒（Phase 5 收尾）。记录最近一次备份时间（`SharedPreferences` key `backup.lastAt`），首页 / 设置入口顶部展示「最后备份: N 天前」横幅；N 天阈值（默认 30）超期时高亮提醒。要不要等用户启用 → 加个 Settings toggle 控制提醒开关？最简版：直接在 BackupPage 头部显示状态 + Dashboard 加一个可关闭的横幅。
+
+**已完成 Step 5.2**：
+
+
 
 **子任务**：
 
@@ -411,7 +427,7 @@
 
 - [x] Excel / CSV 导出 → 系统分享面板（先做 CSV；Excel 推迟）
 - [x] 数据导入（含冲突合并策略：复合 key dedupe，缺失字典项跳过）
-- [ ] 一键备份 / 恢复 `.shbak`
+- [x] 一键备份 / 恢复 `.shbak`
 - [ ] 备份提醒
 
 ---
@@ -467,6 +483,7 @@
 | 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）         | TransactionsFilter + chart taps + 顶部 chip + 4 单测         |
 | 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                     | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测                |
 | 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                     | parseCsv + 复合 key dedupe + ImportSummary + 8 单测          |
+| 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak           | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测        |
 
 ---
 

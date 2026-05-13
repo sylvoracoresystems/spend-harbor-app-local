@@ -310,6 +310,35 @@ class AppL10nZh extends AppL10n {
   }
 
   @override
+  String get backupTitle => '备份与恢复';
+
+  @override
+  String get backupExportHint => '把数据完整快照保存为 .shbak 文件。';
+
+  @override
+  String get backupExportButton => '导出备份';
+
+  @override
+  String get backupRestoreHint => '从 .shbak 文件恢复，将**完全替换**当前所有数据。';
+
+  @override
+  String get backupRestoreButton => '从备份恢复';
+
+  @override
+  String get backupRestoreConfirmTitle => '替换全部数据？';
+
+  @override
+  String get backupRestoreConfirmBody => '当前的分类、标签、来源、预算和交易将被备份中的数据替换。此操作不可撤销。';
+
+  @override
+  String get backupRestoreDone => '已完成恢复';
+
+  @override
+  String backupVersionMismatch(int found, int expected) {
+    return '备份版本 $found 无法恢复（期望 $expected）。';
+  }
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

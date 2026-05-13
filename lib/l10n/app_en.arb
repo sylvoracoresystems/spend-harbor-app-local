@@ -140,6 +140,22 @@
     }
   },
 
+  "backupTitle": "Backup & Restore",
+  "backupExportHint": "Save a full snapshot of your data as a .shbak file.",
+  "backupExportButton": "Export backup",
+  "backupRestoreHint": "Restore from a .shbak file. This replaces ALL current data.",
+  "backupRestoreButton": "Restore from backup",
+  "backupRestoreConfirmTitle": "Replace all data?",
+  "backupRestoreConfirmBody": "Your current categories, tags, sources, budgets, and transactions will be replaced by the backup. This cannot be undone.",
+  "backupRestoreDone": "Restore completed",
+  "backupVersionMismatch": "Backup version {found} cannot be restored (expected {expected}).",
+  "@backupVersionMismatch": {
+    "placeholders": {
+      "found": { "type": "int" },
+      "expected": { "type": "int" }
+    }
+  },
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",
