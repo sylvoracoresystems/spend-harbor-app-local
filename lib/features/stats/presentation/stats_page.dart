@@ -60,6 +60,8 @@ class StatsPage extends ConsumerWidget {
               _CategoryDonutCard(currency: currency),
               const SizedBox(height: AppSpacing.x4),
               _TagDonutCard(currency: currency),
+              const SizedBox(height: AppSpacing.x4),
+              _TopCategoriesCard(currency: currency),
             ],
           );
         },
@@ -422,6 +424,162 @@ class _DonutBody extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _TopCategoriesCard extends ConsumerStatefulWidget {
+  const _TopCategoriesCard({required this.currency});
+  final String currency;
+
+  @override
+  ConsumerState<_TopCategoriesCard> createState() => _TopCategoriesCardState();
+}
+
+class _TopCategoriesCardState extends ConsumerState<_TopCategoriesCard> {
+  bool _byAmount = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final c = context.appColors;
+    final cats = ref.watch(allCategoriesProvider).valueOrNull ?? const <Category>[];
+
+    String nameOf(String id) {
+      final cat = cats.where((x) => x.id == id).firstOrNull;
+      if (cat == null) return '—';
+      return resolveDefaultName(AppL10n.of(context), cat.nameKey) ?? cat.name;
+    }
+
+    Widget body;
+    if (_byAmount) {
+      final slices = ref.watch(categorySlicesProvider).valueOrNull ?? const [];
+      final top = slices.take(5).toList();
+      if (top.isEmpty) {
+        body = const SizedBox.shrink();
+      } else {
+        final symbol = Currency.byCode(widget.currency).symbol;
+        body = Column(
+          children: [
+            for (var i = 0; i < top.length; i++)
+              _TopRow(
+                rank: i + 1,
+                name: nameOf(top[i].categoryId),
+                trailing:
+                    '$symbol${(top[i].totalCents / 100).toStringAsFixed(2)}',
+                ink: c.actionInk,
+                muted: c.textMuted,
+              ),
+          ],
+        );
+      }
+    } else {
+      final counts = ref.watch(categoryCountsProvider).valueOrNull ?? const [];
+      final top = counts.take(5).toList();
+      if (top.isEmpty) {
+        body = const SizedBox.shrink();
+      } else {
+        body = Column(
+          children: [
+            for (var i = 0; i < top.length; i++)
+              _TopRow(
+                rank: i + 1,
+                name: nameOf(top[i].categoryId),
+                trailing: l.statsCountUnit(top[i].count),
+                ink: c.actionInk,
+                muted: c.textMuted,
+              ),
+          ],
+        );
+      }
+    }
+
+    return Container(
+      padding: AppSpacing.card,
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: AppRadius.brXl,
+        border: Border.all(color: c.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l.statsTopTitle,
+                style: AppTypography.sm.copyWith(
+                  color: c.actionInk,
+                  fontWeight: AppTypography.weightSemibold,
+                ),
+              ),
+              SegmentedButton<bool>(
+                style: const ButtonStyle(
+                  visualDensity: VisualDensity.compact,
+                ),
+                segments: [
+                  ButtonSegment(value: true, label: Text(l.statsTopByAmount)),
+                  ButtonSegment(value: false, label: Text(l.statsTopByCount)),
+                ],
+                selected: {_byAmount},
+                onSelectionChanged: (s) => setState(() => _byAmount = s.first),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.x3),
+          body,
+        ],
+      ),
+    );
+  }
+}
+
+class _TopRow extends StatelessWidget {
+  const _TopRow({
+    required this.rank,
+    required this.name,
+    required this.trailing,
+    required this.ink,
+    required this.muted,
+  });
+  final int rank;
+  final String name;
+  final String trailing;
+  final Color ink;
+  final Color muted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 20,
+            child: Text(
+              '$rank',
+              style: AppTypography.xs.copyWith(color: muted),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.x2),
+          Expanded(
+            child: Text(
+              name,
+              style: AppTypography.sm.copyWith(
+                color: ink,
+                fontWeight: AppTypography.weightMedium,
+              ),
+            ),
+          ),
+          Text(
+            trailing,
+            style: AppTypography.xs
+                .merge(AppTypography.mono)
+                .copyWith(color: ink),
+          ),
+        ],
+      ),
     );
   }
 }

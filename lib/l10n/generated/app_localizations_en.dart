@@ -260,6 +260,26 @@ class AppL10nEn extends AppL10n {
   String get statsNoTags => 'No tagged transactions';
 
   @override
+  String get statsTopTitle => 'Top Categories';
+
+  @override
+  String get statsTopByAmount => 'By amount';
+
+  @override
+  String get statsTopByCount => 'By count';
+
+  @override
+  String statsCountUnit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count entries',
+      one: '1 entry',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

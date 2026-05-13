@@ -107,6 +107,13 @@
   "statsByCategory": "按分类",
   "statsByTag": "按标签",
   "statsNoTags": "本月暂无标签交易",
+  "statsTopTitle": "分类排行",
+  "statsTopByAmount": "按金额",
+  "statsTopByCount": "按笔数",
+  "statsCountUnit": "{count, plural, other{{count} 笔}}",
+  "@statsCountUnit": {
+    "placeholders": { "count": { "type": "int" } }
+  },
 
   "recycleBinTitle": "回收站",
   "recycleBinEmpty": "回收站空着。删除的交易会保留 30 天。",

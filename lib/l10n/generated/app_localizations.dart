@@ -581,6 +581,30 @@ abstract class AppL10n {
   /// **'No tagged transactions'**
   String get statsNoTags;
 
+  /// No description provided for @statsTopTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Categories'**
+  String get statsTopTitle;
+
+  /// No description provided for @statsTopByAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'By amount'**
+  String get statsTopByAmount;
+
+  /// No description provided for @statsTopByCount.
+  ///
+  /// In en, this message translates to:
+  /// **'By count'**
+  String get statsTopByCount;
+
+  /// No description provided for @statsCountUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 entry} other{{count} entries}}'**
+  String statsCountUnit(int count);
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

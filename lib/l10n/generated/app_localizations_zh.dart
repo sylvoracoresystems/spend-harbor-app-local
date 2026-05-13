@@ -260,6 +260,25 @@ class AppL10nZh extends AppL10n {
   String get statsNoTags => '本月暂无标签交易';
 
   @override
+  String get statsTopTitle => '分类排行';
+
+  @override
+  String get statsTopByAmount => '按金额';
+
+  @override
+  String get statsTopByCount => '按笔数';
+
+  @override
+  String statsCountUnit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 笔',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

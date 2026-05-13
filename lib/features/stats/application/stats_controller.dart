@@ -94,6 +94,40 @@ List<CategorySlice> aggregateByCategory(
   ];
 }
 
+/// 单分类的支出笔数（按 dominant 币种过滤）。
+class CategoryCount {
+  const CategoryCount({required this.categoryId, required this.count});
+  final String categoryId;
+  final int count;
+}
+
+/// 按分类统计本月支出笔数（仅 expense + 匹配币种），降序。
+List<CategoryCount> countByCategory(
+  List<Transaction> rows, {
+  required String currency,
+}) {
+  final counts = <String, int>{};
+  for (final t in rows) {
+    if (t.type != TransactionType.expense) continue;
+    if (t.currency != currency) continue;
+    counts[t.categoryId] = (counts[t.categoryId] ?? 0) + 1;
+  }
+  final entries = counts.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+  return [
+    for (final e in entries)
+      CategoryCount(categoryId: e.key, count: e.value),
+  ];
+}
+
+/// 当月分类笔数排行（按 dominant 币种）。
+final categoryCountsProvider = FutureProvider<List<CategoryCount>>((ref) async {
+  final rows = await ref.watch(transactionsOfMonthProvider.future);
+  final ym = ref.watch(currentMonthProvider);
+  final bars = aggregateDailyExpenses(rows, year: ym.year, month: ym.month);
+  return countByCategory(rows, currency: dominantCurrency(bars));
+});
+
 /// 按标签聚合（指定币种 + expense）。
 ///
 /// 一笔交易可能挂多个标签，按完整金额累加到每个 tagId（不平分）。

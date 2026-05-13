@@ -82,6 +82,37 @@ void main() {
     });
   });
 
+  group('countByCategory', () {
+    test('按笔数降序', () {
+      final counts = countByCategory(
+        [
+          _tx(id: 'a', cents: 100, date: '2026-05-01'),
+          _tx(id: 'b', cents: 200, date: '2026-05-02'),
+          _tx(id: 'c', cents: 300, date: '2026-05-03'),
+        ],
+        currency: 'CAD',
+      );
+      expect(counts.length, 1);
+      expect(counts.first.count, 3);
+    });
+    test('过滤 income + 不匹配币种', () {
+      final counts = countByCategory(
+        [
+          _tx(id: 'a', cents: 100, date: '2026-05-01'),
+          _tx(
+              id: 'b',
+              cents: 200,
+              date: '2026-05-02',
+              type: TransactionType.income),
+          _tx(id: 'c', cents: 300, date: '2026-05-03', currency: 'USD'),
+        ],
+        currency: 'CAD',
+      );
+      expect(counts.length, 1);
+      expect(counts.first.count, 1);
+    });
+  });
+
   group('aggregateByTag', () {
     test('多标签都累加同一笔金额', () {
       final slices = aggregateByTag(

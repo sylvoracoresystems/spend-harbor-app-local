@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 4 — 统计分析
-- **当前 Step**：4.2 分类 / 标签 Donut ✅；准备进入 4.3 Top 排行
+- **当前 Step**：4.3 Top 排行 ✅；准备进入 4.4 图表点击跳转
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,21 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 4 · 4.2 — 分类 / 标签 Donut ✅
+**当前 Step**：Phase 4 · 4.3 — Top 排行 ✅
+
+**子任务**：
+
+- [x] 纯函数 `countByCategory(rows, currency)` + `categoryCountsProvider`
+- [x] `StatsPage` 底部加 `_TopCategoriesCard`：SegmentedButton 切「按金额 / 按笔数」；列表显示 Top 5 排名 + 分类名 + 金额或笔数
+- [x] ARB：statsTopTitle / statsTopByAmount / statsTopByCount / statsCountUnit (ICU plural)（en + zh）
+- [x] 单测 2 例（按笔数降序 + 过滤 income/不匹配币种）
+- [x] `flutter analyze` + `flutter test` 通过（85 tests）
+
+**下一步接入点**：4.4 图表点击跳转 — 给 BarChart / PieChart 行加 onTap：① 柱状图点某日 → push `/transactions?date=YYYY-MM-DD`（需扩展 transactions list 支持单日筛选）② Donut 切片 / Top 行 → push `/transactions?category=:id`。考虑：交易列表当前只支持月份切换，需要新增「临时筛选」状态（query 参数解析 + 顶部 chip 可清除）。
+
+**已完成 Step 4.2**：
+
+
 
 **子任务**：
 
@@ -325,7 +339,7 @@
 
 - [x] 趋势图（Bar Chart）
 - [x] 分类 / 标签 Donut
-- [ ] Top 排行
+- [x] Top 排行
 - [ ] 点击图表跳转交易列表（带筛选）
 
 ---
@@ -386,6 +400,7 @@
 | 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾） | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测     |
 | 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                   | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测         |
 | 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut            | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测     |
+| 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                     | countByCategory + 金额/笔数切换 + 2 单测                     |
 
 ---
 
