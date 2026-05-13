@@ -47,6 +47,7 @@
 | `fl_chart`                    | ^0.69.0    | 柱状图 / 环形图（Stats 统计分析）        | 轻量、纯 Flutter、零网络；钉 0.69 避免 1.x 与当前 Flutter SDK 冲突 |
 | `csv`                         | ^6.0.0     | CSV 导出 / 导入                          | RFC 4180 引号/逗号处理；纯 Dart 不联网                      |
 | `share_plus`                  | ^12.x      | 调起系统分享面板（导出 / 备份分享）       | 跨平台官方维护；通过临时文件 + XFile 分享                    |
+| `file_picker`                 | ^11.0.2    | 选择 CSV 导入文件                        | 跨平台；11.x 改为 `FilePicker.pickFiles` 静态调用             |
 
 ### 2.2 开发时依赖（`dev_dependencies`）
 

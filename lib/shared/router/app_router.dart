@@ -8,6 +8,7 @@ import '../../features/budgets/presentation/budgets_page.dart';
 import '../../features/categories/presentation/categories_page.dart';
 import '../../features/categories/presentation/category_edit_page.dart';
 import '../../features/data_io/presentation/export_page.dart';
+import '../../features/data_io/presentation/import_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/settings_page.dart';
@@ -36,7 +37,7 @@ const _settingsRoutes = <_SettingsRoute>[
   // sources 已实现，从占位列表中移除
   // budgets 已实现，从占位列表中移除
   // export 已实现，从占位列表中移除
-  (path: '/settings/import', title: _import),
+  // import 已实现，从占位列表中移除
   (path: '/settings/backup', title: _backup),
   (path: '/settings/currency', title: _currency),
   (path: '/settings/language', title: _language),
@@ -47,7 +48,6 @@ const _settingsRoutes = <_SettingsRoute>[
 ];
 
 String _profile(AppL10n l) => l.settingsProfile;
-String _import(AppL10n l) => l.settingsImport;
 String _backup(AppL10n l) => l.settingsBackup;
 String _currency(AppL10n l) => l.settingsCurrency;
 String _language(AppL10n l) => l.settingsLanguage;
@@ -146,6 +146,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings/export',
         parentNavigatorKey: _rootKey,
         builder: (_, __) => const ExportPage(),
+      ),
+      GoRoute(
+        path: '/settings/import',
+        parentNavigatorKey: _rootKey,
+        builder: (_, __) => const ImportPage(),
       ),
       GoRoute(
         path: '/settings/budgets',

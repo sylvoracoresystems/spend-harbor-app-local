@@ -297,6 +297,20 @@ class AppL10nEn extends AppL10n {
   String get exportDone => 'Share sheet opened';
 
   @override
+  String get importTitle => 'Import Data';
+
+  @override
+  String get importPickCsv => 'Pick CSV file';
+
+  @override
+  String get importHint => 'Pick a SpendHarbor-format CSV. Rows referencing unknown categories or sources will be skipped.';
+
+  @override
+  String importSummary(int parsed, int imported, int duplicates, int invalid) {
+    return 'Parsed $parsed · Imported $imported · Duplicates $duplicates · Invalid $invalid';
+  }
+
+  @override
   String get recycleBinTitle => 'Recycle Bin';
 
   @override

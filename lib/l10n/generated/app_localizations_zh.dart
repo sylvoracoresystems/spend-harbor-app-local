@@ -296,6 +296,20 @@ class AppL10nZh extends AppL10n {
   String get exportDone => '已唤起分享面板';
 
   @override
+  String get importTitle => '数据导入';
+
+  @override
+  String get importPickCsv => '选择 CSV 文件';
+
+  @override
+  String get importHint => '请选择 SpendHarbor 格式的 CSV。引用未知分类或来源的行将被跳过。';
+
+  @override
+  String importSummary(int parsed, int imported, int duplicates, int invalid) {
+    return '解析 $parsed · 已导入 $imported · 重复 $duplicates · 无效 $invalid';
+  }
+
+  @override
   String get recycleBinTitle => '回收站';
 
   @override

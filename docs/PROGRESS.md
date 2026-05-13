@@ -9,7 +9,7 @@
 ## 当前状态
 
 - **当前阶段**：Phase 5 — 导入 / 导出 / 备份
-- **当前 Step**：5.1 CSV 导出 ✅；准备进入 5.2 数据导入
+- **当前 Step**：5.2 CSV 导入 ✅；准备进入 5.3 备份 / 恢复
 - **最近更新**：2026-05-13
 
 ---
@@ -18,7 +18,30 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 5 · 5.1 — CSV 导出 ✅
+**当前 Step**：Phase 5 · 5.2 — CSV 导入 ✅
+
+**子任务**：
+
+- [x] 新依赖 `file_picker: ^11.0.2`（注意 11.x 静态 API `FilePicker.pickFiles`）
+- [x] `application/csv_importer.dart`：纯函数 `parseCsv`（校验日期 / 类型 / 币种 / 金额）+ `dedupeKey` 复合 key（date+type+catId+srcId+amount+currency+note）+ `existingDedupeKeys`
+- [x] `application/import_controller.dart`：文件选择 → 解析 → 按 name 解析 category/source/tag（缺失则跳过）→ dedupe → 事务批量插入；返回 `ImportSummary { parsed, imported, duplicates, invalid }`
+- [x] `presentation/import_page.dart`：按钮 + busy + 摘要文案
+- [x] go_router `/settings/import` 替换占位
+- [x] ARB：importTitle / Hint / PickCsv / Summary (ICU 4 placeholders)（en + zh）
+- [x] TECH_STACK §2.1 追加 `file_picker`
+- [x] 单测 8 例（parseCsv 5 + dedupeKey 3）
+- [x] `flutter analyze` + `flutter test` 通过（102 tests）
+
+**下一步接入点**：5.3 备份 / 恢复。一键导出全库快照（`.shbak` = JSON + 可选压缩）：
+- 新增依赖 `archive`（zip）或先做不压缩 JSON
+- `backup_writer.dart`：把所有 5 张表 + transaction_tags 序列化为 JSON（含 schemaVersion）
+- `backup_reader.dart`：解析 → 校验 schemaVersion → 清空 + 重建（或合并）
+- `/settings/backup` 落地：导出按钮（写 `.shbak` → SharePlus）+ 恢复按钮（file_picker → 读 → 二次确认 → 写）
+- 测试：序列化 round-trip + 版本不匹配抛错
+
+**已完成 Step 5.1**：
+
+
 
 **子任务**：
 
@@ -387,7 +410,7 @@
 ## Phase 5 — 导入 / 导出 / 备份
 
 - [x] Excel / CSV 导出 → 系统分享面板（先做 CSV；Excel 推迟）
-- [ ] 数据导入（含冲突合并策略）
+- [x] 数据导入（含冲突合并策略：复合 key dedupe，缺失字典项跳过）
 - [ ] 一键备份 / 恢复 `.shbak`
 - [ ] 备份提醒
 
@@ -443,6 +466,7 @@
 | 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                     | countByCategory + 金额/笔数切换 + 2 单测                     |
 | 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）         | TransactionsFilter + chart taps + 顶部 chip + 4 单测         |
 | 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                     | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测                |
+| 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                     | parseCsv + 复合 key dedupe + ImportSummary + 8 单测          |
 
 ---
 

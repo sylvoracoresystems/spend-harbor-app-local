@@ -635,6 +635,30 @@ abstract class AppL10n {
   /// **'Share sheet opened'**
   String get exportDone;
 
+  /// No description provided for @importTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Data'**
+  String get importTitle;
+
+  /// No description provided for @importPickCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick CSV file'**
+  String get importPickCsv;
+
+  /// No description provided for @importHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a SpendHarbor-format CSV. Rows referencing unknown categories or sources will be skipped.'**
+  String get importHint;
+
+  /// No description provided for @importSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}'**
+  String importSummary(int parsed, int imported, int duplicates, int invalid);
+
   /// No description provided for @recycleBinTitle.
   ///
   /// In en, this message translates to:

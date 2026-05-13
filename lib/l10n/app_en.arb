@@ -127,6 +127,19 @@
   "exportEmpty": "No transactions in this month to export.",
   "exportDone": "Share sheet opened",
 
+  "importTitle": "Import Data",
+  "importPickCsv": "Pick CSV file",
+  "importHint": "Pick a SpendHarbor-format CSV. Rows referencing unknown categories or sources will be skipped.",
+  "importSummary": "Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}",
+  "@importSummary": {
+    "placeholders": {
+      "parsed": { "type": "int" },
+      "imported": { "type": "int" },
+      "duplicates": { "type": "int" },
+      "invalid": { "type": "int" }
+    }
+  },
+
   "recycleBinTitle": "Recycle Bin",
   "recycleBinEmpty": "Nothing here. Deleted transactions stay for 30 days.",
   "recycleBinDaysLeft": "{days} days left",

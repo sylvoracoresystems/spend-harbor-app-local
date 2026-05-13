@@ -47,7 +47,7 @@ void main() {
   });
 
   group('toCsvRow', () {
-    Transaction _tx() => Transaction(
+    Transaction makeTx() => Transaction(
           id: 'a',
           amountCents: 5050,
           currency: 'CAD',
@@ -62,7 +62,7 @@ void main() {
 
     test('字典命中：用 display name，金额格式化为两位小数', () {
       final row = toCsvRow(
-        tx: _tx(),
+        tx: makeTx(),
         categoryNames: const {'c1': 'Food'},
         sourceNames: const {'s1': 'Cash'},
         tagNames: const {'t1': 'Work', 't2': 'Personal'},
@@ -76,7 +76,7 @@ void main() {
     });
     test('字典缺失：落回 id', () {
       final row = toCsvRow(
-        tx: _tx(),
+        tx: makeTx(),
         categoryNames: const {},
         sourceNames: const {},
         tagNames: const {},
