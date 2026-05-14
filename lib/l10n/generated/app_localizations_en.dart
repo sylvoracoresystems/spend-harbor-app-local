@@ -260,44 +260,80 @@ class AppL10nEn extends AppL10n {
   String get dashBudgetManage => 'Manage';
 
   @override
-  String get statsTrendTitle => 'Daily Expense';
+  String get statsFilterCurrency => 'Currency';
 
   @override
-  String get statsEmpty => 'No data this month';
+  String get statsFilterSource => 'Source';
 
   @override
-  String statsCurrencyHint(String currency) {
-    return 'Showing $currency';
+  String get statsFilterAllSources => 'All sources';
+
+  @override
+  String get statsPeriodWeek => 'Week';
+
+  @override
+  String get statsPeriodMonth => 'Month';
+
+  @override
+  String get statsPeriodYear => 'Year';
+
+  @override
+  String get statsTrendTitle => 'Trend';
+
+  @override
+  String get statsDistCategoryTitle => 'Category Distribution';
+
+  @override
+  String get statsDistTagTitle => 'Tag Distribution';
+
+  @override
+  String get statsTypeExpense => 'Expense';
+
+  @override
+  String get statsTypeIncome => 'Income';
+
+  @override
+  String get statsDistCenterExpense => 'EXPENSE';
+
+  @override
+  String get statsDistCenterIncome => 'INCOME';
+
+  @override
+  String get statsTopTitle => 'Top';
+
+  @override
+  String get statsTopByCategory => 'Category';
+
+  @override
+  String get statsTopByTag => 'Tag';
+
+  @override
+  String statsTopCountLabel(int count) {
+    return 'Count: $count';
   }
 
   @override
-  String get statsByCategory => 'By Category';
+  String get statsUntagged => 'Untagged';
 
   @override
-  String get statsByTag => 'By Tag';
-
-  @override
-  String get statsNoTags => 'No tagged transactions';
-
-  @override
-  String get statsTopTitle => 'Top Categories';
-
-  @override
-  String get statsTopByAmount => 'By amount';
-
-  @override
-  String get statsTopByCount => 'By count';
-
-  @override
-  String statsCountUnit(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count entries',
-      one: '1 entry',
-    );
-    return '$_temp0';
+  String statsTopMoreLink(int n) {
+    return '+ $n more · View all in Tag Distribution →';
   }
+
+  @override
+  String get statsTopMultiTagNote => '* A transaction may belong to multiple tags, so totals may exceed the actual sum.';
+
+  @override
+  String get statsNoData => 'No data';
+
+  @override
+  String get statsNoTaggedData => 'No tagged transactions';
+
+  @override
+  String get statsLoading => 'Loading…';
+
+  @override
+  String get statsError => 'Failed to load';
 
   @override
   String get exportTitle => 'Export Data';

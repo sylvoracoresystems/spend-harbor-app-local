@@ -110,22 +110,36 @@
   },
   "dashBudgetManage": "Manage",
 
-  "statsTrendTitle": "Daily Expense",
-  "statsEmpty": "No data this month",
-  "statsCurrencyHint": "Showing {currency}",
-  "@statsCurrencyHint": {
-    "placeholders": { "currency": { "type": "String" } }
-  },
-  "statsByCategory": "By Category",
-  "statsByTag": "By Tag",
-  "statsNoTags": "No tagged transactions",
-  "statsTopTitle": "Top Categories",
-  "statsTopByAmount": "By amount",
-  "statsTopByCount": "By count",
-  "statsCountUnit": "{count, plural, =1{1 entry} other{{count} entries}}",
-  "@statsCountUnit": {
+  "statsFilterCurrency": "Currency",
+  "statsFilterSource": "Source",
+  "statsFilterAllSources": "All sources",
+  "statsPeriodWeek": "Week",
+  "statsPeriodMonth": "Month",
+  "statsPeriodYear": "Year",
+  "statsTrendTitle": "Trend",
+  "statsDistCategoryTitle": "Category Distribution",
+  "statsDistTagTitle": "Tag Distribution",
+  "statsTypeExpense": "Expense",
+  "statsTypeIncome": "Income",
+  "statsDistCenterExpense": "EXPENSE",
+  "statsDistCenterIncome": "INCOME",
+  "statsTopTitle": "Top",
+  "statsTopByCategory": "Category",
+  "statsTopByTag": "Tag",
+  "statsTopCountLabel": "Count: {count}",
+  "@statsTopCountLabel": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "statsUntagged": "Untagged",
+  "statsTopMoreLink": "+ {n} more · View all in Tag Distribution →",
+  "@statsTopMoreLink": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "statsTopMultiTagNote": "* A transaction may belong to multiple tags, so totals may exceed the actual sum.",
+  "statsNoData": "No data",
+  "statsNoTaggedData": "No tagged transactions",
+  "statsLoading": "Loading…",
+  "statsError": "Failed to load",
 
   "exportTitle": "Export Data",
   "exportMonthHint": "Exports the currently selected month ({month}).",

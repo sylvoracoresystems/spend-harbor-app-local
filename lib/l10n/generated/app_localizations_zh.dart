@@ -260,43 +260,80 @@ class AppL10nZh extends AppL10n {
   String get dashBudgetManage => '管理';
 
   @override
-  String get statsTrendTitle => '每日支出';
+  String get statsFilterCurrency => '货币';
 
   @override
-  String get statsEmpty => '本月暂无数据';
+  String get statsFilterSource => '来源';
 
   @override
-  String statsCurrencyHint(String currency) {
-    return '显示 $currency';
+  String get statsFilterAllSources => '全部来源';
+
+  @override
+  String get statsPeriodWeek => '周';
+
+  @override
+  String get statsPeriodMonth => '月';
+
+  @override
+  String get statsPeriodYear => '年';
+
+  @override
+  String get statsTrendTitle => '趋势';
+
+  @override
+  String get statsDistCategoryTitle => '分类分布';
+
+  @override
+  String get statsDistTagTitle => '标签分布';
+
+  @override
+  String get statsTypeExpense => '支出';
+
+  @override
+  String get statsTypeIncome => '收入';
+
+  @override
+  String get statsDistCenterExpense => '支出';
+
+  @override
+  String get statsDistCenterIncome => '收入';
+
+  @override
+  String get statsTopTitle => '排行';
+
+  @override
+  String get statsTopByCategory => '分类';
+
+  @override
+  String get statsTopByTag => '标签';
+
+  @override
+  String statsTopCountLabel(int count) {
+    return '笔数：$count';
   }
 
   @override
-  String get statsByCategory => '按分类';
+  String get statsUntagged => '未打标签';
 
   @override
-  String get statsByTag => '按标签';
-
-  @override
-  String get statsNoTags => '本月暂无标签交易';
-
-  @override
-  String get statsTopTitle => '分类排行';
-
-  @override
-  String get statsTopByAmount => '按金额';
-
-  @override
-  String get statsTopByCount => '按笔数';
-
-  @override
-  String statsCountUnit(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 笔',
-    );
-    return '$_temp0';
+  String statsTopMoreLink(int n) {
+    return '+ 还有 $n 条 · 查看「标签分布」→';
   }
+
+  @override
+  String get statsTopMultiTagNote => '* 同一交易可同时属于多个标签，金额合计可能大于实际总和。';
+
+  @override
+  String get statsNoData => '暂无数据';
+
+  @override
+  String get statsNoTaggedData => '本期无打标签交易';
+
+  @override
+  String get statsLoading => '加载中…';
+
+  @override
+  String get statsError => '加载失败';
 
   @override
   String get exportTitle => '数据导出';

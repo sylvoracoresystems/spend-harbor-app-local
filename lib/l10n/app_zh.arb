@@ -107,22 +107,36 @@
   },
   "dashBudgetManage": "管理",
 
-  "statsTrendTitle": "每日支出",
-  "statsEmpty": "本月暂无数据",
-  "statsCurrencyHint": "显示 {currency}",
-  "@statsCurrencyHint": {
-    "placeholders": { "currency": { "type": "String" } }
-  },
-  "statsByCategory": "按分类",
-  "statsByTag": "按标签",
-  "statsNoTags": "本月暂无标签交易",
-  "statsTopTitle": "分类排行",
-  "statsTopByAmount": "按金额",
-  "statsTopByCount": "按笔数",
-  "statsCountUnit": "{count, plural, other{{count} 笔}}",
-  "@statsCountUnit": {
+  "statsFilterCurrency": "货币",
+  "statsFilterSource": "来源",
+  "statsFilterAllSources": "全部来源",
+  "statsPeriodWeek": "周",
+  "statsPeriodMonth": "月",
+  "statsPeriodYear": "年",
+  "statsTrendTitle": "趋势",
+  "statsDistCategoryTitle": "分类分布",
+  "statsDistTagTitle": "标签分布",
+  "statsTypeExpense": "支出",
+  "statsTypeIncome": "收入",
+  "statsDistCenterExpense": "支出",
+  "statsDistCenterIncome": "收入",
+  "statsTopTitle": "排行",
+  "statsTopByCategory": "分类",
+  "statsTopByTag": "标签",
+  "statsTopCountLabel": "笔数：{count}",
+  "@statsTopCountLabel": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "statsUntagged": "未打标签",
+  "statsTopMoreLink": "+ 还有 {n} 条 · 查看「标签分布」→",
+  "@statsTopMoreLink": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "statsTopMultiTagNote": "* 同一交易可同时属于多个标签，金额合计可能大于实际总和。",
+  "statsNoData": "暂无数据",
+  "statsNoTaggedData": "本期无打标签交易",
+  "statsLoading": "加载中…",
+  "statsError": "加载失败",
 
   "exportTitle": "数据导出",
   "exportMonthHint": "导出当前选定的月份（{month}）。",

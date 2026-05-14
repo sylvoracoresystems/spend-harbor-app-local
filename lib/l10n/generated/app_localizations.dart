@@ -581,65 +581,149 @@ abstract class AppL10n {
   /// **'Manage'**
   String get dashBudgetManage;
 
+  /// No description provided for @statsFilterCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get statsFilterCurrency;
+
+  /// No description provided for @statsFilterSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get statsFilterSource;
+
+  /// No description provided for @statsFilterAllSources.
+  ///
+  /// In en, this message translates to:
+  /// **'All sources'**
+  String get statsFilterAllSources;
+
+  /// No description provided for @statsPeriodWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get statsPeriodWeek;
+
+  /// No description provided for @statsPeriodMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get statsPeriodMonth;
+
+  /// No description provided for @statsPeriodYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get statsPeriodYear;
+
   /// No description provided for @statsTrendTitle.
   ///
   /// In en, this message translates to:
-  /// **'Daily Expense'**
+  /// **'Trend'**
   String get statsTrendTitle;
 
-  /// No description provided for @statsEmpty.
+  /// No description provided for @statsDistCategoryTitle.
   ///
   /// In en, this message translates to:
-  /// **'No data this month'**
-  String get statsEmpty;
+  /// **'Category Distribution'**
+  String get statsDistCategoryTitle;
 
-  /// No description provided for @statsCurrencyHint.
+  /// No description provided for @statsDistTagTitle.
   ///
   /// In en, this message translates to:
-  /// **'Showing {currency}'**
-  String statsCurrencyHint(String currency);
+  /// **'Tag Distribution'**
+  String get statsDistTagTitle;
 
-  /// No description provided for @statsByCategory.
+  /// No description provided for @statsTypeExpense.
   ///
   /// In en, this message translates to:
-  /// **'By Category'**
-  String get statsByCategory;
+  /// **'Expense'**
+  String get statsTypeExpense;
 
-  /// No description provided for @statsByTag.
+  /// No description provided for @statsTypeIncome.
   ///
   /// In en, this message translates to:
-  /// **'By Tag'**
-  String get statsByTag;
+  /// **'Income'**
+  String get statsTypeIncome;
 
-  /// No description provided for @statsNoTags.
+  /// No description provided for @statsDistCenterExpense.
   ///
   /// In en, this message translates to:
-  /// **'No tagged transactions'**
-  String get statsNoTags;
+  /// **'EXPENSE'**
+  String get statsDistCenterExpense;
+
+  /// No description provided for @statsDistCenterIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'INCOME'**
+  String get statsDistCenterIncome;
 
   /// No description provided for @statsTopTitle.
   ///
   /// In en, this message translates to:
-  /// **'Top Categories'**
+  /// **'Top'**
   String get statsTopTitle;
 
-  /// No description provided for @statsTopByAmount.
+  /// No description provided for @statsTopByCategory.
   ///
   /// In en, this message translates to:
-  /// **'By amount'**
-  String get statsTopByAmount;
+  /// **'Category'**
+  String get statsTopByCategory;
 
-  /// No description provided for @statsTopByCount.
+  /// No description provided for @statsTopByTag.
   ///
   /// In en, this message translates to:
-  /// **'By count'**
-  String get statsTopByCount;
+  /// **'Tag'**
+  String get statsTopByTag;
 
-  /// No description provided for @statsCountUnit.
+  /// No description provided for @statsTopCountLabel.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 entry} other{{count} entries}}'**
-  String statsCountUnit(int count);
+  /// **'Count: {count}'**
+  String statsTopCountLabel(int count);
+
+  /// No description provided for @statsUntagged.
+  ///
+  /// In en, this message translates to:
+  /// **'Untagged'**
+  String get statsUntagged;
+
+  /// No description provided for @statsTopMoreLink.
+  ///
+  /// In en, this message translates to:
+  /// **'+ {n} more · View all in Tag Distribution →'**
+  String statsTopMoreLink(int n);
+
+  /// No description provided for @statsTopMultiTagNote.
+  ///
+  /// In en, this message translates to:
+  /// **'* A transaction may belong to multiple tags, so totals may exceed the actual sum.'**
+  String get statsTopMultiTagNote;
+
+  /// No description provided for @statsNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get statsNoData;
+
+  /// No description provided for @statsNoTaggedData.
+  ///
+  /// In en, this message translates to:
+  /// **'No tagged transactions'**
+  String get statsNoTaggedData;
+
+  /// No description provided for @statsLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get statsLoading;
+
+  /// No description provided for @statsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load'**
+  String get statsError;
 
   /// No description provided for @exportTitle.
   ///
