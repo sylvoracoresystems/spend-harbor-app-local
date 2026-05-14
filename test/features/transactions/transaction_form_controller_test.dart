@@ -2,12 +2,16 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spend_harbor_app_local/data/database/app_database.dart';
 import 'package:spend_harbor_app_local/data/database/app_database_provider.dart';
 import 'package:spend_harbor_app_local/domain/enums/transaction_type.dart';
 import 'package:spend_harbor_app_local/features/transactions/application/transaction_form_controller.dart';
+import 'package:spend_harbor_app_local/shared/providers/preferences_provider.dart';
 
 Future<({AppDatabase db, ProviderContainer container})> _setup() async {
+  SharedPreferences.setMockInitialValues(<String, Object>{});
+  final prefs = await SharedPreferences.getInstance();
   final db = AppDatabase.forTesting(NativeDatabase.memory());
   await db.categoryDao.insertCategory(CategoriesCompanion.insert(
     id: 'c-expense',
@@ -32,6 +36,7 @@ Future<({AppDatabase db, ProviderContainer container})> _setup() async {
   ));
   final container = ProviderContainer(overrides: [
     appDatabaseProvider.overrideWithValue(db),
+    sharedPreferencesProvider.overrideWithValue(prefs),
   ]);
   addTearDown(container.dispose);
   addTearDown(db.close);

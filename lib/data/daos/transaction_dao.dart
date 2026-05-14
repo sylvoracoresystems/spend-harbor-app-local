@@ -205,6 +205,26 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     return out;
   }
 
+  /// 统计 [sinceIso, todayIso] 闭区间内每个 tag 被使用的次数。
+  /// 仅统计未软删除的交易。返回 `tagId -> count`。
+  Future<Map<String, int>> tagUsageSince(String sinceIso) async {
+    final q = customSelect(
+      'SELECT tt.tag_id AS tag_id, COUNT(*) AS cnt '
+      'FROM transaction_tags tt '
+      'JOIN transactions t ON t.id = tt.transaction_id '
+      'WHERE t.deleted_at IS NULL AND t.transacted_on >= ? '
+      'GROUP BY tt.tag_id',
+      variables: [Variable.withString(sinceIso)],
+      readsFrom: {transactionTags, transactions},
+    );
+    final rows = await q.get();
+    final out = <String, int>{};
+    for (final r in rows) {
+      out[r.read<String>('tag_id')] = r.read<int>('cnt');
+    }
+    return out;
+  }
+
   /// 获取某笔交易关联的所有标签 id。
   Future<List<String>> tagIdsOf(String transactionId) async {
     final rows = await (select(transactionTags)

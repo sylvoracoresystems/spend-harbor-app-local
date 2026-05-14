@@ -162,6 +162,9 @@ class AppL10nEn extends AppL10n {
   String get txErrSourceRequired => 'Pick a source';
 
   @override
+  String get txErrCurrencyRequired => 'Pick a currency';
+
+  @override
   String get txEmptyCategory => 'No categories yet';
 
   @override
@@ -169,6 +172,32 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get txNotePlaceholder => 'e.g. Lunch with team';
+
+  @override
+  String get txAmountPlaceholder => '0.00';
+
+  @override
+  String get txSourcePlaceholder => 'Source';
+
+  @override
+  String get txTagSearchPlaceholder => 'Search tags (max 5)...';
+
+  @override
+  String get txTagNoMatch => 'No matching tags';
+
+  @override
+  String txTagMore(int count) {
+    return 'More (+$count)';
+  }
+
+  @override
+  String get txTagLess => 'Less';
+
+  @override
+  String get txTagLimitReached => 'You can pick up to 5 tags';
+
+  @override
+  String get txNoteOptional => 'Note (optional)';
 
   @override
   String get txListEmpty => 'No transactions this month';

@@ -162,6 +162,9 @@ class AppL10nZh extends AppL10n {
   String get txErrSourceRequired => '请选择来源';
 
   @override
+  String get txErrCurrencyRequired => '请选择币种';
+
+  @override
   String get txEmptyCategory => '暂无分类';
 
   @override
@@ -169,6 +172,32 @@ class AppL10nZh extends AppL10n {
 
   @override
   String get txNotePlaceholder => '例如：团建午餐';
+
+  @override
+  String get txAmountPlaceholder => '0.00';
+
+  @override
+  String get txSourcePlaceholder => '来源';
+
+  @override
+  String get txTagSearchPlaceholder => '搜索标签（最多 5 个）…';
+
+  @override
+  String get txTagNoMatch => '无匹配标签';
+
+  @override
+  String txTagMore(int count) {
+    return '更多 (+$count)';
+  }
+
+  @override
+  String get txTagLess => '收起';
+
+  @override
+  String get txTagLimitReached => '最多选择 5 个标签';
+
+  @override
+  String get txNoteOptional => '备注（选填）';
 
   @override
   String get txListEmpty => '本月暂无交易';

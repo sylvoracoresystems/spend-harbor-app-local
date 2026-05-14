@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 8 — Stats 视觉重构 ✅
-- **当前 Step**：Phase 8 全部子项完成（filter / trend / distribution / top + ARB）
+- **当前阶段**：Phase 9 — Add / Edit Transaction 页面重构 ✅
+- **当前 Step**：Phase 9 全部子项完成（custom header / amount+currency / category grid / tag search / source-last）
 - **最近更新**：2026-05-14
 
 ---
@@ -17,6 +17,27 @@
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase 9 — Add / Edit Transaction 页面重构 ✅
+
+**Phase 9 子任务**：
+
+- [x] 9.1 `lastTransactedOnProvider`（SharedPreferences `tx.lastTransactedOn`）+ `tagUsageLast30dProvider`（TransactionDao.tagUsageSince customSelect）
+- [x] 9.2 Controller 扩展：`currency` / `currencyManuallySet` 字段独立于 source；`setSource(id, sourceCurrency: ...)` 仅在用户未手动改币种时联动；`setCurrency` 标记 manual；新增 `currencyRequired` / `tagLimitExceeded` 错误；`toggleTag` 返回 bool 处理 5 个上限
+- [x] 9.3 ARB en+zh 新增 9 keys（`txErrCurrencyRequired` / `txAmountPlaceholder` / `txSourcePlaceholder` / `txTagSearchPlaceholder` / `txTagNoMatch` / `txTagMore` / `txTagLess` / `txTagLimitReached` / `txNoteOptional`）
+- [x] 9.4 `transaction_form.dart` 整页重写：自定义 Header（< Back / 标题 / 编辑态垃圾桶）+ 类型胶囊分段（Expense 红 / Income 绿）+ 金额 24sp 等宽 + 币种独立 dropdown + 日期框 + 动态 Yesterday/Today 按钮 + 4 列分类九宫格 SizedBox(230) + Tag 搜索框 + Wrap chips（选中置顶 / 频次降序 / 10 个折叠 + More(+N) / Less）+ Note 2 行 + Source 下拉（最后）+ 底部 Cancel + Save 双按钮
+- [x] 9.5 `transaction_edit_page.dart` 去掉 AppBar，整页交给 `TransactionForm`
+- [x] 9.6 测试：`transaction_form_controller_test.dart` 注入 `sharedPreferencesProvider` mock；`flutter analyze` 0 issues + `flutter test` 通过（170 tests）
+- [ ] 实机交互验证（用户自己跑）
+
+**Phase 9 已知 deferred**：
+
+- 字段级错误聚焦到第一个错误字段（spec 标记为可选优化），暂未实现。
+- 全局 API 错误的红色软底卡片：本地无后端，仅 SnackBar 提示 tag 上限，其他错误为字段级红字。
+
+---
+
+**已完成 Step Phase 8**：
 
 **当前 Step**：Phase 8 — Stats 视觉重构 ✅
 

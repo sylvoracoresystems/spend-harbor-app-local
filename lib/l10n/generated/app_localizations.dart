@@ -401,6 +401,12 @@ abstract class AppL10n {
   /// **'Pick a source'**
   String get txErrSourceRequired;
 
+  /// No description provided for @txErrCurrencyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a currency'**
+  String get txErrCurrencyRequired;
+
   /// No description provided for @txEmptyCategory.
   ///
   /// In en, this message translates to:
@@ -418,6 +424,54 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'e.g. Lunch with team'**
   String get txNotePlaceholder;
+
+  /// No description provided for @txAmountPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get txAmountPlaceholder;
+
+  /// No description provided for @txSourcePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get txSourcePlaceholder;
+
+  /// No description provided for @txTagSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tags (max 5)...'**
+  String get txTagSearchPlaceholder;
+
+  /// No description provided for @txTagNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching tags'**
+  String get txTagNoMatch;
+
+  /// No description provided for @txTagMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More (+{count})'**
+  String txTagMore(int count);
+
+  /// No description provided for @txTagLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get txTagLess;
+
+  /// No description provided for @txTagLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'You can pick up to 5 tags'**
+  String get txTagLimitReached;
+
+  /// No description provided for @txNoteOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get txNoteOptional;
 
   /// No description provided for @txListEmpty.
   ///
