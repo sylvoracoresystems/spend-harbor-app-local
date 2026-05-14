@@ -71,8 +71,12 @@ class StatsFilterBar extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: AppSpacing.x2),
-            SizedBox(
+            Container(
               width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: c.borderSoft),
+                borderRadius: BorderRadius.circular(999),
+              ),
               child: SegmentedButton<StatsPeriod>(
                 showSelectedIcon: false,
                 style: ButtonStyle(
