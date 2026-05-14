@@ -34,8 +34,8 @@ class StatsDonut extends StatelessWidget {
   final String centerAmount;
   final Color centerColor;
 
-  static const double _centerRadius = 70;
-  static const double _ringRadius = 26;
+  static const double _centerRadius = 56;
+  static const double _ringRadius = 28;
   static const double _badgeOffset = 1.7;
   static const double _badgeThreshold = 0.03;
 
@@ -72,15 +72,16 @@ class StatsDonut extends StatelessWidget {
               Text(
                 centerLabel,
                 style: AppTypography.xs.copyWith(
+                  fontSize: 10,
                   color: c.textMuted,
                   fontWeight: AppTypography.weightSemibold,
-                  letterSpacing: 2,
+                  letterSpacing: 1.5,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               Text(
                 centerAmount,
-                style: AppTypography.xl.copyWith(
+                style: AppTypography.base.copyWith(
                   fontWeight: AppTypography.weightBold,
                   fontFamily: 'monospace',
                   color: centerColor,
