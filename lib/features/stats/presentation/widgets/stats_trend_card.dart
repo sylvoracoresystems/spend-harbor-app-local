@@ -144,19 +144,52 @@ class _Bars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    final maxY = rows
+    final rawMax = rows
         .map((r) =>
             r.incomeCents > r.expenseCents ? r.incomeCents : r.expenseCents)
         .fold<int>(0, (a, b) => a > b ? a : b)
         .toDouble();
+    final maxY = rawMax == 0 ? 100.0 : rawMax * 1.15;
+    final interval = _niceInterval(maxY);
     return BarChart(
       BarChartData(
-        maxY: maxY == 0 ? 1 : maxY * 1.15,
-        gridData: const FlGridData(show: false),
-        borderData: FlBorderData(show: false),
+        maxY: maxY,
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: false,
+          horizontalInterval: interval,
+          getDrawingHorizontalLine: (_) => FlLine(
+            color: c.borderSoft,
+            strokeWidth: 1,
+            dashArray: const [3, 3],
+          ),
+        ),
+        borderData: FlBorderData(
+          show: true,
+          border: Border(
+            left: BorderSide(color: c.borderSoft, width: 1),
+            bottom: BorderSide(color: c.borderSoft, width: 1),
+          ),
+        ),
         titlesData: FlTitlesData(
-          leftTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: interval,
+              reservedSize: 36,
+              getTitlesWidget: (v, _) {
+                if (v == 0) return const SizedBox();
+                return Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Text(
+                    _shortAmount(v),
+                    style: AppTypography.xs.copyWith(color: c.textMuted),
+                    textAlign: TextAlign.right,
+                  ),
+                );
+              },
+            ),
+          ),
           rightTitles:
               const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles:
@@ -217,4 +250,41 @@ class _Bars extends StatelessWidget {
       ),
     );
   }
+}
+
+/// 选一个让 Y 轴显示 4 段左右的「整齐」步长（1 / 2 / 5 × 10^n，单位 cents）。
+double _niceInterval(double maxY) {
+  if (maxY <= 0) return 1;
+  final target = maxY / 4;
+  final exp = (target == 0 ? 0 : (target.toString().length - 1)).toDouble();
+  final base = _pow10(exp);
+  final norm = target / base;
+  double mult;
+  if (norm <= 1) {
+    mult = 1;
+  } else if (norm <= 2) {
+    mult = 2;
+  } else if (norm <= 5) {
+    mult = 5;
+  } else {
+    mult = 10;
+  }
+  return mult * base;
+}
+
+double _pow10(double e) {
+  double r = 1;
+  for (var i = 0; i < e.toInt(); i++) {
+    r *= 10;
+  }
+  return r;
+}
+
+/// 把 cents 缩为短金额标签（轴标）：1234500 → "12.3k"，不带币种符号。
+String _shortAmount(double cents) {
+  final unitDollars = cents / 100;
+  final abs = unitDollars.abs();
+  if (abs >= 1000000) return '${(unitDollars / 1000000).toStringAsFixed(1)}M';
+  if (abs >= 1000) return '${(unitDollars / 1000).toStringAsFixed(1)}k';
+  return unitDollars.toStringAsFixed(0);
 }
