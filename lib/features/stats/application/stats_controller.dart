@@ -3,67 +3,97 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../domain/enums/transaction_type.dart';
-import '../../transactions/application/transactions_list_controller.dart';
+import 'stats_buckets.dart';
+import 'stats_filter.dart';
+import 'stats_filter_provider.dart';
+import 'stats_top_aggregator.dart';
 
-/// 当月一日的支出聚合：用于趋势柱状图。
-class DailyExpenseBar {
-  const DailyExpenseBar({required this.day, required this.byCurrency});
-
-  /// 当月 1..N
-  final int day;
-
-  /// 同一日按币种分桶，避免换算。
-  final Map<String, int> byCurrency;
-
-  int totalCentsForCurrency(String code) => byCurrency[code] ?? 0;
+/// 单桶在某币种下的双值（income / expense cents）。
+class TrendBucketValues {
+  const TrendBucketValues({
+    required this.bucket,
+    required this.incomeCents,
+    required this.expenseCents,
+  });
+  final TrendBucket bucket;
+  final int incomeCents;
+  final int expenseCents;
 }
 
-/// 把交易按 `transactedOn` 的「日」聚合为 [DailyExpenseBar] 列表（1..daysInMonth）。
-List<DailyExpenseBar> aggregateDailyExpenses(
-  List<Transaction> rows, {
-  required int year,
-  required int month,
-}) {
-  final daysInMonth = DateTime(
-    month == 12 ? year + 1 : year,
-    month == 12 ? 1 : month + 1,
-    1,
-  ).subtract(const Duration(days: 1)).day;
-
-  final buckets = <int, Map<String, int>>{
-    for (var d = 1; d <= daysInMonth; d++) d: <String, int>{},
+/// Trend 数据：6/3 桶。
+final trendBucketsProvider =
+    FutureProvider<List<TrendBucketValues>>((ref) async {
+  final f = ref.watch(statsFilterProvider);
+  final anchor = switch (f.period) {
+    StatsPeriod.week => f.rememberedMonthAnchor,
+    StatsPeriod.month => DateTime.now(),
+    StatsPeriod.year => DateTime.now(),
   };
-  for (final t in rows) {
-    if (t.type != TransactionType.expense) continue;
-    final parts = t.transactedOn.split('-');
-    final d = int.tryParse(parts.last);
-    if (d == null || d < 1 || d > daysInMonth) continue;
-    final byCcy = buckets[d]!;
-    byCcy[t.currency] = (byCcy[t.currency] ?? 0) + t.amountCents;
-  }
-  return [
-    for (var d = 1; d <= daysInMonth; d++)
-      DailyExpenseBar(day: d, byCurrency: buckets[d]!),
-  ];
-}
+  final buckets = generateBuckets(f.period, anchor);
+  final dao = ref.watch(transactionDaoProvider);
+  final start = buckets.first.start;
+  final end = buckets.last.end;
+  final rows = await dao.findByDateRange(isoDate(start), isoDate(end));
 
-/// 当月趋势数据。
-final dailyExpenseBarsProvider = Provider<AsyncValue<List<DailyExpenseBar>>>((
-  ref,
-) {
-  final ym = ref.watch(currentMonthProvider);
-  return ref.watch(transactionsOfMonthProvider).whenData(
-        (rows) =>
-            aggregateDailyExpenses(rows, year: ym.year, month: ym.month),
-      );
+  final out = <TrendBucketValues>[];
+  for (final b in buckets) {
+    int inc = 0;
+    int exp = 0;
+    for (final r in rows) {
+      if (r.currency != f.currency) continue;
+      if (f.sourceId != null && r.sourceId != f.sourceId) continue;
+      final d = DateTime.parse(r.transactedOn);
+      if (d.isBefore(b.start) || d.isAfter(b.end)) continue;
+      if (r.type == TransactionType.expense) {
+        exp += r.amountCents;
+      } else {
+        inc += r.amountCents;
+      }
+    }
+    out.add(TrendBucketValues(bucket: b, incomeCents: inc, expenseCents: exp));
+  }
+  return out;
 });
 
-/// 单组占比切片（用于 Donut）。
+/// 选中桶范围内 + currency/source 过滤后的原始 rows（给 Distribution / Top 复用）。
+final bucketTransactionsProvider =
+    FutureProvider<List<Transaction>>((ref) async {
+  final f = ref.watch(statsFilterProvider);
+  final start = f.selectedBucketStart;
+  final DateTime end;
+  switch (f.period) {
+    case StatsPeriod.week:
+      end = DateTime(start.year, start.month, start.day + 6);
+      break;
+    case StatsPeriod.month:
+      end = DateTime(start.year, start.month + 1, 0);
+      break;
+    case StatsPeriod.year:
+      end = DateTime(start.year, 12, 31);
+      break;
+  }
+  final dao = ref.watch(transactionDaoProvider);
+  final all = await dao.findByDateRange(isoDate(start), isoDate(end));
+  return [
+    for (final r in all)
+      if (r.currency == f.currency &&
+          (f.sourceId == null || r.sourceId == f.sourceId))
+        r,
+  ];
+});
+
+/// 选中桶内的 tagIdsByTx（一次查询，给 Tag Distribution + Top 复用）。
+final bucketTagsByTxProvider =
+    FutureProvider<Map<String, List<String>>>((ref) async {
+  final rows = await ref.watch(bucketTransactionsProvider.future);
+  if (rows.isEmpty) return const {};
+  return ref
+      .watch(transactionDaoProvider)
+      .tagIdsForMany(rows.map((r) => r.id).toList());
+});
+
 class CategorySlice {
-  const CategorySlice({
-    required this.categoryId,
-    required this.totalCents,
-  });
+  const CategorySlice({required this.categoryId, required this.totalCents});
   final String categoryId;
   final int totalCents;
 }
@@ -74,127 +104,102 @@ class TagSlice {
   final int totalCents;
 }
 
-/// 按分类聚合（指定币种 + expense）。降序返回。
-List<CategorySlice> aggregateByCategory(
-  List<Transaction> rows, {
-  required String currency,
-}) {
+class CategoryDistribution {
+  const CategoryDistribution({required this.slices, required this.totalCents});
+  final List<CategorySlice> slices;
+  final int totalCents;
+}
+
+class TagDistribution {
+  const TagDistribution({
+    required this.slices,
+    required this.totalCents,
+    required this.untaggedCents,
+  });
+  final List<TagSlice> slices;
+  final int totalCents;
+  final int untaggedCents;
+}
+
+final categoryDistributionProvider =
+    FutureProvider.family<CategoryDistribution, TransactionType>(
+        (ref, type) async {
+  final rows = await ref.watch(bucketTransactionsProvider.future);
   final totals = <String, int>{};
-  for (final t in rows) {
-    if (t.type != TransactionType.expense) continue;
-    if (t.currency != currency) continue;
-    totals[t.categoryId] =
-        (totals[t.categoryId] ?? 0) + t.amountCents;
+  int sum = 0;
+  for (final r in rows) {
+    if (r.type != type) continue;
+    totals[r.categoryId] = (totals[r.categoryId] ?? 0) + r.amountCents;
+    sum += r.amountCents;
   }
   final entries = totals.entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
-  return [
-    for (final e in entries)
-      CategorySlice(categoryId: e.key, totalCents: e.value),
-  ];
-}
-
-/// 单分类的支出笔数（按 dominant 币种过滤）。
-class CategoryCount {
-  const CategoryCount({required this.categoryId, required this.count});
-  final String categoryId;
-  final int count;
-}
-
-/// 按分类统计本月支出笔数（仅 expense + 匹配币种），降序。
-List<CategoryCount> countByCategory(
-  List<Transaction> rows, {
-  required String currency,
-}) {
-  final counts = <String, int>{};
-  for (final t in rows) {
-    if (t.type != TransactionType.expense) continue;
-    if (t.currency != currency) continue;
-    counts[t.categoryId] = (counts[t.categoryId] ?? 0) + 1;
-  }
-  final entries = counts.entries.toList()
-    ..sort((a, b) => b.value.compareTo(a.value));
-  return [
-    for (final e in entries)
-      CategoryCount(categoryId: e.key, count: e.value),
-  ];
-}
-
-/// 当月分类笔数排行（按 dominant 币种）。
-final categoryCountsProvider = FutureProvider<List<CategoryCount>>((ref) async {
-  final rows = await ref.watch(transactionsOfMonthProvider.future);
-  final ym = ref.watch(currentMonthProvider);
-  final bars = aggregateDailyExpenses(rows, year: ym.year, month: ym.month);
-  return countByCategory(rows, currency: dominantCurrency(bars));
+  return CategoryDistribution(
+    slices: [
+      for (final e in entries)
+        CategorySlice(categoryId: e.key, totalCents: e.value),
+    ],
+    totalCents: sum,
+  );
 });
 
-/// 按标签聚合（指定币种 + expense）。
-///
-/// 一笔交易可能挂多个标签，按完整金额累加到每个 tagId（不平分）。
-/// [tagIdsByTx] 形如 `transactionId → [tagId,...]`。
-List<TagSlice> aggregateByTag(
-  List<Transaction> rows, {
-  required String currency,
-  required Map<String, List<String>> tagIdsByTx,
-}) {
+final tagDistributionProvider =
+    FutureProvider.family<TagDistribution, TransactionType>((ref, type) async {
+  final rows = await ref.watch(bucketTransactionsProvider.future);
+  final tagsByTx = await ref.watch(bucketTagsByTxProvider.future);
   final totals = <String, int>{};
-  for (final t in rows) {
-    if (t.type != TransactionType.expense) continue;
-    if (t.currency != currency) continue;
-    final tagIds = tagIdsByTx[t.id] ?? const <String>[];
-    for (final tagId in tagIds) {
-      totals[tagId] = (totals[tagId] ?? 0) + t.amountCents;
+  int sum = 0;
+  int untagged = 0;
+  for (final r in rows) {
+    if (r.type != type) continue;
+    sum += r.amountCents;
+    final tags = tagsByTx[r.id] ?? const <String>[];
+    if (tags.isEmpty) {
+      untagged += r.amountCents;
+      continue;
+    }
+    for (final tag in tags) {
+      totals[tag] = (totals[tag] ?? 0) + r.amountCents;
     }
   }
   final entries = totals.entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
-  return [
-    for (final e in entries)
-      TagSlice(tagId: e.key, totalCents: e.value),
-  ];
-}
-
-/// 当月分类切片（按 dominant 币种）。
-final categorySlicesProvider = FutureProvider<List<CategorySlice>>((ref) async {
-  final rows = await ref.watch(transactionsOfMonthProvider.future);
-  final bars = aggregateDailyExpenses(
-    rows,
-    year: ref.watch(currentMonthProvider).year,
-    month: ref.watch(currentMonthProvider).month,
+  return TagDistribution(
+    slices: [
+      for (final e in entries) TagSlice(tagId: e.key, totalCents: e.value),
+    ],
+    totalCents: sum,
+    untaggedCents: untagged,
   );
-  final ccy = dominantCurrency(bars);
-  return aggregateByCategory(rows, currency: ccy);
 });
 
-/// 当月标签切片（按 dominant 币种）。
-final tagSlicesProvider = FutureProvider<List<TagSlice>>((ref) async {
-  final rows = await ref.watch(transactionsOfMonthProvider.future);
-  if (rows.isEmpty) return const <TagSlice>[];
-  final dao = ref.watch(transactionDaoProvider);
-  final tagsByTx = await dao.tagIdsForMany(rows.map((r) => r.id).toList());
-  final bars = aggregateDailyExpenses(
+final topByCategoryProvider =
+    FutureProvider.family<List<TopCategoryRow>, TransactionType>(
+        (ref, type) async {
+  final rows = await ref.watch(bucketTransactionsProvider.future);
+  final tags = await ref.watch(bucketTagsByTxProvider.future);
+  final f = ref.read(statsFilterProvider);
+  return aggregateTopByCategory(
     rows,
-    year: ref.watch(currentMonthProvider).year,
-    month: ref.watch(currentMonthProvider).month,
+    type: type,
+    currency: f.currency,
+    sourceId: f.sourceId,
+    tagsByTx: tags,
+    limit: 10,
   );
-  final ccy = dominantCurrency(bars);
-  return aggregateByTag(rows, currency: ccy, tagIdsByTx: tagsByTx);
 });
 
-/// 主币种：聚合中数据最多的币种；都为空时返回 'CAD'。
-String dominantCurrency(List<DailyExpenseBar> bars) {
-  final totals = <String, int>{};
-  for (final b in bars) {
-    b.byCurrency.forEach((k, v) {
-      totals[k] = (totals[k] ?? 0) + v;
-    });
-  }
-  if (totals.isEmpty) return 'CAD';
-  final sorted = totals.entries.toList()
-    ..sort((a, b) {
-      if (a.key == 'CAD') return -1;
-      if (b.key == 'CAD') return 1;
-      return b.value.compareTo(a.value);
-    });
-  return sorted.first.key;
-}
+final topByTagProvider =
+    FutureProvider.family<TopTagAggregate, TransactionType>((ref, type) async {
+  final rows = await ref.watch(bucketTransactionsProvider.future);
+  final tags = await ref.watch(bucketTagsByTxProvider.future);
+  final f = ref.read(statsFilterProvider);
+  return aggregateTopByTag(
+    rows,
+    type: type,
+    currency: f.currency,
+    sourceId: f.sourceId,
+    tagsByTx: tags,
+    limit: 10,
+  );
+});
