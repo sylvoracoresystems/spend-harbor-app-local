@@ -157,8 +157,8 @@ class _Bars extends StatelessWidget {
             r.incomeCents > r.expenseCents ? r.incomeCents : r.expenseCents)
         .fold<int>(0, (a, b) => a > b ? a : b)
         .toDouble();
-    final maxY = rawMax == 0 ? 100.0 : rawMax * 1.15;
-    final interval = _niceInterval(maxY);
+    final maxY = rawMax == 0 ? 100.0 : rawMax * 1.05;
+    final interval = maxY / 4;
     return BarChart(
       BarChartData(
         maxY: maxY,
@@ -237,8 +237,6 @@ class _Bars extends StatelessWidget {
             BarChartGroupData(
               x: i,
               barsSpace: 3,
-              showingTooltipIndicators:
-                  rows[i].bucket.start == selected ? const [0, 1] : const [],
               barRods: [
                 BarChartRodData(
                   toY: rows[i].incomeCents.toDouble(),
@@ -328,39 +326,13 @@ class _LegendDot extends StatelessWidget {
   }
 }
 
-/// 选一个让 Y 轴显示 4 段左右的「整齐」步长（1 / 2 / 5 × 10^n，单位 cents）。
-double _niceInterval(double maxY) {
-  if (maxY <= 0) return 1;
-  final target = maxY / 4;
-  final exp = (target == 0 ? 0 : (target.toString().length - 1)).toDouble();
-  final base = _pow10(exp);
-  final norm = target / base;
-  double mult;
-  if (norm <= 1) {
-    mult = 1;
-  } else if (norm <= 2) {
-    mult = 2;
-  } else if (norm <= 5) {
-    mult = 5;
-  } else {
-    mult = 10;
-  }
-  return mult * base;
-}
-
-double _pow10(double e) {
-  double r = 1;
-  for (var i = 0; i < e.toInt(); i++) {
-    r *= 10;
-  }
-  return r;
-}
-
-/// 把 cents 缩为短金额标签（轴标）：1234500 → "12.3k"，不带币种符号。
+/// 把 cents 缩为短金额标签（轴标）：始终用 k 单位，无币种符号。
+/// 0.5k 以下保留两位小数（"0.05k"），其余 1 位小数（"3.8k"）；百万以上转 "M"。
 String _shortAmount(double cents) {
-  final unitDollars = cents / 100;
-  final abs = unitDollars.abs();
-  if (abs >= 1000000) return '${(unitDollars / 1000000).toStringAsFixed(1)}M';
-  if (abs >= 1000) return '${(unitDollars / 1000).toStringAsFixed(1)}k';
-  return unitDollars.toStringAsFixed(0);
+  final dollars = cents / 100;
+  final abs = dollars.abs();
+  if (abs >= 1000000) return '${(dollars / 1000000).toStringAsFixed(1)}M';
+  final inK = dollars / 1000;
+  if (abs >= 500) return '${inK.toStringAsFixed(1)}k';
+  return '${inK.toStringAsFixed(2)}k';
 }
