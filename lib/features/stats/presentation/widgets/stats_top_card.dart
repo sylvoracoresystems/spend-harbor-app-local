@@ -15,6 +15,7 @@ import '../../application/stats_controller.dart';
 import '../../application/stats_filter_provider.dart';
 import '../stats_navigation.dart';
 import 'tag_pill.dart';
+import 'type_pill_toggle.dart';
 
 enum TopMode { category, tag }
 
@@ -56,21 +57,9 @@ class _Top extends ConsumerState<StatsTopCard> {
                   ),
                 ),
                 const Spacer(),
-                SegmentedButton<TransactionType>(
-                  style: const ButtonStyle(visualDensity: VisualDensity.compact),
-                  showSelectedIcon: false,
-                  segments: [
-                    ButtonSegment(
-                      value: TransactionType.expense,
-                      label: Text(l.statsTypeExpense),
-                    ),
-                    ButtonSegment(
-                      value: TransactionType.income,
-                      label: Text(l.statsTypeIncome),
-                    ),
-                  ],
-                  selected: {_type},
-                  onSelectionChanged: (s) => setState(() => _type = s.first),
+                TypePillToggle(
+                  value: _type,
+                  onChanged: (v) => setState(() => _type = v),
                 ),
               ],
             ),

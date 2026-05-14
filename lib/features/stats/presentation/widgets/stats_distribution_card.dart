@@ -16,6 +16,7 @@ import '../../application/stats_filter_provider.dart';
 import '../stats_navigation.dart';
 import 'stats_donut.dart';
 import 'tag_pill.dart';
+import 'type_pill_toggle.dart';
 
 class CategoryDistributionCard extends ConsumerStatefulWidget {
   const CategoryDistributionCard({super.key});
@@ -60,7 +61,7 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
                   ),
                 ),
                 const Spacer(),
-                _TypeToggle(
+                TypePillToggle(
                   value: _type,
                   onChanged: (v) => setState(() => _type = v),
                 ),
@@ -170,7 +171,7 @@ class _TDState extends ConsumerState<TagDistributionCard> {
                   ),
                 ),
                 const Spacer(),
-                _TypeToggle(
+                TypePillToggle(
                   value: _type,
                   onChanged: (v) => setState(() => _type = v),
                 ),
@@ -246,33 +247,6 @@ class _TDState extends ConsumerState<TagDistributionCard> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _TypeToggle extends StatelessWidget {
-  const _TypeToggle({required this.value, required this.onChanged});
-  final TransactionType value;
-  final ValueChanged<TransactionType> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return SegmentedButton<TransactionType>(
-      style: const ButtonStyle(visualDensity: VisualDensity.compact),
-      showSelectedIcon: false,
-      segments: [
-        ButtonSegment(
-          value: TransactionType.expense,
-          label: Text(l.statsTypeExpense),
-        ),
-        ButtonSegment(
-          value: TransactionType.income,
-          label: Text(l.statsTypeIncome),
-        ),
-      ],
-      selected: {value},
-      onSelectionChanged: (s) => onChanged(s.first),
     );
   }
 }
