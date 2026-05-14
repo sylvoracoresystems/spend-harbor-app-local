@@ -108,7 +108,7 @@ final transactionsOfMonthProvider = StreamProvider<List<Transaction>>((ref) {
   final filter = ref.watch(transactionsFilterProvider);
   final dao = ref.watch(transactionDaoProvider);
   if (filter != null && filter.hasDateRange) {
-    return dao.watchByDateRange(filter.dateStartIso!, filter.dateEndIso!);
+    return dao.watchBetween(filter.dateStartIso!, filter.dateEndIso!);
   }
   final ym = ref.watch(currentMonthProvider);
   return dao.watchByMonth(ym.key);
@@ -140,12 +140,22 @@ final filteredTransactionsProvider =
   final filter = ref.watch(transactionsFilterProvider);
   final txAsync = ref.watch(transactionsOfMonthProvider);
   if (filter == null || filter.isEmpty) return txAsync;
-  final tagsAsync = ref.watch(_tagsForCurrentListProvider);
-  return txAsync.whenData((rows) {
-    final tagsByTx = tagsAsync.maybeWhen(
-      data: (m) => m,
-      orElse: () => const <String, List<String>>{},
+
+  final needsTags = filter.tagId != null || filter.untagged;
+  if (!needsTags) {
+    return txAsync.whenData(
+      (rows) => rows.where((t) => filter.matches(t)).toList(),
     );
+  }
+  final tagsAsync = ref.watch(_tagsForCurrentListProvider);
+  if (tagsAsync is AsyncLoading) {
+    return const AsyncValue.loading();
+  }
+  if (tagsAsync is AsyncError) {
+    return AsyncValue.error(tagsAsync.error!, tagsAsync.stackTrace ?? StackTrace.empty);
+  }
+  final tagsByTx = tagsAsync.value ?? const <String, List<String>>{};
+  return txAsync.whenData((rows) {
     return rows
         .where((t) => filter.matches(t, tagIds: tagsByTx[t.id]?.toSet()))
         .toList();
