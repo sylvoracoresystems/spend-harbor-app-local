@@ -116,7 +116,7 @@
   "statsPeriodWeek": "Week",
   "statsPeriodMonth": "Month",
   "statsPeriodYear": "Year",
-  "statsTrendTitle": "Trend",
+  "statsTrendTitle": "Spending Overview",
   "statsDistCategoryTitle": "Category Distribution",
   "statsDistTagTitle": "Tag Distribution",
   "statsTypeExpense": "Expense",

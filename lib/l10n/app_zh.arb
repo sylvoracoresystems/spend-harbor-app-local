@@ -113,7 +113,7 @@
   "statsPeriodWeek": "周",
   "statsPeriodMonth": "月",
   "statsPeriodYear": "年",
-  "statsTrendTitle": "趋势",
+  "statsTrendTitle": "支出概览",
   "statsDistCategoryTitle": "分类分布",
   "statsDistTagTitle": "标签分布",
   "statsTypeExpense": "支出",

@@ -278,7 +278,7 @@ class AppL10nEn extends AppL10n {
   String get statsPeriodYear => 'Year';
 
   @override
-  String get statsTrendTitle => 'Trend';
+  String get statsTrendTitle => 'Spending Overview';
 
   @override
   String get statsDistCategoryTitle => 'Category Distribution';

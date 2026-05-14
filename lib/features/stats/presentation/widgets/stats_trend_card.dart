@@ -45,6 +45,14 @@ class StatsTrendCard extends ConsumerWidget {
             const SizedBox(height: 4),
             _RangeChip(filter: f, locale: locale),
             const SizedBox(height: AppSpacing.x3),
+            _Legend(
+              incomeColor: c.income,
+              expenseColor: c.expense,
+              incomeLabel: l.statsTypeIncome,
+              expenseLabel: l.statsTypeExpense,
+              mutedColor: c.textBody,
+            ),
+            const SizedBox(height: AppSpacing.x2),
             SizedBox(
               height: 180,
               child: dataAsync.when(
@@ -228,26 +236,94 @@ class _Bars extends StatelessWidget {
           for (var i = 0; i < rows.length; i++)
             BarChartGroupData(
               x: i,
-              barsSpace: 2,
+              barsSpace: 3,
               showingTooltipIndicators:
                   rows[i].bucket.start == selected ? const [0, 1] : const [],
               barRods: [
                 BarChartRodData(
                   toY: rows[i].incomeCents.toDouble(),
-                  color: c.income,
-                  width: 8,
-                  borderRadius: BorderRadius.circular(2),
+                  color: rows[i].bucket.start == selected
+                      ? c.income
+                      : c.income.withValues(alpha: 0.4),
+                  width: 14,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(4),
+                  ),
                 ),
                 BarChartRodData(
                   toY: rows[i].expenseCents.toDouble(),
-                  color: c.expense,
-                  width: 8,
-                  borderRadius: BorderRadius.circular(2),
+                  color: rows[i].bucket.start == selected
+                      ? c.expense
+                      : c.expense.withValues(alpha: 0.4),
+                  width: 14,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(4),
+                  ),
                 ),
               ],
             ),
         ],
       ),
+    );
+  }
+}
+
+class _Legend extends StatelessWidget {
+  const _Legend({
+    required this.incomeColor,
+    required this.expenseColor,
+    required this.incomeLabel,
+    required this.expenseLabel,
+    required this.mutedColor,
+  });
+
+  final Color incomeColor;
+  final Color expenseColor;
+  final String incomeLabel;
+  final String expenseLabel;
+  final Color mutedColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _LegendDot(color: incomeColor, label: incomeLabel, textColor: mutedColor),
+        const SizedBox(width: 20),
+        _LegendDot(
+            color: expenseColor, label: expenseLabel, textColor: mutedColor),
+      ],
+    );
+  }
+}
+
+class _LegendDot extends StatelessWidget {
+  const _LegendDot({
+    required this.color,
+    required this.label,
+    required this.textColor,
+  });
+
+  final Color color;
+  final String label;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: AppTypography.sm.copyWith(color: textColor),
+        ),
+      ],
     );
   }
 }

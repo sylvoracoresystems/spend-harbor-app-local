@@ -278,7 +278,7 @@ class AppL10nZh extends AppL10n {
   String get statsPeriodYear => '年';
 
   @override
-  String get statsTrendTitle => '趋势';
+  String get statsTrendTitle => '支出概览';
 
   @override
   String get statsDistCategoryTitle => '分类分布';

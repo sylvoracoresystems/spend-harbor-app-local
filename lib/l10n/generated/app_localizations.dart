@@ -620,7 +620,7 @@ abstract class AppL10n {
   /// No description provided for @statsTrendTitle.
   ///
   /// In en, this message translates to:
-  /// **'Trend'**
+  /// **'Spending Overview'**
   String get statsTrendTitle;
 
   /// No description provided for @statsDistCategoryTitle.
