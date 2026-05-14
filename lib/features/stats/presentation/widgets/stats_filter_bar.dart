@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../data/database/app_database_provider.dart';
 import '../../../../domain/value_objects/currency.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../application/stats_filter.dart';
 import '../../application/stats_filter_provider.dart';
@@ -14,6 +15,7 @@ class StatsFilterBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
+    final c = context.appColors;
     final f = ref.watch(statsFilterProvider);
     final sources = ref.watch(allSourcesProvider).valueOrNull ?? const [];
     final filteredSources =
@@ -71,6 +73,24 @@ class StatsFilterBar extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<StatsPeriod>(
+                showSelectedIcon: false,
+                style: ButtonStyle(
+                  side: const WidgetStatePropertyAll(BorderSide.none),
+                  backgroundColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return c.mintSoft;
+                    }
+                    return Colors.transparent;
+                  }),
+                  foregroundColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return c.actionInk;
+                    }
+                    return c.textMuted;
+                  }),
+                  overlayColor:
+                      WidgetStatePropertyAll(c.mintSoft.withValues(alpha: 0.6)),
+                ),
                 segments: [
                   ButtonSegment(
                     value: StatsPeriod.week,
