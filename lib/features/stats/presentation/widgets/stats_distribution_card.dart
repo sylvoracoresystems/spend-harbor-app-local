@@ -85,6 +85,7 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
                           DonutSlice(
                             color: _categoryColor(findCat(s.categoryId)),
                             value: s.totalCents.toDouble(),
+                            icon: iconFor(findCat(s.categoryId)?.icon ?? 'tag'),
                           ),
                       ],
                       centerLabel: _type == TransactionType.expense
@@ -303,23 +304,33 @@ Widget _categoryRow(
   final name = cat == null
       ? '—'
       : (resolveDefaultName(l, cat.nameKey) ?? cat.name);
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
+  return Container(
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(color: c.borderSoft)),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
     child: Row(
       children: [
         Container(
-          width: 28,
-          height: 28,
+          width: 36,
+          height: 36,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           alignment: Alignment.center,
-          child: Icon(iconFor(iconKey), size: 16, color: Colors.white),
+          child: Icon(iconFor(iconKey), size: 18, color: Colors.white),
         ),
-        const SizedBox(width: 8),
-        Expanded(child: Text(name, overflow: TextOverflow.ellipsis)),
+        const SizedBox(width: AppSpacing.x3),
+        Expanded(
+          child: Text(
+            name,
+            style: AppTypography.base.copyWith(color: c.textPrimary),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         Text(
           _formatAmount(cents, currency, type),
-          style: AppTypography.sm.copyWith(
+          style: AppTypography.base.copyWith(
             fontFamily: 'monospace',
+            fontWeight: AppTypography.weightSemibold,
             color: type == TransactionType.expense ? c.expense : c.income,
           ),
         ),
@@ -340,16 +351,20 @@ Widget _tagRow(
   final name = tag == null
       ? '—'
       : (resolveDefaultName(l, tag.nameKey) ?? tag.name);
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
+  return Container(
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(color: c.borderSoft)),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
     child: Row(
       children: [
-        TagPill(label: name, color: _tagColor(tag), compact: true),
+        TagPill(label: name, color: _tagColor(tag)),
         const Spacer(),
         Text(
           _formatAmount(cents, currency, type),
-          style: AppTypography.sm.copyWith(
+          style: AppTypography.base.copyWith(
             fontFamily: 'monospace',
+            fontWeight: AppTypography.weightSemibold,
             color: type == TransactionType.expense ? c.expense : c.income,
           ),
         ),
@@ -366,21 +381,24 @@ Widget _untaggedRow(
   TransactionType type,
 ) {
   final c = context.appColors;
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
+  return Container(
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(color: c.borderSoft)),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
     child: Row(
       children: [
         TagPill(
           label: l.statsUntagged,
           color: c.textMuted,
-          compact: true,
           italic: true,
         ),
         const Spacer(),
         Text(
           _formatAmount(cents, currency, type),
-          style: AppTypography.sm.copyWith(
+          style: AppTypography.base.copyWith(
             fontFamily: 'monospace',
+            fontWeight: AppTypography.weightSemibold,
             color: type == TransactionType.expense ? c.expense : c.income,
           ),
         ),
