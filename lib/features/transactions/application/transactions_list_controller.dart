@@ -55,23 +55,46 @@ final currentMonthProvider =
   (ref) => CurrentMonthController(),
 );
 
-/// 当前月份内的交易（按日期降序）。
-final transactionsOfMonthProvider = StreamProvider<List<Transaction>>((ref) {
-  final ym = ref.watch(currentMonthProvider);
-  return ref.watch(transactionDaoProvider).watchByMonth(ym.key);
-});
-
-/// 临时筛选：单日 / 单分类，二选一或都为 null。
+/// 临时筛选：支持单日、日期区间、分类、标签、无标签、账户来源。
 class TransactionsFilter {
-  const TransactionsFilter({this.dayIso, this.categoryId});
+  const TransactionsFilter({
+    this.dayIso,
+    this.dateStartIso,
+    this.dateEndIso,
+    this.categoryId,
+    this.tagId,
+    this.untagged = false,
+    this.sourceId,
+  });
   final String? dayIso;
+  final String? dateStartIso;
+  final String? dateEndIso;
   final String? categoryId;
+  final String? tagId;
+  final bool untagged;
+  final String? sourceId;
 
-  bool get isEmpty => dayIso == null && categoryId == null;
+  bool get isEmpty =>
+      dayIso == null &&
+      dateStartIso == null &&
+      dateEndIso == null &&
+      categoryId == null &&
+      tagId == null &&
+      !untagged &&
+      sourceId == null;
 
-  bool matches(Transaction t) {
+  /// 是否携带完整的日期区间（由 query 层处理，不在 matches 中重复过滤）。
+  bool get hasDateRange => dateStartIso != null && dateEndIso != null;
+
+  /// [tagIds] 为当前行关联的标签 id 集合（可为 null 表示未加载）。
+  bool matches(Transaction t, {Set<String>? tagIds}) {
     if (dayIso != null && t.transactedOn != dayIso) return false;
     if (categoryId != null && t.categoryId != categoryId) return false;
+    if (sourceId != null && t.sourceId != sourceId) return false;
+    if (tagId != null && (tagIds == null || !tagIds.contains(tagId))) {
+      return false;
+    }
+    if (untagged && (tagIds != null && tagIds.isNotEmpty)) return false;
     return true;
   }
 }
@@ -80,21 +103,52 @@ class TransactionsFilter {
 final transactionsFilterProvider =
     StateProvider<TransactionsFilter?>((ref) => null);
 
-/// 月份切换时自动清空筛选（避免月外 day 残留）。
+/// 当前月份内的交易（date-range 模式下按区间查询，否则按月查询）。
+final transactionsOfMonthProvider = StreamProvider<List<Transaction>>((ref) {
+  final filter = ref.watch(transactionsFilterProvider);
+  final dao = ref.watch(transactionDaoProvider);
+  if (filter != null && filter.hasDateRange) {
+    return dao.watchByDateRange(filter.dateStartIso!, filter.dateEndIso!);
+  }
+  final ym = ref.watch(currentMonthProvider);
+  return dao.watchByMonth(ym.key);
+});
+
+/// 月份切换时自动清空筛选（date-range 模式下保持不变）。
 final _monthChangeListenerProvider = Provider<void>((ref) {
   ref.listen(currentMonthProvider, (_, __) {
+    final cur = ref.read(transactionsFilterProvider);
+    if (cur != null && cur.hasDateRange) return; // 保持区间模式
     ref.read(transactionsFilterProvider.notifier).state = null;
   });
 });
 
-/// 月份内交易经过 filter 后的视图。
+/// 预加载当前列表所有交易的标签关联。
+final _tagsForCurrentListProvider =
+    FutureProvider<Map<String, List<String>>>((ref) async {
+  final rows = await ref.watch(transactionsOfMonthProvider.future);
+  if (rows.isEmpty) return const {};
+  return ref
+      .watch(transactionDaoProvider)
+      .tagIdsForMany(rows.map((r) => r.id).toList());
+});
+
+/// 月份内交易经过 filter 后的视图（支持标签过滤）。
 final filteredTransactionsProvider =
     Provider<AsyncValue<List<Transaction>>>((ref) {
   ref.watch(_monthChangeListenerProvider);
   final filter = ref.watch(transactionsFilterProvider);
-  return ref.watch(transactionsOfMonthProvider).whenData((rows) {
-    if (filter == null || filter.isEmpty) return rows;
-    return rows.where(filter.matches).toList();
+  final txAsync = ref.watch(transactionsOfMonthProvider);
+  if (filter == null || filter.isEmpty) return txAsync;
+  final tagsAsync = ref.watch(_tagsForCurrentListProvider);
+  return txAsync.whenData((rows) {
+    final tagsByTx = tagsAsync.maybeWhen(
+      data: (m) => m,
+      orElse: () => const <String, List<String>>{},
+    );
+    return rows
+        .where((t) => filter.matches(t, tagIds: tagsByTx[t.id]?.toSet()))
+        .toList();
   });
 });
 
