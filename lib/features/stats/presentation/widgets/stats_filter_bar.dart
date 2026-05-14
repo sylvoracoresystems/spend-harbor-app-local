@@ -90,6 +90,12 @@ class StatsFilterBar extends ConsumerWidget {
                   }),
                   overlayColor:
                       WidgetStatePropertyAll(c.mintSoft.withValues(alpha: 0.6)),
+                  elevation: WidgetStateProperty.resolveWith((states) {
+                    return states.contains(WidgetState.selected) ? 2 : 0;
+                  }),
+                  shadowColor: WidgetStatePropertyAll(
+                    c.action.withValues(alpha: 0.25),
+                  ),
                 ),
                 segments: [
                   ButtonSegment(
