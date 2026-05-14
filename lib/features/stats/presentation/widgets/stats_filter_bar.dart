@@ -6,6 +6,7 @@ import '../../../../domain/value_objects/currency.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
+import '../../../../theme/app_typography.dart';
 import '../../application/stats_filter.dart';
 import '../../application/stats_filter_provider.dart';
 
@@ -32,7 +33,7 @@ class StatsFilterBar extends ConsumerWidget {
                 Expanded(
                   child: _PillDropdown<String>(
                     value: f.currency,
-                    label: l.statsFilterCurrency,
+                    icon: Icons.attach_money,
                     items: [
                       for (final c in Currency.all)
                         DropdownMenuItem(
@@ -51,7 +52,7 @@ class StatsFilterBar extends ConsumerWidget {
                 Expanded(
                   child: _PillDropdown<String?>(
                     value: f.sourceId,
-                    label: l.statsFilterSource,
+                    icon: Icons.account_balance_wallet_outlined,
                     items: [
                       DropdownMenuItem<String?>(
                         value: null,
@@ -127,35 +128,45 @@ class StatsFilterBar extends ConsumerWidget {
 class _PillDropdown<T> extends StatelessWidget {
   const _PillDropdown({
     required this.value,
-    required this.label,
+    required this.icon,
     required this.items,
     required this.onChanged,
   });
 
   final T value;
-  final String label;
+  final IconData icon;
   final List<DropdownMenuItem<T>> items;
   final ValueChanged<T?> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        labelText: label,
-        isDense: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(999),
-        ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    final c = context.appColors;
+    return Container(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: c.surfacePress,
+        border: Border.all(color: c.borderSoft),
+        borderRadius: BorderRadius.circular(999),
       ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<T>(
-          value: value,
-          isExpanded: true,
-          items: items,
-          onChanged: onChanged,
-        ),
+      child: Row(
+        children: [
+          Icon(icon, size: 14, color: c.textMuted),
+          const SizedBox(width: 6),
+          Expanded(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<T>(
+                value: value,
+                isExpanded: true,
+                isDense: true,
+                style: AppTypography.sm.copyWith(color: c.textPrimary),
+                icon: Icon(Icons.expand_more, size: 18, color: c.textMuted),
+                items: items,
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
