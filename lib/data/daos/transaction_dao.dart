@@ -35,6 +35,20 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
         .watch();
   }
 
+  /// 一次性按 [startIso] (含) ~ [endIso] (含) 取交易（未删除）。
+  Future<List<Transaction>> findByDateRange(String startIso, String endIso) {
+    return (select(transactions)
+          ..where((t) =>
+              t.deletedAt.isNull() &
+              t.transactedOn.isBiggerOrEqualValue(startIso) &
+              t.transactedOn.isSmallerOrEqualValue(endIso))
+          ..orderBy([
+            (t) => OrderingTerm.desc(t.transactedOn),
+            (t) => OrderingTerm.desc(t.createdAt),
+          ]))
+        .get();
+  }
+
   /// 按月份监听（YYYY-MM 前缀匹配）。
   Stream<List<Transaction>> watchByMonth(String yearMonth) {
     return (select(transactions)
