@@ -8,9 +8,9 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 7 进行中
-- **当前 Step**：7.1 Dashboard 视觉重构 ✅（过滤条 + tile-icon 卡片）
-- **最近更新**：2026-05-13
+- **当前阶段**：Phase 8 — Stats 视觉重构 ✅
+- **当前 Step**：Phase 8 全部子项完成（filter / trend / distribution / top + ARB）
+- **最近更新**：2026-05-14
 
 ---
 
@@ -18,7 +18,32 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
-**当前 Step**：Phase 7 · 7.1 — Dashboard 视觉重构 ✅
+**当前 Step**：Phase 8 — Stats 视觉重构 ✅
+
+**Phase 8 子任务**：
+
+- [x] 8.1 StatsFilter + Period / 桶生成纯函数 + StatsFilterController（含 prefs + dominant-currency init）
+- [x] 8.2 TransactionsFilter 扩展（dateRange / tag / untagged / source）+ router query params
+- [x] 8.3 Stats controller 重写：trend / bucketTransactions / bucketTagsByTx / categoryDistribution.family / tagDistribution.family / topByCategory.family / topByTag.family
+- [x] 8.4 共享组件 + 4 卡：TagPill / StatsDonut / StatsFilterBar / StatsTrendCard / Category+TagDistributionCard / StatsTopCard
+- [x] 8.5 stats_navigation.dart：navigateToTransactions 按 period 拼 month / dateStart-dateEnd + source/category/tag/untagged 跳 /transactions
+- [x] 8.6 stats_page.dart 整页装配（filter → trend → cat dist → tag dist → top；GlobalKey + Scrollable.ensureVisible 跳转）
+- [x] 8.7 ARB en+zh：19 keys 新增、8 keys 移除；ARB parity test 通过
+- [x] `flutter analyze` 0 issues + `flutter test` 通过（169 tests）
+- [ ] 实机交互验证（用户自己跑）
+
+**Phase 8 spec / plan**：
+
+- 设计 spec：[docs/superpowers/specs/2026-05-14-stats-page-overhaul-design.md](superpowers/specs/2026-05-14-stats-page-overhaul-design.md)
+- 实现 plan：[docs/superpowers/plans/2026-05-14-stats-page-overhaul.md](superpowers/plans/2026-05-14-stats-page-overhaul.md)
+
+**Phase 8 已知 deferred**：
+
+- Top By Tag 底部 "+N more · View all" 链接未实现（rows 已被 limit=10 截断，multi-tag 提示行已点击跳到 Tag Distribution，覆盖同一意图）。
+
+---
+
+**已完成 Step Phase 7 · 7.1**：
 
 **子任务**：
 
@@ -30,7 +55,7 @@
 - [x] ARB en+zh：`dashFilterCurrency / dashFilterSource / dashFilterAll / dashPrevMonth / dashNextMonth / dashOthersBadge`
 - [x] 新增 11 个单测：`applyDashboardFilter` × 5 + `DashboardFilter.copyWith` × 2 + `toMetrics` × 4
 - [x] `flutter analyze` + `flutter test` 通过（148 tests）
-- [ ] 实机验证（用户自己跑）
+- [x] 实机验证（用户自己跑）
 
 **下一步接入点**：Phase 7 · 7.2 — App 图标 + 启动页（**已完成**，见下方记录）；继续 7.3 国际化 / 字号 / 深色全量回归（已做完程序化检查部分；剩手动 QA checklist）。
 
@@ -55,7 +80,7 @@
 **子任务**：
 
 - [x] 新依赖 `crypto: ^3.0.6`（PIN SHA-256 哈希）
-- [x] `application/app_lock_controller.dart`：纯函数 `hashPin(pin)` (salt + sha256) + `AppLockController`（StateNotifier<AppLockState>，bootstrap 从 secure_storage 读 hash + 生物识别开关）
+- [x] `application/app_lock_controller.dart`：纯函数 `hashPin(pin)` (salt + sha256) + `AppLockController`（StateNotifier`<AppLockState>`，bootstrap 从 secure_storage 读 hash + 生物识别开关）
 - [x] `LockStorage` 接口（生产 = secure_storage；测试可注入内存实现）+ `localAuthProvider` 包装 LocalAuthentication
 - [x] `presentation/app_lock_gate.dart`：`Stack` 覆盖锁屏；`WidgetsBindingObserver` 在 paused/detached 时调用 `lock()`；启动时自动尝试生物识别
 - [x] `presentation/security_page.dart`：开关 + 设置/修改 PIN（弹窗输入两次校验）+ 生物识别 toggle
@@ -357,7 +382,7 @@
 
 **子任务**：
 
-- [x] `SelectionController`（StateNotifier<Set`<String>`>）+ `selectionControllerProvider`
+- [x] `SelectionController`（StateNotifier<Set `<String>`>）+ `selectionControllerProvider`
 - [x] `TransactionDao.bulkSoftDelete(List<String>)`：一次性 IN 查询软删除
 - [x] 行长按 → 进入选择模式；点击行在选择模式下切换勾选，否则跳编辑
 - [x] AppBar 替换：左叉 / 「N 已选」/ 删除按钮
@@ -382,7 +407,7 @@
 
 - URL query `?month=YYYY-MM` 双向同步 — 当前用 Riverpod 内存 state，月份在 tab 切换间保持；深链恢复推迟到 Phase 7 打磨
 
-**下一步接入点**：2.4 多选与批量删除 — 在 `application/transactions_list_controller.dart` 新增 `SelectionController`（StateNotifier<Set`<String>`>），交易行 onLongPress（500ms 由 InkWell 默认）进入选择模式，AppBar 顶部替换为「N 已选 + 取消 + 删除」批量按钮，调用 `transactionDao.softDelete` 循环。
+**下一步接入点**：2.4 多选与批量删除 — 在 `application/transactions_list_controller.dart` 新增 `SelectionController`（StateNotifier<Set `<String>`>），交易行 onLongPress（500ms 由 InkWell 默认）进入选择模式，AppBar 顶部替换为「N 已选 + 取消 + 删除」批量按钮，调用 `transactionDao.softDelete` 循环。
 
 **已完成 Step 2.2**：
 
@@ -552,40 +577,41 @@
 
 ## 决策与变更日志
 
-| 日期       | 事项                                               | 备注                                                        |
-| ---------- | -------------------------------------------------- | ----------------------------------------------------------- |
-| 2026-05-12 | 产品定位调整：移除登录/会员/Admin，全功能终身可用  | 重写 PRODUCT_SPEC v2.0                                      |
-| 2026-05-12 | 实现平台选定：Flutter（iOS + Android）             | 暂不发布 Web / 桌面端                                       |
-| 2026-05-12 | DESIGN_STANDARDS 重写为 Flutter 版                 | v2.0                                                        |
-| 2026-05-12 | 完成 Step 1：依赖与目录骨架                        | 新增 TECH_STACK.md / PROGRESS.md                            |
-| 2026-05-12 | 完成 Step 2：设计 token 落地                       | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页           |
-| 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                  | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测            |
-| 2026-05-13 | 完成 Step 4：i18n 基础                             | en/zh ARB + localeController + nameKey resolver + 12 单测   |
-| 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）          | go_router StatefulShellRoute + 移动/平板自适应 + onboarding |
-| 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                   | appDatabaseProvider + DAO/stream providers + 启动 seed      |
-| 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                       | StateNotifier 控制器 + 9 字段表单 + 9 单测                  |
-| 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                       | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后     |
-| 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                 | SelectionController + bulkSoftDelete + 选择模式 AppBar      |
-| 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                 | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线   |
-| 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）         | watchTrashed/restore/purge + 启动自动 30 天清理             |
-| 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                  | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测         |
-| 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                  | name + color；4 单测                                        |
-| 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                  | name + icon + color + 币种（18 种）；4 单测                 |
-| 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐       | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测  |
-| 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾）   | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测    |
-| 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                     | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测        |
-| 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut              | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测    |
-| 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                       | countByCategory + 金额/笔数切换 + 2 单测                    |
-| 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）           | TransactionsFilter + chart taps + 顶部 chip + 4 单测        |
-| 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                       | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测               |
-| 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                       | parseCsv + 复合 key dedupe + ImportSummary + 8 单测         |
-| 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak             | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测       |
-| 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）       | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测           |
-| 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言         | 昵称 + initials + ThemeMode 持久化 + 9 单测                 |
-| 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                       | 持久化 + Source/Budget 新建套用默认 + 4 单测                |
-| 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）       | hashPin + secure_storage + LockGate 生命周期 + 9 单测       |
-| 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾） | AboutPage + LegalPage + 3 处 HapticFeedback                 |
-| 2026-05-13 | 完成 Phase 7 · 7.2：App 图标 + 启动页              | flutter_launcher_icons + flutter_native_splash 白底品牌 logo |
+| 日期       | 事项                                               | 备注                                                            |
+| ---------- | -------------------------------------------------- | --------------------------------------------------------------- |
+| 2026-05-12 | 产品定位调整：移除登录/会员/Admin，全功能终身可用  | 重写 PRODUCT_SPEC v2.0                                          |
+| 2026-05-12 | 实现平台选定：Flutter（iOS + Android）             | 暂不发布 Web / 桌面端                                           |
+| 2026-05-12 | DESIGN_STANDARDS 重写为 Flutter 版                 | v2.0                                                            |
+| 2026-05-12 | 完成 Step 1：依赖与目录骨架                        | 新增 TECH_STACK.md / PROGRESS.md                                |
+| 2026-05-12 | 完成 Step 2：设计 token 落地                       | `lib/theme/` 6 文件，浅/深主题 + Theme Preview 页               |
+| 2026-05-13 | 完成 Step 3：数据库 Schema + Seed                  | drift 5 表 + 多对多 + 5 DAO + 中英 seed + 7 单测                |
+| 2026-05-13 | 完成 Step 4：i18n 基础                             | en/zh ARB + localeController + nameKey resolver + 12 单测       |
+| 2026-05-13 | 完成 Step 5：路由与主框架（Phase 1 收尾）          | go_router StatefulShellRoute + 移动/平板自适应 + onboarding     |
+| 2026-05-13 | 完成 Phase 2 · 2.1：数据访问基础                   | appDatabaseProvider + DAO/stream providers + 启动 seed          |
+| 2026-05-13 | 完成 Phase 2 · 2.2：交易表单                       | StateNotifier 控制器 + 9 字段表单 + 9 单测                      |
+| 2026-05-13 | 完成 Phase 2 · 2.3：交易列表                       | YearMonth + DayGroup + 月份切换 + 6 单测；URL sync 延后         |
+| 2026-05-13 | 完成 Phase 2 · 2.4：多选与批量删除                 | SelectionController + bulkSoftDelete + 选择模式 AppBar          |
+| 2026-05-13 | 完成 Phase 2 · 2.5：Dashboard 闭环                 | 4 指标卡 + 近期交易 + 多币种分行；widget 烟雾测试暂时下线       |
+| 2026-05-13 | 完成 Phase 2 · 2.6：回收站（Phase 2 收尾）         | watchTrashed/restore/purge + 启动自动 30 天清理                 |
+| 2026-05-13 | 完成 Phase 3 · 3.1：分类管理 CRUD                  | icon registry + 类型分页 + 图标/颜色选择器 + 4 单测             |
+| 2026-05-13 | 完成 Phase 3 · 3.2：标签管理 CRUD                  | name + color；4 单测                                            |
+| 2026-05-13 | 完成 Phase 3 · 3.3：来源管理 CRUD                  | name + icon + color + 币种（18 种）；4 单测                     |
+| 2026-05-13 | 完成 Phase 3 · 3.4：预算管理 CRUD + 周期对齐       | period/scope/cat 联动 + week/month/year 起点对齐 + 12 单测      |
+| 2026-05-13 | 完成 Phase 3 · 3.5：Dashboard 接入预算块（收尾）   | watchBetween + 本期窗口聚合 + 进度卡 / 超支红色 + 7 单测        |
+| 2026-05-13 | 完成 Phase 4 · 4.1：趋势柱状图                     | fl_chart 0.69 + 按日聚合 + dominantCurrency + 7 单测            |
+| 2026-05-13 | 完成 Phase 4 · 4.2：分类 / 标签 Donut              | PieChart + 自绘 legend + tagIdsForMany 批量查询 + 3 单测        |
+| 2026-05-13 | 完成 Phase 4 · 4.3：Top 排行                       | countByCategory + 金额/笔数切换 + 2 单测                        |
+| 2026-05-13 | 完成 Phase 4 · 4.4：图表点击跳转（收尾）           | TransactionsFilter + chart taps + 顶部 chip + 4 单测            |
+| 2026-05-13 | 完成 Phase 5 · 5.1：CSV 导出                       | rowsToCsv RFC 4180 + share_plus 分享 + 5 单测                   |
+| 2026-05-13 | 完成 Phase 5 · 5.2：CSV 导入                       | parseCsv + 复合 key dedupe + ImportSummary + 8 单测             |
+| 2026-05-13 | 完成 Phase 5 · 5.3：备份 / 恢复 .shbak             | JSON snapshot schemaVersion=1 + 事务替换全库 + 3 单测           |
+| 2026-05-13 | 完成 Phase 5 · 5.4：备份提醒（Phase 5 收尾）       | BackupStatus + Dashboard/BackupPage 横幅 + 6 单测               |
+| 2026-05-13 | 完成 Phase 6 · 6.1：个人偏好 + 外观 + 语言         | 昵称 + initials + ThemeMode 持久化 + 9 单测                     |
+| 2026-05-13 | 完成 Phase 6 · 6.2：默认货币                       | 持久化 + Source/Budget 新建套用默认 + 4 单测                    |
+| 2026-05-13 | 完成 Phase 6 · 6.3：应用锁（PIN + 生物识别）       | hashPin + secure_storage + LockGate 生命周期 + 9 单测           |
+| 2026-05-13 | 完成 Phase 6 · 6.4+6.5：关于 / 法律 / 触感（收尾） | AboutPage + LegalPage + 3 处 HapticFeedback                     |
+| 2026-05-13 | 完成 Phase 7 · 7.2：App 图标 + 启动页              | flutter_launcher_icons + flutter_native_splash 白底品牌 logo    |
+| 2026-05-14 | 完成 Phase 8：Stats 视觉重构                       | Week/Month/Year + 选中桶锚点 + Cat/Tag Distribution + Top；新增 21 单测；169 tests 全过 |
 | 2026-05-13 | 完成 Phase 7 · 7.1：Dashboard 视觉重构             | 过滤条（月份导航 + 货币/来源 pill）+ tile-icon 2×2 卡 + 11 单测 |
 
 ---
