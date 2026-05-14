@@ -1,4 +1,3 @@
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -272,14 +271,17 @@ class _TransactionsRouteEntryState
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) => _apply());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _apply();
+    });
   }
 
   void _apply() {
     final qp = widget.qp;
     // 1. 先设置月份（监听器此时看到的 filter 仍为 null，清空是 no-op）。
     final m = qp['month'];
-    if (m != null) {
+    if (m != null && RegExp(r'^\d{4}-(0[1-9]|1[0-2])$').hasMatch(m)) {
       ref.read(currentMonthProvider.notifier).set(YearMonth.parse(m));
     }
 
@@ -296,11 +298,13 @@ class _TransactionsRouteEntryState
 
     // 3. 若 filter 携带 dateRange 但没有 month 参数，将月份锚定到区间起点。
     if (m == null && filter.hasDateRange) {
-      final dt = DateTime.parse(filter.dateStartIso!);
+      final dt = DateTime.tryParse(filter.dateStartIso!);
       // date-range 模式下监听器不会清空 filter，直接设置月份即可。
-      ref
-          .read(currentMonthProvider.notifier)
-          .set(YearMonth(dt.year, dt.month));
+      if (dt != null) {
+        ref
+            .read(currentMonthProvider.notifier)
+            .set(YearMonth(dt.year, dt.month));
+      }
     }
 
     // 4. 最后写入 filter（在月份已确定之后，避免被监听器覆盖）。
