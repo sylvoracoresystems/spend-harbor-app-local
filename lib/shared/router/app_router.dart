@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,7 @@ import '../../features/tags/presentation/tag_edit_page.dart';
 import '../../features/tags/presentation/tags_page.dart';
 import '../../features/transactions/presentation/recycle_bin_page.dart';
 import '../../features/transactions/presentation/transaction_edit_page.dart';
+import '../../features/transactions/application/transactions_list_controller.dart';
 import '../../features/transactions/presentation/transactions_page.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../providers/onboarding_provider.dart';
@@ -233,7 +235,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(routes: [
             GoRoute(
               path: '/transactions',
-              builder: (_, __) => const TransactionsPage(),
+              builder: (_, state) =>
+                  _TransactionsRouteEntry(state.uri.queryParameters),
             ),
           ]),
           StatefulShellBranch(routes: [
@@ -247,6 +250,67 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+/// /transactions 路由入口：从 URL query 参数解析筛选条件并写入 provider。
+///
+/// 采用 post-frame 回调来避免在 build 阶段直接修改 provider 状态。
+/// 关键顺序：先设置 month，再设置 filter。
+/// 原因：_monthChangeListenerProvider 在 currentMonthProvider 变化时同步触发，
+/// 会将 filter 清空（date-range 模式除外）。此时 filter 还未写入（仍为 null），
+/// 监听器的清空操作是 no-op；随后再写入 filter，不会被覆盖。
+class _TransactionsRouteEntry extends ConsumerStatefulWidget {
+  const _TransactionsRouteEntry(this.qp);
+  final Map<String, String> qp;
+
+  @override
+  ConsumerState<_TransactionsRouteEntry> createState() =>
+      _TransactionsRouteEntryState();
+}
+
+class _TransactionsRouteEntryState
+    extends ConsumerState<_TransactionsRouteEntry> {
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) => _apply());
+  }
+
+  void _apply() {
+    final qp = widget.qp;
+    // 1. 先设置月份（监听器此时看到的 filter 仍为 null，清空是 no-op）。
+    final m = qp['month'];
+    if (m != null) {
+      ref.read(currentMonthProvider.notifier).set(YearMonth.parse(m));
+    }
+
+    // 2. 构造 filter。
+    final filter = TransactionsFilter(
+      dayIso: qp['day'],
+      dateStartIso: qp['dateStart'],
+      dateEndIso: qp['dateEnd'],
+      categoryId: qp['category'],
+      tagId: qp['tag'],
+      untagged: qp['untagged'] == '1',
+      sourceId: qp['source'],
+    );
+
+    // 3. 若 filter 携带 dateRange 但没有 month 参数，将月份锚定到区间起点。
+    if (m == null && filter.hasDateRange) {
+      final dt = DateTime.parse(filter.dateStartIso!);
+      // date-range 模式下监听器不会清空 filter，直接设置月份即可。
+      ref
+          .read(currentMonthProvider.notifier)
+          .set(YearMonth(dt.year, dt.month));
+    }
+
+    // 4. 最后写入 filter（在月份已确定之后，避免被监听器覆盖）。
+    ref.read(transactionsFilterProvider.notifier).state =
+        filter.isEmpty ? null : filter;
+  }
+
+  @override
+  Widget build(BuildContext context) => const TransactionsPage();
+}
 
 /// 把 Riverpod 的 onboarding 状态桥接到 go_router 的 refreshListenable。
 class _OnboardingListenable extends ChangeNotifier {
