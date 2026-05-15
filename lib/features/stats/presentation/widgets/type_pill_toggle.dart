@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../domain/enums/transaction_type.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../theme/app_radius.dart';
 import '../../../../theme/app_typography.dart';
 
 /// 胶囊式 expense / income 切换，带滑动 thumb。
@@ -49,7 +50,7 @@ class TypePillToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: c.surfacePress,
         border: Border.all(color: c.borderSoft),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppRadius.brFull,
       ),
       child: SizedBox(
         width: halfW * 2,
@@ -68,7 +69,7 @@ class TypePillToggle extends StatelessWidget {
                   curve: Curves.easeOut,
                   decoration: BoxDecoration(
                     color: thumbColor,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: AppRadius.brFull,
                   ),
                 ),
               ),
@@ -136,7 +137,7 @@ class _Half extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppRadius.brFull,
         onTap: onTap,
         child: Container(
           alignment: Alignment.center,

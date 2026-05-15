@@ -18,52 +18,52 @@ class SettingsPage extends StatelessWidget {
     final sections = <_SettingsSection>[
       _SettingsSection(l.settingsSectionAccount, [
         _SettingsItem(LucideIcons.user, l.settingsProfile, '/settings/profile',
-            fg: const Color(0xFF2563EB), bg: const Color(0xFFDBEAFE)),
+            swatch: SettingsIconPalette.profile),
       ]),
       _SettingsSection(l.settingsSectionLibrary, [
         _SettingsItem(LucideIcons.shapes, l.settingsCategories,
             '/settings/categories',
-            fg: const Color(0xFF7C3AED), bg: const Color(0xFFEDE9FE)),
+            swatch: SettingsIconPalette.categories),
         _SettingsItem(LucideIcons.tag, l.settingsTags, '/settings/tags',
-            fg: const Color(0xFFDB2777), bg: const Color(0xFFFCE7F3)),
+            swatch: SettingsIconPalette.tags),
         _SettingsItem(
             LucideIcons.wallet, l.settingsSources, '/settings/sources',
-            fg: const Color(0xFFD97706), bg: const Color(0xFFFEF3C7)),
+            swatch: SettingsIconPalette.sources),
         _SettingsItem(
             LucideIcons.target, l.settingsBudgets, '/settings/budgets',
-            fg: const Color(0xFF059669), bg: const Color(0xFFD1FAE5)),
+            swatch: SettingsIconPalette.budgets),
       ]),
       _SettingsSection(l.settingsSectionDataIO, [
         _SettingsItem(
             LucideIcons.download, l.settingsExport, '/settings/export',
-            fg: const Color(0xFF0D9488), bg: const Color(0xFFCCFBF1)),
+            swatch: SettingsIconPalette.export),
         _SettingsItem(LucideIcons.upload, l.settingsImport, '/settings/import',
-            fg: const Color(0xFF0284C7), bg: const Color(0xFFE0F2FE)),
+            swatch: SettingsIconPalette.import),
         _SettingsItem(
             LucideIcons.archive, l.settingsBackup, '/settings/backup',
-            fg: const Color(0xFF475569), bg: const Color(0xFFE2E8F0)),
+            swatch: SettingsIconPalette.backup),
       ]),
       _SettingsSection(l.settingsSectionPreferences, [
         _SettingsItem(LucideIcons.dollarSign, l.settingsCurrency,
             '/settings/currency',
-            fg: const Color(0xFF16A34A), bg: const Color(0xFFDCFCE7)),
+            swatch: SettingsIconPalette.currency),
         _SettingsItem(
             LucideIcons.languages, l.settingsLanguage, '/settings/language',
-            fg: const Color(0xFF4F46E5), bg: const Color(0xFFE0E7FF)),
+            swatch: SettingsIconPalette.language),
         _SettingsItem(LucideIcons.palette, l.settingsAppearance,
             '/settings/appearance',
-            fg: const Color(0xFFE11D48), bg: const Color(0xFFFFE4E6)),
+            swatch: SettingsIconPalette.appearance),
       ]),
       _SettingsSection(l.settingsSectionSecurity, [
         _SettingsItem(
             LucideIcons.lock, l.settingsSecurity, '/settings/security',
-            fg: const Color(0xFFDC2626), bg: const Color(0xFFFEE2E2)),
+            swatch: SettingsIconPalette.security),
       ]),
       _SettingsSection(l.settingsSectionAbout, [
         _SettingsItem(LucideIcons.info, l.settingsAbout, '/settings/about',
-            fg: const Color(0xFF64748B), bg: const Color(0xFFF1F5F9)),
+            swatch: SettingsIconPalette.about),
         _SettingsItem(LucideIcons.shield, l.settingsLegal, '/settings/legal',
-            fg: const Color(0xFFEA580C), bg: const Color(0xFFFFEDD5)),
+            swatch: SettingsIconPalette.legal),
       ]),
     ];
 
@@ -147,11 +147,11 @@ class _ItemRow extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: item.bg,
+          color: item.swatch.bg,
           borderRadius: AppRadius.brLg,
         ),
         alignment: Alignment.center,
-        child: Icon(item.icon, size: 18, color: item.fg),
+        child: Icon(item.icon, size: 18, color: item.swatch.fg),
       ),
       title: Text(item.label,
           style: AppTypography.sm.copyWith(color: c.actionInk)),
@@ -172,12 +172,10 @@ class _SettingsItem {
     this.icon,
     this.label,
     this.path, {
-    required this.fg,
-    required this.bg,
+    required this.swatch,
   });
   final IconData icon;
   final String label;
   final String path;
-  final Color fg;
-  final Color bg;
+  final IconSwatch swatch;
 }

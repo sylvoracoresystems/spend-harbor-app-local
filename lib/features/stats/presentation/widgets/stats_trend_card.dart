@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../theme/app_radius.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
 import '../../application/stats_buckets.dart';
@@ -45,7 +46,7 @@ class StatsTrendCard extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.x1),
             _RangeChip(filter: f, locale: locale),
             const SizedBox(height: AppSpacing.x3),
             _Legend(
@@ -118,7 +119,7 @@ class _RangeChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         color: c.mintSoft,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: AppRadius.brLg,
       ),
       child: Text(
         text,

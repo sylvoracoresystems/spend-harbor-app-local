@@ -205,7 +205,8 @@ class _ByCategoryBody extends ConsumerWidget {
                       if (row.tagFrequencies.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(left: 36, top: 4),
-                          child: _tagPills(l, row.tagFrequencies, findTag),
+                          child: _tagPills(
+                              context, l, row.tagFrequencies, findTag),
                         ),
                       Padding(
                         padding: const EdgeInsets.only(left: 36, top: 4),
@@ -226,6 +227,7 @@ class _ByCategoryBody extends ConsumerWidget {
   }
 
   Widget _tagPills(
+    BuildContext context,
     AppL10n l,
     Map<String, int> freq,
     Tag? Function(String) findTag,
@@ -247,7 +249,7 @@ class _ByCategoryBody extends ConsumerWidget {
         if (extra > 0)
           TagPill(
             label: '+$extra',
-            color: const Color(0xFFBBBBBB),
+            color: context.appColors.textHint,
             compact: true,
           ),
       ],
@@ -384,7 +386,7 @@ class _ByTagBody extends ConsumerWidget {
                   ),
                 ),
               ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.x1),
             InkWell(
               onTap: onJumpToTagDist,
               child: Padding(
@@ -490,9 +492,9 @@ String _tagName(AppL10n l, Tag? tag) {
 }
 
 Color _categoryColor(Category? c) =>
-    c == null ? const Color(0xFF999999) : _hexToColor(c.color);
+    c == null ? AppColors.light.textHint : _hexToColor(c.color);
 Color _tagColor(Tag? t) =>
-    t == null ? const Color(0xFF999999) : _hexToColor(t.color);
+    t == null ? AppColors.light.textHint : _hexToColor(t.color);
 
 Color _hexToColor(String hex) {
   final cleaned = hex.replaceFirst('#', '');

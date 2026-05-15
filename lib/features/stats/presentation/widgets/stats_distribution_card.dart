@@ -316,17 +316,17 @@ Widget _categoryRow(
     child: Row(
       children: [
         Container(
-          width: 36,
-          height: 36,
+          width: 28,
+          height: 28,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           alignment: Alignment.center,
-          child: Icon(iconFor(iconKey), size: 18, color: Colors.white),
+          child: Icon(iconFor(iconKey), size: 16, color: Colors.white),
         ),
-        const SizedBox(width: AppSpacing.x3),
+        const SizedBox(width: AppSpacing.x2),
         Expanded(
           child: Text(
             name,
-            style: AppTypography.base.copyWith(color: c.textPrimary),
+            style: AppTypography.sm.copyWith(color: c.textPrimary),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -413,9 +413,9 @@ Widget _untaggedRow(
 }
 
 Color _categoryColor(Category? c) =>
-    c == null ? const Color(0xFF999999) : _hexToColor(c.color);
+    c == null ? AppColors.light.textHint : _hexToColor(c.color);
 Color _tagColor(Tag? t) =>
-    t == null ? const Color(0xFF999999) : _hexToColor(t.color);
+    t == null ? AppColors.light.textHint : _hexToColor(t.color);
 
 Color _hexToColor(String hex) {
   final cleaned = hex.replaceFirst('#', '');

@@ -195,3 +195,45 @@ extension AppColorsContext on BuildContext {
   AppColors get appColors =>
       Theme.of(this).extension<AppColors>() ?? AppColors.light;
 }
+
+/// 装饰性图标色板：每对 (fg/bg) 用于 Settings 列表项等分类图标。
+/// 这些颜色仅作视觉区分用，不承载语义；如需调整必须在此集中维护。
+@immutable
+class IconSwatch {
+  const IconSwatch(this.fg, this.bg);
+  final Color fg;
+  final Color bg;
+}
+
+class SettingsIconPalette {
+  SettingsIconPalette._();
+
+  static const profile =
+      IconSwatch(Color(0xFF2563EB), Color(0xFFDBEAFE));
+  static const categories =
+      IconSwatch(Color(0xFF7C3AED), Color(0xFFEDE9FE));
+  static const tags =
+      IconSwatch(Color(0xFFDB2777), Color(0xFFFCE7F3));
+  static const sources =
+      IconSwatch(Color(0xFFD97706), Color(0xFFFEF3C7));
+  static const budgets =
+      IconSwatch(Color(0xFF059669), Color(0xFFD1FAE5));
+  static const export =
+      IconSwatch(Color(0xFF0D9488), Color(0xFFCCFBF1));
+  static const import =
+      IconSwatch(Color(0xFF0284C7), Color(0xFFE0F2FE));
+  static const backup =
+      IconSwatch(Color(0xFF475569), Color(0xFFE2E8F0));
+  static const currency =
+      IconSwatch(Color(0xFF16A34A), Color(0xFFDCFCE7));
+  static const language =
+      IconSwatch(Color(0xFF4F46E5), Color(0xFFE0E7FF));
+  static const appearance =
+      IconSwatch(Color(0xFFE11D48), Color(0xFFFFE4E6));
+  static const security =
+      IconSwatch(Color(0xFFDC2626), Color(0xFFFEE2E2));
+  static const about =
+      IconSwatch(Color(0xFF64748B), Color(0xFFF1F5F9));
+  static const legal =
+      IconSwatch(Color(0xFFEA580C), Color(0xFFFFEDD5));
+}

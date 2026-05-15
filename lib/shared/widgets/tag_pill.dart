@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/app_radius.dart';
 import '../../theme/app_typography.dart';
 
 /// 共享标签胶囊：用于 Dashboard / Transactions 列表行、Stats tag distribution。
@@ -26,7 +27,7 @@ class TagPill extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppRadius.brFull,
       ),
       child: Text(
         label,

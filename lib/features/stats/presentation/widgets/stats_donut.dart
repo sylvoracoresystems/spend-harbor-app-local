@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../theme/app_colors.dart';
+import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
 
 class DonutSlice {
@@ -134,13 +135,12 @@ class _StatsDonutState extends State<StatsDonut>
               Text(
                 widget.centerLabel,
                 style: AppTypography.xs.copyWith(
-                  fontSize: 10,
                   color: c.textMuted,
                   fontWeight: AppTypography.weightSemibold,
                   letterSpacing: 1.5,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacing.x1),
               Text(
                 widget.centerAmount,
                 style: AppTypography.base.copyWith(

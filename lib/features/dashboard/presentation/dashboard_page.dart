@@ -403,7 +403,7 @@ class _BudgetRow extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.x2),
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: AppRadius.brFull,
             child: LinearProgressIndicator(
               value: clamped,
               minHeight: 6,
