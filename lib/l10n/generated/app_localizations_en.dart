@@ -405,15 +405,60 @@ class AppL10nEn extends AppL10n {
   String get exportTitle => 'Export Data';
 
   @override
-  String exportMonthHint(String month) {
-    return 'Exports the currently selected month ($month).';
+  String get exportSectionTransactions => 'Transactions';
+
+  @override
+  String get exportSectionTaxonomy => 'Categories, tags & sources';
+
+  @override
+  String get exportTaxonomyHint => 'Export all categories, tags and sources as one xlsx file (3 sheets).';
+
+  @override
+  String get exportTaxonomyButton => 'Export taxonomy';
+
+  @override
+  String get exportFormatLabel => 'Format';
+
+  @override
+  String get exportFormatXlsx => 'XLSX';
+
+  @override
+  String get exportFormatCsv => 'CSV';
+
+  @override
+  String get exportScopeLabel => 'Range';
+
+  @override
+  String exportScopeMonth(String month) {
+    return '$month';
   }
 
   @override
-  String get exportButton => 'Export CSV';
+  String get exportScopeAll => 'All';
 
   @override
-  String get exportEmpty => 'No transactions in this month to export.';
+  String get exportScopeRange => 'Range';
+
+  @override
+  String get exportRangeStart => 'Start date';
+
+  @override
+  String get exportRangeEnd => 'End date';
+
+  @override
+  String get exportRangeInvalid => 'End date must be on or after start date.';
+
+  @override
+  String get exportEmptyRange => 'No transactions in this range.';
+
+  @override
+  String get exportButton => 'Export transactions';
+
+  @override
+  String get exportEmptyMonth => 'No transactions in this month.';
+
+  @override
+  String get exportEmptyAll => 'No transactions yet.';
 
   @override
   String get exportDone => 'Share sheet opened';
@@ -422,14 +467,30 @@ class AppL10nEn extends AppL10n {
   String get importTitle => 'Import Data';
 
   @override
-  String get importPickCsv => 'Pick CSV file';
+  String get importPickFile => 'Pick file (xlsx or csv)';
 
   @override
-  String get importHint => 'Pick a SpendHarbor-format CSV. Rows referencing unknown categories or sources will be skipped.';
+  String get importHint => 'Pick a SpendHarbor xlsx (transactions or taxonomy) or CSV. Missing categories/tags/sources are auto-created on transaction import.';
 
   @override
-  String importSummary(int parsed, int imported, int duplicates, int invalid) {
+  String importTxSummary(int parsed, int imported, int duplicates, int invalid) {
     return 'Parsed $parsed · Imported $imported · Duplicates $duplicates · Invalid $invalid';
+  }
+
+  @override
+  String importTxAutoCreated(int cats, int tags, int srcs) {
+    return 'Auto-created · $cats categories · $tags tags · $srcs sources';
+  }
+
+  @override
+  String get importTaxonomyConfirmTitle => 'Replace taxonomy?';
+
+  @override
+  String get importTaxonomyConfirmBody => 'This will overwrite categories, tags and sources to match the picked file. Items not in the file are hidden (existing transactions still keep their references).';
+
+  @override
+  String importTaxonomySummary(int cAdded, int cUpdated, int cDeleted, int tAdded, int tUpdated, int tDeleted, int sAdded, int sUpdated, int sDeleted) {
+    return 'Categories +$cAdded ~$cUpdated -$cDeleted · Tags +$tAdded ~$tUpdated -$tDeleted · Sources +$sAdded ~$sUpdated -$sDeleted';
   }
 
   @override

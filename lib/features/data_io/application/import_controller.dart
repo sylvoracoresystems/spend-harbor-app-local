@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:file_picker/file_picker.dart';
@@ -8,10 +9,19 @@ import 'package:uuid/uuid.dart';
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../data/seed/default_name_resolver.dart';
+import '../../../domain/enums/transaction_type.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'csv_importer.dart';
+import 'transactions_xlsx.dart';
 
 const _uuid = Uuid();
+
+/// 默认 fallback 视觉（导入时新建的 category/tag/source 用）。
+const _kDefaultCatColor = '#64748b';
+const _kDefaultCatIcon = 'tag';
+const _kDefaultTagColor = '#94a3b8';
+const _kDefaultSrcColor = '#10b981';
+const _kDefaultSrcIcon = 'wallet';
 
 /// 导入结果摘要：UI 展示给用户。
 class ImportSummary {
@@ -21,6 +31,9 @@ class ImportSummary {
     required this.duplicates,
     required this.invalid,
     required this.invalidReasons,
+    required this.autoCreatedCategories,
+    required this.autoCreatedTags,
+    required this.autoCreatedSources,
   });
 
   final int parsed;
@@ -28,32 +41,66 @@ class ImportSummary {
   final int duplicates;
   final int invalid;
   final List<String> invalidReasons;
+  final int autoCreatedCategories;
+  final int autoCreatedTags;
+  final int autoCreatedSources;
 }
 
-/// 用户取消选择文件时返回 null。
-Future<ImportSummary?> importCsvFromPicker({
+/// 用户取消选择文件时返回 null。支持 .csv 和 .xlsx（按扩展名分发）。
+Future<ImportSummary?> importTransactionsFromPicker({
   required WidgetRef ref,
   required AppL10n l,
 }) async {
   final picked = await FilePicker.pickFiles(
     type: FileType.custom,
-    allowedExtensions: ['csv'],
+    allowedExtensions: ['csv', 'xlsx'],
   );
   if (picked == null || picked.files.isEmpty) return null;
-  final path = picked.files.single.path;
+  final file = picked.files.single;
+  final path = file.path;
   if (path == null) return null;
-  final body = await File(path).readAsString();
-  return importCsvFromString(ref: ref, l: l, body: body);
+
+  final ext = (file.extension ?? '').toLowerCase();
+  if (ext == 'xlsx') {
+    final bytes = await File(path).readAsBytes();
+    final outcomes = parseTransactionsXlsx(_asUint8(bytes));
+    return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+  } else {
+    final body = await File(path).readAsString();
+    final outcomes = parseCsv(body);
+    return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+  }
 }
 
-/// 把 CSV 文本导入到数据库。
-///
-/// 解析失败 / 行格式错误 / 找不到对应分类或来源 → 视为 invalid 并跳过。
-/// 复合 key 命中已有数据 → 视为 duplicate 跳过。
+/// 仅 CSV 路径（保留旧签名，方便上层和测试沿用）。
 Future<ImportSummary> importCsvFromString({
   required WidgetRef ref,
   required AppL10n l,
   required String body,
+}) async {
+  final outcomes = parseCsv(body);
+  return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+}
+
+/// 直接从 xlsx 字节导入（UI 已自行 detect kind 后调用此函数）。
+Future<ImportSummary> importTransactionsFromXlsx({
+  required WidgetRef ref,
+  required AppL10n l,
+  required List<int> bytes,
+}) async {
+  final outcomes = parseTransactionsXlsx(_asUint8(bytes));
+  return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+}
+
+/// 把解析结果写入数据库。
+///
+/// - 复合 key 命中已有数据 → 视为 duplicate 跳过。
+/// - 引用的 category / source / tag 名字找不到时**自动创建**新条目（默认配色），
+///   并继续导入这一行。
+Future<ImportSummary> _ingestOutcomes({
+  required WidgetRef ref,
+  required AppL10n l,
+  required List<CsvRowOutcome> outcomes,
 }) async {
   final db = ref.read(appDatabaseProvider);
   final txDao = ref.read(transactionDaoProvider);
@@ -65,32 +112,76 @@ Future<ImportSummary> importCsvFromString({
   String displayName(String name, String? key) =>
       resolveDefaultName(l, key) ?? name;
 
-  Map<String, String> indexByName(List<({String id, String name})> rows) {
-    final map = <String, String>{};
-    for (final r in rows) {
-      map[r.name.toLowerCase()] = r.id;
-    }
-    return map;
-  }
-
-  final catByName = indexByName([
-    for (final c in cats) (id: c.id, name: displayName(c.name, c.nameKey)),
-  ]);
-  final srcByName = indexByName([
-    for (final s in sources) (id: s.id, name: displayName(s.name, s.nameKey)),
-  ]);
-  final tagByName = indexByName([
-    for (final t in tags) (id: t.id, name: displayName(t.name, t.nameKey)),
-  ]);
+  // 各 dictionary 的「name(lower) → row」可变索引：自动创建后会更新。
+  final catByName = <String, Category>{
+    for (final c in cats) displayName(c.name, c.nameKey).toLowerCase(): c,
+  };
+  final srcByName = <String, Source>{
+    for (final s in sources) displayName(s.name, s.nameKey).toLowerCase(): s,
+  };
+  final tagByName = <String, Tag>{
+    for (final t in tags) displayName(t.name, t.nameKey).toLowerCase(): t,
+  };
 
   final existing = await txDao.watchAll().first;
   final existingKeys = existingDedupeKeys(existing);
 
-  final outcomes = parseCsv(body);
   final invalidReasons = <String>[];
   var imported = 0;
   var duplicates = 0;
   var invalid = 0;
+  var autoCats = 0;
+  var autoTags = 0;
+  var autoSrcs = 0;
+
+  Future<String> ensureCategory(String name, TransactionType type) async {
+    final existing = catByName[name.toLowerCase()];
+    if (existing != null) return existing.id;
+    final id = _uuid.v4();
+    await db.categoryDao.insertCategory(CategoriesCompanion.insert(
+      id: id,
+      name: name,
+      type: type,
+      icon: _kDefaultCatIcon,
+      color: _kDefaultCatColor,
+    ));
+    final fresh = await db.categoryDao.findById(id);
+    if (fresh != null) catByName[name.toLowerCase()] = fresh;
+    autoCats++;
+    return id;
+  }
+
+  Future<String> ensureSource(String name, String currency) async {
+    final existing = srcByName[name.toLowerCase()];
+    if (existing != null) return existing.id;
+    final id = _uuid.v4();
+    await db.sourceDao.insertSource(SourcesCompanion.insert(
+      id: id,
+      name: name,
+      currency: currency,
+      icon: _kDefaultSrcIcon,
+      color: _kDefaultSrcColor,
+    ));
+    final fresh = await db.sourceDao.findById(id);
+    if (fresh != null) srcByName[name.toLowerCase()] = fresh;
+    autoSrcs++;
+    return id;
+  }
+
+  Future<String> ensureTag(String name) async {
+    final existing = tagByName[name.toLowerCase()];
+    if (existing != null) return existing.id;
+    final id = _uuid.v4();
+    await db.tagDao.insertTag(TagsCompanion.insert(
+      id: id,
+      name: name,
+      color: _kDefaultTagColor,
+    ));
+    final fresh = await db.tagDao.findById(id);
+    if (fresh != null) tagByName[name.toLowerCase()] = fresh;
+    autoTags++;
+    return id;
+  }
 
   await db.transaction(() async {
     for (final outcome in outcomes) {
@@ -100,13 +191,9 @@ Future<ImportSummary> importCsvFromString({
         continue;
       }
       final r = outcome.row!;
-      final catId = catByName[r.categoryName.toLowerCase()];
-      final srcId = srcByName[r.sourceName.toLowerCase()];
-      if (catId == null || srcId == null) {
-        invalid++;
-        invalidReasons.add('unresolved name');
-        continue;
-      }
+      final catId = await ensureCategory(r.categoryName, r.type);
+      final srcId = await ensureSource(r.sourceName, r.currency);
+
       final key = dedupeKey(
         transactedOn: r.transactedOn,
         type: r.type,
@@ -123,8 +210,7 @@ Future<ImportSummary> importCsvFromString({
 
       final tagIds = <String>[];
       for (final n in r.tagNames) {
-        final id = tagByName[n.toLowerCase()];
-        if (id != null) tagIds.add(id);
+        tagIds.add(await ensureTag(n));
       }
 
       await txDao.insertWithTags(
@@ -151,5 +237,11 @@ Future<ImportSummary> importCsvFromString({
     duplicates: duplicates,
     invalid: invalid,
     invalidReasons: invalidReasons,
+    autoCreatedCategories: autoCats,
+    autoCreatedTags: autoTags,
+    autoCreatedSources: autoSrcs,
   );
 }
+
+Uint8List _asUint8(List<int> b) =>
+    b is Uint8List ? b : Uint8List.fromList(b);

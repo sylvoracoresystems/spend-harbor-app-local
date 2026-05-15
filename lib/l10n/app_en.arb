@@ -170,24 +170,63 @@
   "statsError": "Failed to load",
 
   "exportTitle": "Export Data",
-  "exportMonthHint": "Exports the currently selected month ({month}).",
-  "@exportMonthHint": {
+  "exportSectionTransactions": "Transactions",
+  "exportSectionTaxonomy": "Categories, tags & sources",
+  "exportTaxonomyHint": "Export all categories, tags and sources as one xlsx file (3 sheets).",
+  "exportTaxonomyButton": "Export taxonomy",
+  "exportFormatLabel": "Format",
+  "exportFormatXlsx": "XLSX",
+  "exportFormatCsv": "CSV",
+  "exportScopeLabel": "Range",
+  "exportScopeMonth": "{month}",
+  "@exportScopeMonth": {
     "placeholders": { "month": { "type": "String" } }
   },
-  "exportButton": "Export CSV",
-  "exportEmpty": "No transactions in this month to export.",
+  "exportScopeAll": "All",
+  "exportScopeRange": "Range",
+  "exportRangeStart": "Start date",
+  "exportRangeEnd": "End date",
+  "exportRangeInvalid": "End date must be on or after start date.",
+  "exportEmptyRange": "No transactions in this range.",
+  "exportButton": "Export transactions",
+  "exportEmptyMonth": "No transactions in this month.",
+  "exportEmptyAll": "No transactions yet.",
   "exportDone": "Share sheet opened",
 
   "importTitle": "Import Data",
-  "importPickCsv": "Pick CSV file",
-  "importHint": "Pick a SpendHarbor-format CSV. Rows referencing unknown categories or sources will be skipped.",
-  "importSummary": "Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}",
-  "@importSummary": {
+  "importPickFile": "Pick file (xlsx or csv)",
+  "importHint": "Pick a SpendHarbor xlsx (transactions or taxonomy) or CSV. Missing categories/tags/sources are auto-created on transaction import.",
+  "importTxSummary": "Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}",
+  "@importTxSummary": {
     "placeholders": {
       "parsed": { "type": "int" },
       "imported": { "type": "int" },
       "duplicates": { "type": "int" },
       "invalid": { "type": "int" }
+    }
+  },
+  "importTxAutoCreated": "Auto-created · {cats} categories · {tags} tags · {srcs} sources",
+  "@importTxAutoCreated": {
+    "placeholders": {
+      "cats": { "type": "int" },
+      "tags": { "type": "int" },
+      "srcs": { "type": "int" }
+    }
+  },
+  "importTaxonomyConfirmTitle": "Replace taxonomy?",
+  "importTaxonomyConfirmBody": "This will overwrite categories, tags and sources to match the picked file. Items not in the file are hidden (existing transactions still keep their references).",
+  "importTaxonomySummary": "Categories +{cAdded} ~{cUpdated} -{cDeleted} · Tags +{tAdded} ~{tUpdated} -{tDeleted} · Sources +{sAdded} ~{sUpdated} -{sDeleted}",
+  "@importTaxonomySummary": {
+    "placeholders": {
+      "cAdded": { "type": "int" },
+      "cUpdated": { "type": "int" },
+      "cDeleted": { "type": "int" },
+      "tAdded": { "type": "int" },
+      "tUpdated": { "type": "int" },
+      "tDeleted": { "type": "int" },
+      "sAdded": { "type": "int" },
+      "sUpdated": { "type": "int" },
+      "sDeleted": { "type": "int" }
     }
   },
 

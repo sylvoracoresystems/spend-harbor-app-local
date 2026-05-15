@@ -47,8 +47,10 @@
 | `shared_preferences`          | ^2.3.2     | 非敏感本地偏好（locale、themeMode）      | 比 secure_storage 更轻量；敏感数据仍走 secure_storage          |
 | `fl_chart`                    | ^0.69.0    | 柱状图 / 环形图（Stats 统计分析）        | 轻量、纯 Flutter、零网络；钉 0.69 避免 1.x 与当前 Flutter SDK 冲突 |
 | `csv`                         | ^6.0.0     | CSV 导出 / 导入                          | RFC 4180 引号/逗号处理；纯 Dart 不联网                      |
+| `archive`                     | ^4.0.0     | XLSX zip 容器读写（自研最小 xlsx codec） | 已有 image 间接依赖，提升为直接依赖；纯 Dart 不联网          |
+| `xml`                         | ^6.5.0     | XLSX SpreadsheetML XML 解析              | 同上；提升为直接依赖                                          |
 | `share_plus`                  | ^12.x      | 调起系统分享面板（导出 / 备份分享）       | 跨平台官方维护；通过临时文件 + XFile 分享                    |
-| `file_picker`                 | ^11.0.2    | 选择 CSV 导入文件                        | 跨平台；11.x 改为 `FilePicker.pickFiles` 静态调用             |
+| `file_picker`                 | ^11.0.2    | 选择 CSV / XLSX 导入文件                  | 跨平台；11.x 改为 `FilePicker.pickFiles` 静态调用             |
 | `crypto`                      | ^3.0.6     | PIN SHA-256 哈希                          | 标准实现；纯 Dart 不联网                                      |
 
 ### 2.2 开发时依赖（`dev_dependencies`）
@@ -64,12 +66,10 @@
 
 | 包                       | 用途             | 何时引入                       |
 | ------------------------ | ---------------- | ------------------------------ |
-| `excel` 或 `syncfusion_flutter_xlsio` | .xlsx 导出 | 实现 §4.6 数据导出时 |
-| `csv`                    | CSV 导出/导入    | 同上                           |
-| `share_plus`             | 调起系统分享面板 | 导出/备份分享时                |
-| `file_picker`            | 选择导入文件     | 实现 §4.7 数据导入时           |
 | `flutter_launcher_icons` | 生成 App 图标    | 上架前                         |
 | `flutter_native_splash`  | 生成启动页       | 上架前                         |
+
+> 注：原计划用 `excel` / `syncfusion_flutter_xlsio` 处理 .xlsx，但前者与 `flutter_native_splash` 在 `archive` 大版本上冲突，后者商用收费。最终用 `archive` + `xml` 自研 [`xlsx_codec.dart`](../lib/features/data_io/application/xlsx_codec.dart) 实现 OOXML SpreadsheetML 最小子集（仅字符串 / 数字单元格 + sharedStrings + 多 sheet），约 200 行，零冲突且能往返读写示例文件。
 
 ### 2.4 明确不引入
 

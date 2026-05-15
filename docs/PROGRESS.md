@@ -18,6 +18,32 @@
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
 
+**当前 Step**：Phase 10 — XLSX 导入导出（交易 + Taxonomy）✅
+
+**Phase 10 子任务**：
+
+- [x] 10.1 自研 [`xlsx_codec.dart`](../lib/features/data_io/application/xlsx_codec.dart)：encodeXlsx / decodeXlsx，仅支持 string + number 单元格 + sharedStrings + 多 sheet。绕开 `excel` 包与 `flutter_native_splash` 的 archive 大版本冲突。
+- [x] 10.2 [`taxonomy_xlsx.dart`](../lib/features/data_io/application/taxonomy_xlsx.dart)：3-sheet schema（Categories / Tags / Sources），与示例文件 `spend-harbor-taxonomy-*.xlsx` 完全对齐。
+- [x] 10.3 [`transactions_xlsx.dart`](../lib/features/data_io/application/transactions_xlsx.dart)：1-sheet schema（Amount / Type / Currency / Date / Category / Tags / Source / Notes），复用 csv_importer 的 ParsedCsvRow / CsvRowOutcome 下游逻辑。
+- [x] 10.4 [`taxonomy_import_controller.dart`](../lib/features/data_io/application/taxonomy_import_controller.dart)：「清空后重建」语义的 FK-safe 实现 —— 同名更新 / 新增插入 / xlsx 没有的软删除（保留外键引用）。
+- [x] 10.5 [`import_controller.dart`](../lib/features/data_io/application/import_controller.dart) 重写：xlsx/csv 自动分发 + 缺失的 category/tag/source 自动新建（默认配色）。返回带 autoCreated 计数的 ImportSummary。
+- [x] 10.6 [`export_controller.dart`](../lib/features/data_io/application/export_controller.dart) 重写：`exportTransactions(scope, format)` + `exportTaxonomy()`；文件名规则与示例对齐。
+- [x] 10.7 ARB en+zh 新增 16 keys（exportSection*/exportFormat*/exportScope*/importTaxonomy*/importTxAutoCreated 等）。
+- [x] 10.8 Export 页：双卡片（Transactions + Taxonomy），PillSegmented 选格式 + 范围；Import 页：单 Pick 按钮 + 自动 detect xlsx kind + taxonomy 替换前确认对话框。
+- [x] 10.9 单测：[`xlsx_codec_test.dart`](../test/features/data_io/xlsx_codec_test.dart) 编解码往返 + XML 转义。
+- [x] 10.10 docs：TECH_STACK.md §2.1 加 archive + xml；§2.3 移除 excel 计划项并解释自研原因。
+- [x] 10.11 `flutter analyze` 0 issues + `flutter test` 通过（171 tests）。
+- [ ] 实机验证：分享导出文件给自己 + 重新导入 + 编辑示例文件后再导入（用户自己跑）。
+
+**Phase 10 已知 deferred**：
+
+- Tags 表无 icon 列；导出时为兼容示例 schema 固定写 'tag'，导入时忽略 icon 列。
+- Taxonomy 导入语义实质是 merge + soft-delete missing，不是真正的硬删除（保护交易外键）。从用户视角等价于「以 xlsx 为准」。
+
+---
+
+**已完成 Step Phase 9**：
+
 **当前 Step**：Phase 9 — Add / Edit Transaction 页面重构 ✅
 
 **Phase 9 子任务**：

@@ -405,15 +405,60 @@ class AppL10nZh extends AppL10n {
   String get exportTitle => '数据导出';
 
   @override
-  String exportMonthHint(String month) {
-    return '导出当前选定的月份（$month）。';
+  String get exportSectionTransactions => '交易';
+
+  @override
+  String get exportSectionTaxonomy => '分类、标签与来源';
+
+  @override
+  String get exportTaxonomyHint => '把所有分类、标签、来源导出到一个 xlsx（3 个工作表）。';
+
+  @override
+  String get exportTaxonomyButton => '导出分类配置';
+
+  @override
+  String get exportFormatLabel => '格式';
+
+  @override
+  String get exportFormatXlsx => 'XLSX';
+
+  @override
+  String get exportFormatCsv => 'CSV';
+
+  @override
+  String get exportScopeLabel => '范围';
+
+  @override
+  String exportScopeMonth(String month) {
+    return '$month';
   }
 
   @override
-  String get exportButton => '导出 CSV';
+  String get exportScopeAll => '全部';
 
   @override
-  String get exportEmpty => '本月暂无交易可导出。';
+  String get exportScopeRange => '自定义';
+
+  @override
+  String get exportRangeStart => '开始日期';
+
+  @override
+  String get exportRangeEnd => '结束日期';
+
+  @override
+  String get exportRangeInvalid => '结束日期必须不早于开始日期。';
+
+  @override
+  String get exportEmptyRange => '所选日期范围内没有交易。';
+
+  @override
+  String get exportButton => '导出交易';
+
+  @override
+  String get exportEmptyMonth => '本月暂无交易。';
+
+  @override
+  String get exportEmptyAll => '暂无任何交易。';
 
   @override
   String get exportDone => '已唤起分享面板';
@@ -422,14 +467,30 @@ class AppL10nZh extends AppL10n {
   String get importTitle => '数据导入';
 
   @override
-  String get importPickCsv => '选择 CSV 文件';
+  String get importPickFile => '选择文件（xlsx 或 csv）';
 
   @override
-  String get importHint => '请选择 SpendHarbor 格式的 CSV。引用未知分类或来源的行将被跳过。';
+  String get importHint => '请选择 SpendHarbor 的 xlsx（交易 / 分类配置）或 CSV 文件。导入交易时缺失的分类/标签/来源会自动新建。';
 
   @override
-  String importSummary(int parsed, int imported, int duplicates, int invalid) {
+  String importTxSummary(int parsed, int imported, int duplicates, int invalid) {
     return '解析 $parsed · 已导入 $imported · 重复 $duplicates · 无效 $invalid';
+  }
+
+  @override
+  String importTxAutoCreated(int cats, int tags, int srcs) {
+    return '自动新建 · $cats 分类 · $tags 标签 · $srcs 来源';
+  }
+
+  @override
+  String get importTaxonomyConfirmTitle => '替换分类配置？';
+
+  @override
+  String get importTaxonomyConfirmBody => '将以所选文件为准覆盖现有分类、标签、来源。文件中没有的项目会被隐藏（已有交易仍保持引用）。';
+
+  @override
+  String importTaxonomySummary(int cAdded, int cUpdated, int cDeleted, int tAdded, int tUpdated, int tDeleted, int sAdded, int sUpdated, int sDeleted) {
+    return '分类 +$cAdded ~$cUpdated -$cDeleted · 标签 +$tAdded ~$tUpdated -$tDeleted · 来源 +$sAdded ~$sUpdated -$sDeleted';
   }
 
   @override

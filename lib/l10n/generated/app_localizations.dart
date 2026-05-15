@@ -851,23 +851,113 @@ abstract class AppL10n {
   /// **'Export Data'**
   String get exportTitle;
 
-  /// No description provided for @exportMonthHint.
+  /// No description provided for @exportSectionTransactions.
   ///
   /// In en, this message translates to:
-  /// **'Exports the currently selected month ({month}).'**
-  String exportMonthHint(String month);
+  /// **'Transactions'**
+  String get exportSectionTransactions;
+
+  /// No description provided for @exportSectionTaxonomy.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories, tags & sources'**
+  String get exportSectionTaxonomy;
+
+  /// No description provided for @exportTaxonomyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all categories, tags and sources as one xlsx file (3 sheets).'**
+  String get exportTaxonomyHint;
+
+  /// No description provided for @exportTaxonomyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Export taxonomy'**
+  String get exportTaxonomyButton;
+
+  /// No description provided for @exportFormatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Format'**
+  String get exportFormatLabel;
+
+  /// No description provided for @exportFormatXlsx.
+  ///
+  /// In en, this message translates to:
+  /// **'XLSX'**
+  String get exportFormatXlsx;
+
+  /// No description provided for @exportFormatCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV'**
+  String get exportFormatCsv;
+
+  /// No description provided for @exportScopeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Range'**
+  String get exportScopeLabel;
+
+  /// No description provided for @exportScopeMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{month}'**
+  String exportScopeMonth(String month);
+
+  /// No description provided for @exportScopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get exportScopeAll;
+
+  /// No description provided for @exportScopeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Range'**
+  String get exportScopeRange;
+
+  /// No description provided for @exportRangeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get exportRangeStart;
+
+  /// No description provided for @exportRangeEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get exportRangeEnd;
+
+  /// No description provided for @exportRangeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'End date must be on or after start date.'**
+  String get exportRangeInvalid;
+
+  /// No description provided for @exportEmptyRange.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions in this range.'**
+  String get exportEmptyRange;
 
   /// No description provided for @exportButton.
   ///
   /// In en, this message translates to:
-  /// **'Export CSV'**
+  /// **'Export transactions'**
   String get exportButton;
 
-  /// No description provided for @exportEmpty.
+  /// No description provided for @exportEmptyMonth.
   ///
   /// In en, this message translates to:
-  /// **'No transactions in this month to export.'**
-  String get exportEmpty;
+  /// **'No transactions in this month.'**
+  String get exportEmptyMonth;
+
+  /// No description provided for @exportEmptyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet.'**
+  String get exportEmptyAll;
 
   /// No description provided for @exportDone.
   ///
@@ -881,23 +971,47 @@ abstract class AppL10n {
   /// **'Import Data'**
   String get importTitle;
 
-  /// No description provided for @importPickCsv.
+  /// No description provided for @importPickFile.
   ///
   /// In en, this message translates to:
-  /// **'Pick CSV file'**
-  String get importPickCsv;
+  /// **'Pick file (xlsx or csv)'**
+  String get importPickFile;
 
   /// No description provided for @importHint.
   ///
   /// In en, this message translates to:
-  /// **'Pick a SpendHarbor-format CSV. Rows referencing unknown categories or sources will be skipped.'**
+  /// **'Pick a SpendHarbor xlsx (transactions or taxonomy) or CSV. Missing categories/tags/sources are auto-created on transaction import.'**
   String get importHint;
 
-  /// No description provided for @importSummary.
+  /// No description provided for @importTxSummary.
   ///
   /// In en, this message translates to:
   /// **'Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}'**
-  String importSummary(int parsed, int imported, int duplicates, int invalid);
+  String importTxSummary(int parsed, int imported, int duplicates, int invalid);
+
+  /// No description provided for @importTxAutoCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-created · {cats} categories · {tags} tags · {srcs} sources'**
+  String importTxAutoCreated(int cats, int tags, int srcs);
+
+  /// No description provided for @importTaxonomyConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace taxonomy?'**
+  String get importTaxonomyConfirmTitle;
+
+  /// No description provided for @importTaxonomyConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will overwrite categories, tags and sources to match the picked file. Items not in the file are hidden (existing transactions still keep their references).'**
+  String get importTaxonomyConfirmBody;
+
+  /// No description provided for @importTaxonomySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories +{cAdded} ~{cUpdated} -{cDeleted} · Tags +{tAdded} ~{tUpdated} -{tDeleted} · Sources +{sAdded} ~{sUpdated} -{sDeleted}'**
+  String importTaxonomySummary(int cAdded, int cUpdated, int cDeleted, int tAdded, int tUpdated, int tDeleted, int sAdded, int sUpdated, int sDeleted);
 
   /// No description provided for @backupTitle.
   ///
