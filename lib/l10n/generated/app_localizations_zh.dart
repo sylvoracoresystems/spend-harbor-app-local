@@ -203,6 +203,11 @@ class AppL10nZh extends AppL10n {
   String get txListEmpty => '本月暂无交易';
 
   @override
+  String txListCount(int count) {
+    return '$count 笔';
+  }
+
+  @override
   String txFilterAppliedCategory(String name) {
     return '已按分类筛选：$name';
   }

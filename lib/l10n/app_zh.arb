@@ -75,6 +75,10 @@
   "txNoteOptional": "备注（选填）",
 
   "txListEmpty": "本月暂无交易",
+  "txListCount": "{count} 笔",
+  "@txListCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "txFilterAppliedCategory": "已按分类筛选：{name}",
   "@txFilterAppliedCategory": {
     "placeholders": {"name": {"type": "String"}}

@@ -203,6 +203,18 @@ class AppL10nEn extends AppL10n {
   String get txListEmpty => 'No transactions this month';
 
   @override
+  String txListCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+      zero: 'No transactions',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String txFilterAppliedCategory(String name) {
     return 'Filtered by category: $name';
   }

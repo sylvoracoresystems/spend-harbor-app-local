@@ -479,6 +479,12 @@ abstract class AppL10n {
   /// **'No transactions this month'**
   String get txListEmpty;
 
+  /// No description provided for @txListCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No transactions} =1{1 transaction} other{{count} transactions}}'**
+  String txListCount(int count);
+
   /// No description provided for @txFilterAppliedCategory.
   ///
   /// In en, this message translates to:
