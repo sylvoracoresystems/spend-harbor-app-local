@@ -9,6 +9,7 @@ import '../../../domain/enums/budget_scope.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/pill_segmented.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
@@ -66,40 +67,40 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
         children: [
           _SectionLabel(text: l.budgetFieldPeriod),
           const SizedBox(height: AppSpacing.x2),
-          SegmentedButton<BudgetPeriod>(
+          PillSegmented<BudgetPeriod>(
+            value: state.period,
             segments: [
-              ButtonSegment(
+              PillSegment(
                 value: BudgetPeriod.week,
-                label: Text(l.budgetPeriodWeek),
+                label: l.budgetPeriodWeek,
               ),
-              ButtonSegment(
+              PillSegment(
                 value: BudgetPeriod.month,
-                label: Text(l.budgetPeriodMonth),
+                label: l.budgetPeriodMonth,
               ),
-              ButtonSegment(
+              PillSegment(
                 value: BudgetPeriod.year,
-                label: Text(l.budgetPeriodYear),
+                label: l.budgetPeriodYear,
               ),
             ],
-            selected: {state.period},
-            onSelectionChanged: (s) => notifier.setPeriod(s.first),
+            onChanged: notifier.setPeriod,
           ),
           const SizedBox(height: AppSpacing.x4),
           _SectionLabel(text: l.budgetFieldScope),
           const SizedBox(height: AppSpacing.x2),
-          SegmentedButton<BudgetScope>(
-            segments: [
-              ButtonSegment(
-                value: BudgetScope.total,
-                label: Text(l.budgetScopeTotal),
-              ),
-              ButtonSegment(
-                value: BudgetScope.category,
-                label: Text(l.budgetScopeCategory),
-              ),
-            ],
-            selected: {state.scope},
-            onSelectionChanged: (s) => notifier.setScope(s.first),
+          PillToggle<BudgetScope>(
+            value: state.scope,
+            first: PillToggleOption(
+              value: BudgetScope.total,
+              label: l.budgetScopeTotal,
+              activeColor: c.action,
+            ),
+            second: PillToggleOption(
+              value: BudgetScope.category,
+              label: l.budgetScopeCategory,
+              activeColor: c.action,
+            ),
+            onChanged: notifier.setScope,
           ),
           if (state.scope == BudgetScope.category) ...[
             const SizedBox(height: AppSpacing.x4),
