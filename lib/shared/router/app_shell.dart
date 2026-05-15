@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../features/transactions/application/transactions_list_controller.dart';
@@ -32,7 +32,7 @@ class AppShell extends StatelessWidget {
     final l = AppL10n.of(context);
     final destinations = <_NavDestination>[
       _NavDestination(Symbols.home, l.tabDashboard),
-      _NavDestination(Symbols.analytics, l.tabStats),
+      _NavDestination(Symbols.bar_chart, l.tabStats),
       _NavDestination(Symbols.receipt_long, l.tabTransactions),
       _NavDestination(Symbols.settings, l.tabSettings),
     ];

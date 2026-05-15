@@ -61,70 +61,79 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
         backgroundColor: c.surface,
         title: Text(state.isEditing ? l.catEditTitle : l.catNewTitle),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(AppSpacing.x4),
-        children: [
-          _PreviewCard(
-            icon: iconFor(state.icon),
-            color: _hexToColor(state.color),
-            name: state.name,
-            placeholder: l.catFieldName,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.x4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _PreviewCard(
+                icon: iconFor(state.icon),
+                color: _hexToColor(state.color),
+                name: state.name,
+                placeholder: l.catFieldName,
+              ),
+              const SizedBox(height: AppSpacing.x4),
+              TransactionTypeToggle(
+                value: state.type,
+                onChanged: notifier.setType,
+              ),
+              const SizedBox(height: AppSpacing.x4),
+              TextField(
+                controller: _nameCtrl,
+                maxLength: 80,
+                decoration: InputDecoration(labelText: l.catFieldName),
+                onChanged: notifier.setName,
+              ),
+              const SizedBox(height: AppSpacing.x4),
+              _SectionLabel(text: l.catFieldColor),
+              const SizedBox(height: AppSpacing.x2),
+              ColorGrid(value: state.color, onPicked: notifier.setColor),
+              const SizedBox(height: AppSpacing.x4),
+              _SectionLabel(text: l.catFieldIcon),
+              const SizedBox(height: AppSpacing.x2),
+              Expanded(
+                child: _IconPicker(
+                  value: state.icon,
+                  color: _hexToColor(state.color),
+                  onPicked: notifier.setIcon,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.x4),
+              FilledButton(
+                onPressed: state.submitting
+                    ? null
+                    : () async {
+                        final err = await notifier.submit();
+                        if (!context.mounted) return;
+                        if (err == null) {
+                          Navigator.of(context).pop(true);
+                          return;
+                        }
+                        final msg = switch (err) {
+                          CategoryFormError.nameRequired =>
+                            l.catErrNameRequired,
+                          CategoryFormError.nameDuplicate =>
+                            l.catErrNameDuplicate,
+                        };
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(msg)));
+                      },
+                child: Text(l.txSave),
+              ),
+              if (state.isEditing) ...[
+                const SizedBox(height: AppSpacing.x3),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(foregroundColor: c.expense),
+                  onPressed: state.submitting
+                      ? null
+                      : () => _confirmDelete(context, notifier),
+                  child: Text(l.txDelete),
+                ),
+              ],
+            ],
           ),
-          const SizedBox(height: AppSpacing.x4),
-          TransactionTypeToggle(
-            value: state.type,
-            onChanged: notifier.setType,
-          ),
-          const SizedBox(height: AppSpacing.x4),
-          TextField(
-            controller: _nameCtrl,
-            maxLength: 80,
-            decoration: InputDecoration(labelText: l.catFieldName),
-            onChanged: notifier.setName,
-          ),
-          const SizedBox(height: AppSpacing.x4),
-          _SectionLabel(text: l.catFieldColor),
-          const SizedBox(height: AppSpacing.x2),
-          ColorGrid(value: state.color, onPicked: notifier.setColor),
-          const SizedBox(height: AppSpacing.x4),
-          _SectionLabel(text: l.catFieldIcon),
-          const SizedBox(height: AppSpacing.x2),
-          _IconPicker(
-            value: state.icon,
-            color: _hexToColor(state.color),
-            onPicked: notifier.setIcon,
-          ),
-          const SizedBox(height: AppSpacing.x6),
-          FilledButton(
-            onPressed: state.submitting
-                ? null
-                : () async {
-                    final err = await notifier.submit();
-                    if (!context.mounted) return;
-                    if (err == null) {
-                      Navigator.of(context).pop(true);
-                      return;
-                    }
-                    final msg = switch (err) {
-                      CategoryFormError.nameRequired => l.catErrNameRequired,
-                      CategoryFormError.nameDuplicate => l.catErrNameDuplicate,
-                    };
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(msg)));
-                  },
-            child: Text(l.txSave),
-          ),
-          if (state.isEditing) ...[
-            const SizedBox(height: AppSpacing.x3),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(foregroundColor: c.expense),
-              onPressed: state.submitting
-                  ? null
-                  : () => _confirmDelete(context, notifier),
-              child: Text(l.txDelete),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
@@ -198,11 +207,11 @@ class _PreviewCard extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
+              color: color,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Icon(icon, size: 28, color: color),
+            child: Icon(icon, size: 28, color: Colors.white),
           ),
           const SizedBox(width: AppSpacing.x3),
           Expanded(
@@ -251,29 +260,43 @@ class _IconPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    return Wrap(
-      spacing: AppSpacing.x2,
-      runSpacing: AppSpacing.x2,
-      children: [
-        for (final entry in kIconRegistry.entries)
-          GestureDetector(
+    final entries = kIconRegistry.entries.toList();
+    return Container(
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: AppRadius.brXl,
+        border: Border.all(color: c.border),
+      ),
+      padding: const EdgeInsets.all(AppSpacing.x2),
+      child: GridView.builder(
+        padding: EdgeInsets.zero,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 48,
+          mainAxisSpacing: AppSpacing.x2,
+          crossAxisSpacing: AppSpacing.x2,
+          childAspectRatio: 1,
+        ),
+        itemCount: entries.length,
+        itemBuilder: (context, i) {
+          final entry = entries[i];
+          final selected = value == entry.key;
+          return GestureDetector(
             onTap: () => onPicked(entry.key),
             child: Container(
-              width: 40,
-              height: 40,
               decoration: BoxDecoration(
-                color: value == entry.key
-                    ? color.withValues(alpha: 0.18)
-                    : c.surfacePress,
+                color: selected ? color : c.surfacePress,
                 borderRadius: AppRadius.brFull,
-                border: Border.all(
-                  color: value == entry.key ? color : c.border,
-                ),
+                border: Border.all(color: selected ? color : c.border),
               ),
-              child: Icon(entry.value, size: 18, color: color),
+              child: Icon(
+                entry.value,
+                size: 18,
+                color: selected ? Colors.white : c.textMuted,
+              ),
             ),
-          ),
-      ],
+          );
+        },
+      ),
     );
   }
 }

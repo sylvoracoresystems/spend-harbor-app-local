@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
@@ -154,10 +154,10 @@ class _TagRow extends StatelessWidget {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.15),
+          color: color,
           borderRadius: AppRadius.brFull,
         ),
-        child: Icon(LucideIcons.tag, color: color, size: 18),
+        child: Icon(LucideIcons.tag, color: Colors.white, size: 18),
       ),
       title: Text(
         label,

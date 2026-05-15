@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/color_grid.dart';
@@ -176,11 +176,11 @@ class _PreviewCard extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
+              color: color,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Icon(LucideIcons.tag, size: 28, color: color),
+            child: Icon(LucideIcons.tag, size: 28, color: Colors.white),
           ),
           const SizedBox(width: AppSpacing.x3),
           Expanded(
