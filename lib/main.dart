@@ -17,10 +17,13 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
 
   final db = AppDatabase();
-  await seedDefaultData(
-    db,
-    locale: seedLocaleFromPlatform(
-      WidgetsBinding.instance.platformDispatcher.locale,
+  // seed 幂等：已 seed 时秒退；首次启动时与 onboarding 并行跑完，不阻塞首帧。
+  unawaited(
+    seedDefaultData(
+      db,
+      locale: seedLocaleFromPlatform(
+        WidgetsBinding.instance.platformDispatcher.locale,
+      ),
     ),
   );
   // 启动时清理过期回收站项（> 30 天），与 UI 无关，可静默失败。
