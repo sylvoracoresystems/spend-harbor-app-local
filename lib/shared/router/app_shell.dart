@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../features/stats/application/stats_filter_provider.dart';
 import '../../features/transactions/application/transactions_list_controller.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/app_colors.dart';
@@ -13,6 +14,9 @@ import '../../theme/app_spacing.dart';
 /// Transactions tab 在底栏中的索引。离开此 tab 时清空 transactionsFilter
 /// （Stats 跳过来带的 category/tag/dateRange 等临时筛选不应跨 tab 保留）。
 const int _kTransactionsTabIndex = 2;
+
+/// Stats tab 索引。每次进入此 tab 时把柱状图选中桶重置到包含 today 的桶。
+const int _kStatsTabIndex = 1;
 
 /// 平板/桌面切换断点（PRODUCT_SPEC §3.4 md:）。
 const double kTabletBreakpoint = 768;
@@ -82,6 +86,9 @@ class _MobileShell extends ConsumerWidget {
           if (i != _kTransactionsTabIndex) {
             ref.read(transactionsFilterProvider.notifier).state = null;
           }
+          if (i == _kStatsTabIndex) {
+            ref.read(statsFilterProvider.notifier).snapSelectionToToday();
+          }
           shell.goBranch(i, initialLocation: i == shell.currentIndex);
         },
         destinations: [
@@ -133,6 +140,9 @@ class _TabletShell extends ConsumerWidget {
             onDestinationSelected: (i) {
               if (i != _kTransactionsTabIndex) {
                 ref.read(transactionsFilterProvider.notifier).state = null;
+              }
+              if (i == _kStatsTabIndex) {
+                ref.read(statsFilterProvider.notifier).snapSelectionToToday();
               }
               shell.goBranch(i, initialLocation: i == shell.currentIndex);
             },

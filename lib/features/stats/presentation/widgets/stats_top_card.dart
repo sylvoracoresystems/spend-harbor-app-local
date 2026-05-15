@@ -160,6 +160,8 @@ class _ByCategoryBody extends ConsumerWidget {
     }
 
     return async.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
       loading: () => _loading(context, l),
       error: (_, __) => _error(context, l),
       data: (rows) {
@@ -285,6 +287,8 @@ class _ByTagBody extends ConsumerWidget {
     }
 
     return async.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
       loading: () => _loading(context, l),
       error: (_, __) => _error(context, l),
       data: (agg) {

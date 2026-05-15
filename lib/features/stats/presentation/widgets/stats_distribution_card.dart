@@ -69,6 +69,8 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
             ),
             const SizedBox(height: AppSpacing.x3),
             async.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
               loading: () => _loading(context, l),
               error: (_, __) => _error(context, l),
               data: (data) {
@@ -180,6 +182,8 @@ class _TDState extends ConsumerState<TagDistributionCard> {
             ),
             const SizedBox(height: AppSpacing.x3),
             async.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
               loading: () => _loading(context, l),
               error: (_, __) => _error(context, l),
               data: (data) {

@@ -120,6 +120,13 @@ class StatsFilterController extends StateNotifier<StatsFilter> {
   void setSourceId(String? id) {
     state = state.copyWith(sourceId: id);
   }
+
+  /// 把选中桶重置为当前 period 下包含 today 的桶（month → 本月一号 / week → 本周一 / year → 今年）。
+  void snapSelectionToToday() {
+    final today = DateTime.now();
+    final start = alignToPeriodStart(today, state.period);
+    state = applySelectBucket(state, start);
+  }
 }
 
 /// `statsFilterProvider`：同步种子用 defaultCurrencyProvider；启动后异步解析真实 currency。

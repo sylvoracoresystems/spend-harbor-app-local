@@ -59,6 +59,8 @@ class StatsTrendCard extends ConsumerWidget {
             SizedBox(
               height: 180,
               child: dataAsync.when(
+                skipLoadingOnReload: true,
+                skipLoadingOnRefresh: true,
                 loading: () => Center(
                   child: Text(
                     l.statsLoading,
@@ -163,12 +165,11 @@ class _BarsState extends State<_Bars> {
   @override
   void didUpdateWidget(covariant _Bars oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.rows != oldWidget.rows) {
+    if (widget.rows.length != oldWidget.rows.length) {
+      // 桶数变了（period 切换 / filter 变 → 数据跨度变）→ 需要重新对齐
       _visibleMaxY = null;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _jumpToEnd();
-        _recompute();
-      });
+      _didInitialJump = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _recompute());
     }
   }
 
