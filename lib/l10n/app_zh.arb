@@ -75,6 +75,24 @@
   "txNoteOptional": "备注（选填）",
 
   "txListEmpty": "本月暂无交易",
+  "txFilterAppliedCategory": "已按分类筛选：{name}",
+  "@txFilterAppliedCategory": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "txFilterAppliedTag": "已按标签筛选：{name}",
+  "@txFilterAppliedTag": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "txFilterAppliedUntagged": "已筛选：无标签",
+  "txFilterAppliedDateRange": "已按日期区间筛选",
+  "txFilterClear": "清除",
+
+  "settingsSectionAccount": "账户",
+  "settingsSectionLibrary": "数据资料",
+  "settingsSectionDataIO": "导入与备份",
+  "settingsSectionPreferences": "偏好",
+  "settingsSectionSecurity": "安全",
+  "settingsSectionAbout": "关于",
   "txMonthPrev": "上个月",
   "txMonthNext": "下个月",
   "dayToday": "今天",

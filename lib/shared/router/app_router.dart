@@ -10,6 +10,7 @@ import '../../features/categories/presentation/category_edit_page.dart';
 import '../../features/data_io/presentation/export_page.dart';
 import '../../features/data_io/presentation/backup_page.dart';
 import '../../features/data_io/presentation/import_page.dart';
+import '../../features/dashboard/application/dashboard_filter_provider.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/settings/presentation/about_page.dart';
@@ -277,6 +278,27 @@ class _TransactionsRouteEntryState
     });
   }
 
+  @override
+  void didUpdateWidget(covariant _TransactionsRouteEntry oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // StatefulShellRoute.indexedStack 保留分支 State，跨次跳转到 /transactions
+    // 不会重跑 initState；这里在 query 参数变化时重新应用。
+    if (!_mapEquals(oldWidget.qp, widget.qp)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _apply();
+      });
+    }
+  }
+
+  static bool _mapEquals(Map<String, String> a, Map<String, String> b) {
+    if (a.length != b.length) return false;
+    for (final k in a.keys) {
+      if (a[k] != b[k]) return false;
+    }
+    return true;
+  }
+
   void _apply() {
     final qp = widget.qp;
     // 1. 先设置月份（监听器此时看到的 filter 仍为 null，清空是 no-op）。
@@ -285,7 +307,13 @@ class _TransactionsRouteEntryState
       ref.read(currentMonthProvider.notifier).set(YearMonth.parse(m));
     }
 
-    // 2. 构造 filter。
+    // 2. currency / source 写入 dashboardFilter（顶部过滤栏可见状态）。
+    // 缺省参数视为「清空」，避免上次跳转残留导致与本次 Stats 选择不一致。
+    final dash = ref.read(dashboardFilterProvider.notifier);
+    dash.setCurrency(qp['currency']);
+    dash.setSource(qp['source']);
+
+    // 3. 构造 filter（category / tag / day / dateRange 等临时筛选）。
     final filter = TransactionsFilter(
       dayIso: qp['day'],
       dateStartIso: qp['dateStart'],
@@ -293,10 +321,9 @@ class _TransactionsRouteEntryState
       categoryId: qp['category'],
       tagId: qp['tag'],
       untagged: qp['untagged'] == '1',
-      sourceId: qp['source'],
     );
 
-    // 3. 若 filter 携带 dateRange 但没有 month 参数，将月份锚定到区间起点。
+    // 4. 若 filter 携带 dateRange 但没有 month 参数，将月份锚定到区间起点。
     if (m == null && filter.hasDateRange) {
       final dt = DateTime.tryParse(filter.dateStartIso!);
       // date-range 模式下监听器不会清空 filter，直接设置月份即可。
@@ -307,7 +334,7 @@ class _TransactionsRouteEntryState
       }
     }
 
-    // 4. 最后写入 filter（在月份已确定之后，避免被监听器覆盖）。
+    // 5. 最后写入 filter（在月份已确定之后，避免被监听器覆盖）。
     ref.read(transactionsFilterProvider.notifier).state =
         filter.isEmpty ? null : filter;
   }

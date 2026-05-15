@@ -78,6 +78,24 @@
   "txNoteOptional": "Note (optional)",
 
   "txListEmpty": "No transactions this month",
+  "txFilterAppliedCategory": "Filtered by category: {name}",
+  "@txFilterAppliedCategory": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "txFilterAppliedTag": "Filtered by tag: {name}",
+  "@txFilterAppliedTag": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "txFilterAppliedUntagged": "Filtered: untagged",
+  "txFilterAppliedDateRange": "Filtered by date range",
+  "txFilterClear": "Clear",
+
+  "settingsSectionAccount": "Account",
+  "settingsSectionLibrary": "Library",
+  "settingsSectionDataIO": "Data",
+  "settingsSectionPreferences": "Preferences",
+  "settingsSectionSecurity": "Security",
+  "settingsSectionAbout": "About",
   "txMonthPrev": "Previous month",
   "txMonthNext": "Next month",
   "dayToday": "Today",

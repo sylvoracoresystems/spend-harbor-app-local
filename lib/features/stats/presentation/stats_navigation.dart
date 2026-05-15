@@ -33,6 +33,7 @@ void navigateToTransactions(
       qp['dateEnd'] = '$y-12-31';
       break;
   }
+  qp['currency'] = f.currency;
   if (f.sourceId != null) qp['source'] = f.sourceId!;
   if (categoryId != null) qp['category'] = categoryId;
   if (tagId != null) qp['tag'] = tagId;

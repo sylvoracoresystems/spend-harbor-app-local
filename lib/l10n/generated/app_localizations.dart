@@ -479,6 +479,72 @@ abstract class AppL10n {
   /// **'No transactions this month'**
   String get txListEmpty;
 
+  /// No description provided for @txFilterAppliedCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered by category: {name}'**
+  String txFilterAppliedCategory(String name);
+
+  /// No description provided for @txFilterAppliedTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered by tag: {name}'**
+  String txFilterAppliedTag(String name);
+
+  /// No description provided for @txFilterAppliedUntagged.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered: untagged'**
+  String get txFilterAppliedUntagged;
+
+  /// No description provided for @txFilterAppliedDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered by date range'**
+  String get txFilterAppliedDateRange;
+
+  /// No description provided for @txFilterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get txFilterClear;
+
+  /// No description provided for @settingsSectionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsSectionAccount;
+
+  /// No description provided for @settingsSectionLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get settingsSectionLibrary;
+
+  /// No description provided for @settingsSectionDataIO.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get settingsSectionDataIO;
+
+  /// No description provided for @settingsSectionPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get settingsSectionPreferences;
+
+  /// No description provided for @settingsSectionSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get settingsSectionSecurity;
+
+  /// No description provided for @settingsSectionAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsSectionAbout;
+
   /// No description provided for @txMonthPrev.
   ///
   /// In en, this message translates to:

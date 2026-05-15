@@ -11,6 +11,7 @@ import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/widgets/tag_pill.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -131,7 +132,14 @@ class TransactionListRow extends ConsumerWidget {
                         spacing: 4,
                         runSpacing: 4,
                         children: [
-                          for (final t in txTags) _TagPill(tag: t),
+                          for (final t in txTags)
+                            TagPill(
+                              label: resolveDefaultName(
+                                      AppL10n.of(context), t.nameKey) ??
+                                  t.name,
+                              color: _hexToColor(t.color),
+                              compact: true,
+                            ),
                         ],
                       ),
                     ),
@@ -172,32 +180,6 @@ class TransactionListRow extends ConsumerWidget {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TagPill extends StatelessWidget {
-  const _TagPill({required this.tag});
-  final Tag tag;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _hexToColor(tag.color);
-    final label =
-        resolveDefaultName(AppL10n.of(context), tag.nameKey) ?? tag.name;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        label,
-        style: AppTypography.xs.copyWith(
-          color: Colors.white,
-          fontWeight: AppTypography.weightMedium,
         ),
       ),
     );

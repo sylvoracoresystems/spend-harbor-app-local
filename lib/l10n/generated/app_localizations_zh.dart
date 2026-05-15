@@ -203,6 +203,43 @@ class AppL10nZh extends AppL10n {
   String get txListEmpty => '本月暂无交易';
 
   @override
+  String txFilterAppliedCategory(String name) {
+    return '已按分类筛选：$name';
+  }
+
+  @override
+  String txFilterAppliedTag(String name) {
+    return '已按标签筛选：$name';
+  }
+
+  @override
+  String get txFilterAppliedUntagged => '已筛选：无标签';
+
+  @override
+  String get txFilterAppliedDateRange => '已按日期区间筛选';
+
+  @override
+  String get txFilterClear => '清除';
+
+  @override
+  String get settingsSectionAccount => '账户';
+
+  @override
+  String get settingsSectionLibrary => '数据资料';
+
+  @override
+  String get settingsSectionDataIO => '导入与备份';
+
+  @override
+  String get settingsSectionPreferences => '偏好';
+
+  @override
+  String get settingsSectionSecurity => '安全';
+
+  @override
+  String get settingsSectionAbout => '关于';
+
+  @override
   String get txMonthPrev => '上个月';
 
   @override

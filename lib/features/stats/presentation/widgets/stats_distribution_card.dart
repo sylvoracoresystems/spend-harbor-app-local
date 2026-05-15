@@ -15,7 +15,7 @@ import '../../application/stats_controller.dart';
 import '../../application/stats_filter_provider.dart';
 import '../stats_navigation.dart';
 import 'stats_donut.dart';
-import 'tag_pill.dart';
+import '../../../../shared/widgets/tag_pill.dart';
 import 'type_pill_toggle.dart';
 
 class CategoryDistributionCard extends ConsumerStatefulWidget {
@@ -358,7 +358,7 @@ Widget _tagRow(
     padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
     child: Row(
       children: [
-        TagPill(label: name, color: _tagColor(tag)),
+        TagPill(label: name, color: _tagColor(tag), compact: true),
         const Spacer(),
         Text(
           _formatAmount(cents, currency, type),
@@ -392,6 +392,7 @@ Widget _untaggedRow(
           label: l.statsUntagged,
           color: c.textMuted,
           italic: true,
+          compact: true,
         ),
         const Spacer(),
         Text(

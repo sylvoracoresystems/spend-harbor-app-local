@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
+import '../../features/transactions/application/transactions_list_controller.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
+
+/// Transactions tab 在底栏中的索引。离开此 tab 时清空 transactionsFilter
+/// （Stats 跳过来带的 category/tag/dateRange 等临时筛选不应跨 tab 保留）。
+const int _kTransactionsTabIndex = 2;
 
 /// 平板/桌面切换断点（PRODUCT_SPEC §3.4 md:）。
 const double kTabletBreakpoint = 768;
@@ -24,10 +31,10 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final destinations = <_NavDestination>[
-      _NavDestination(LucideIcons.layoutDashboard, l.tabDashboard),
-      _NavDestination(LucideIcons.pieChart, l.tabStats),
-      _NavDestination(LucideIcons.listOrdered, l.tabTransactions),
-      _NavDestination(LucideIcons.settings, l.tabSettings),
+      _NavDestination(Symbols.home, l.tabDashboard),
+      _NavDestination(Symbols.analytics, l.tabStats),
+      _NavDestination(Symbols.receipt_long, l.tabTransactions),
+      _NavDestination(Symbols.settings, l.tabSettings),
     ];
 
     return LayoutBuilder(
@@ -49,7 +56,7 @@ class AppShell extends StatelessWidget {
   }
 }
 
-class _MobileShell extends StatelessWidget {
+class _MobileShell extends ConsumerWidget {
   const _MobileShell({
     required this.shell,
     required this.destinations,
@@ -61,21 +68,29 @@ class _MobileShell extends StatelessWidget {
   final String fabLabel;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.appColors;
     final showFab = shell.currentIndex != 3; // 设置页不显示
     return Scaffold(
       body: shell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
+        indicatorColor: Colors.transparent,
+        overlayColor: WidgetStatePropertyAll(c.action.withValues(alpha: 0.08)),
         onDestinationSelected: (i) {
           HapticFeedback.selectionClick();
+          if (i != _kTransactionsTabIndex) {
+            ref.read(transactionsFilterProvider.notifier).state = null;
+          }
           shell.goBranch(i, initialLocation: i == shell.currentIndex);
         },
         destinations: [
           for (final d in destinations)
             NavigationDestination(
-              icon: Icon(d.icon),
+              icon: Icon(d.icon,
+                  weight: 300, fill: 0, color: c.textMuted),
+              selectedIcon: Icon(d.icon,
+                  weight: 300, fill: 1, color: c.action),
               label: d.label,
             ),
         ],
@@ -96,7 +111,7 @@ class _MobileShell extends StatelessWidget {
   }
 }
 
-class _TabletShell extends StatelessWidget {
+class _TabletShell extends ConsumerWidget {
   const _TabletShell({
     required this.shell,
     required this.destinations,
@@ -108,17 +123,19 @@ class _TabletShell extends StatelessWidget {
   final String fabLabel;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.appColors;
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
             selectedIndex: shell.currentIndex,
-            onDestinationSelected: (i) => shell.goBranch(
-              i,
-              initialLocation: i == shell.currentIndex,
-            ),
+            onDestinationSelected: (i) {
+              if (i != _kTransactionsTabIndex) {
+                ref.read(transactionsFilterProvider.notifier).state = null;
+              }
+              shell.goBranch(i, initialLocation: i == shell.currentIndex);
+            },
             labelType: NavigationRailLabelType.all,
             leading: Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.x4),
@@ -134,10 +151,14 @@ class _TabletShell extends StatelessWidget {
                 child: const Icon(LucideIcons.plus),
               ),
             ),
+            useIndicator: false,
+            selectedIconTheme: IconThemeData(color: c.action),
+            unselectedIconTheme: IconThemeData(color: c.textMuted),
             destinations: [
               for (final d in destinations)
                 NavigationRailDestination(
-                  icon: Icon(d.icon),
+                  icon: Icon(d.icon, weight: 300, fill: 0),
+                  selectedIcon: Icon(d.icon, weight: 300, fill: 1),
                   label: Text(d.label),
                 ),
             ],

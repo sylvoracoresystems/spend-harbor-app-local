@@ -14,7 +14,7 @@ import '../../../../theme/app_typography.dart';
 import '../../application/stats_controller.dart';
 import '../../application/stats_filter_provider.dart';
 import '../stats_navigation.dart';
-import 'tag_pill.dart';
+import '../../../../shared/widgets/tag_pill.dart';
 import 'type_pill_toggle.dart';
 
 enum TopMode { category, tag }

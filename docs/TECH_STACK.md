@@ -41,6 +41,7 @@
 | `local_auth`                  | ^2.3.0     | 生物识别（Face ID / Touch ID / 指纹）    | 配合 App 锁                                                    |
 | `intl`                        | any        | 国际化、日期、数字格式化                 | 由 `flutter_localizations` 钉版本                              |
 | `lucide_icons`                | ^0.257.0   | Lucide 图标集                            | DESIGN_STANDARDS 指定的唯一图标库                              |
+| `material_symbols_icons`      | ^4.2928.1  | Material Symbols 可变图标字体             | 仅用于底部导航；支持 weight/fill 调节，描边比 Lucide 更细       |
 | `collection`                  | ^1.18.0    | 集合工具（groupBy、firstWhereOrNull）    | 常用                                                           |
 | `uuid`                        | ^4.5.0     | 本地实体主键生成                         | 避免依赖自增 ID，便于导入合并                                  |
 | `shared_preferences`          | ^2.3.2     | 非敏感本地偏好（locale、themeMode）      | 比 secure_storage 更轻量；敏感数据仍走 secure_storage          |

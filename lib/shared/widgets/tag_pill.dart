@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../theme/app_typography.dart';
+import '../../theme/app_typography.dart';
 
+/// 共享标签胶囊：用于 Dashboard / Transactions 列表行、Stats tag distribution。
 class TagPill extends StatelessWidget {
   const TagPill({
     super.key,

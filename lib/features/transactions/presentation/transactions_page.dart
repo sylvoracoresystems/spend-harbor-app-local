@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/enums/transaction_type.dart';
@@ -24,9 +23,35 @@ class TransactionsPage extends ConsumerWidget {
     final l = AppL10n.of(context);
     final c = context.appColors;
     final async = ref.watch(filteredTransactionsProvider);
-    final filter = ref.watch(transactionsFilterProvider);
     final selection = ref.watch(selectionControllerProvider);
     final selecting = selection.isNotEmpty;
+
+    // Stats 跳转应用 category/tag/dateRange 临时筛选时弹 toast 提示。
+    ref.listen<TransactionsFilter?>(transactionsFilterProvider, (prev, next) {
+      if (next == null || next.isEmpty) return;
+      if (prev == next) return;
+      final msg = _filterLabel(context, ref, next);
+      if (msg == null) return;
+      final messenger = ScaffoldMessenger.of(context);
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            msg,
+            style: AppTypography.sm.copyWith(color: c.actionInk),
+          ),
+          duration: const Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: c.mintTint,
+          action: SnackBarAction(
+            label: l.txFilterClear,
+            textColor: c.actionInk,
+            onPressed: () =>
+                ref.read(transactionsFilterProvider.notifier).state = null,
+          ),
+        ),
+      );
+    });
 
     return Scaffold(
       appBar: selecting
@@ -46,51 +71,32 @@ class TransactionsPage extends ConsumerWidget {
         children: [
           const DashboardFilterBar(),
           Expanded(
-            child: _buildList(context, ref, async, filter, l, c),
+            child: async.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('$e')),
+              data: (rows) {
+                if (rows.isEmpty) {
+                  return Center(
+                    child: Text(
+                      l.txListEmpty,
+                      style: AppTypography.sm.copyWith(color: c.textMuted),
+                    ),
+                  );
+                }
+                final groups = groupByDay(rows);
+                return ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: AppSpacing.x2),
+                  itemCount: groups.length,
+                  itemBuilder: (context, i) =>
+                      _DayGroupView(group: groups[i]),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
-  }
-
-  Widget _buildList(
-    BuildContext context,
-    WidgetRef ref,
-    AsyncValue<List<Transaction>> async,
-    TransactionsFilter? filter,
-    AppL10n l,
-    AppColors c,
-  ) {
-    return async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('$e')),
-        data: (rows) {
-          final body = rows.isEmpty
-              ? Center(
-                  child: Text(
-                    l.txListEmpty,
-                    style: AppTypography.sm.copyWith(color: c.textMuted),
-                  ),
-                )
-              : Builder(builder: (_) {
-                  final groups = groupByDay(rows);
-                  return ListView.builder(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: AppSpacing.x2),
-                    itemCount: groups.length,
-                    itemBuilder: (context, i) =>
-                        _DayGroupView(group: groups[i]),
-                  );
-                });
-          if (filter == null || filter.isEmpty) return body;
-          return Column(
-            children: [
-              _FilterChip(filter: filter),
-              Expanded(child: body),
-            ],
-          );
-        },
-      );
   }
 }
 
@@ -116,6 +122,33 @@ PreferredSizeWidget _buildSelectionAppBar(
       ),
     ],
   );
+}
+
+/// 从 [filter] 派生 toast 文案。返回 null 表示无可展示的临时筛选。
+String? _filterLabel(
+  BuildContext context,
+  WidgetRef ref,
+  TransactionsFilter filter,
+) {
+  final l = AppL10n.of(context);
+  if (filter.categoryId != null) {
+    final categories = ref.read(allCategoriesProvider).valueOrNull ?? const [];
+    final cat =
+        categories.where((x) => x.id == filter.categoryId).firstOrNull;
+    final name = cat == null
+        ? filter.categoryId!
+        : (resolveDefaultName(l, cat.nameKey) ?? cat.name);
+    return l.txFilterAppliedCategory(name);
+  }
+  if (filter.tagId != null) {
+    final tags = ref.read(allTagsProvider).valueOrNull ?? const [];
+    final tag = tags.where((x) => x.id == filter.tagId).firstOrNull;
+    final name = tag?.name ?? filter.tagId!;
+    return l.txFilterAppliedTag(name);
+  }
+  if (filter.untagged) return l.txFilterAppliedUntagged;
+  if (filter.hasDateRange) return l.txFilterAppliedDateRange;
+  return null;
 }
 
 Future<void> _confirmBulkDelete(
@@ -253,43 +286,4 @@ String _formatDayNet(DayGroup group) {
   final signed = cents < 0 ? '-$body' : body;
   final others = byCcy.length - 1;
   return others > 0 ? '$signed  +$others' : signed;
-}
-
-
-class _FilterChip extends ConsumerWidget {
-  const _FilterChip({required this.filter});
-  final TransactionsFilter filter;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.appColors;
-    final categories = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
-    final cat = filter.categoryId == null
-        ? null
-        : categories.where((x) => x.id == filter.categoryId).firstOrNull;
-    String label;
-    if (filter.dayIso != null) {
-      label = filter.dayIso!;
-    } else if (cat != null) {
-      label = resolveDefaultName(AppL10n.of(context), cat.nameKey) ?? cat.name;
-    } else {
-      label = '—';
-    }
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.x3,
-        vertical: AppSpacing.x2,
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: InputChip(
-          label: Text(label),
-          avatar: Icon(LucideIcons.filter, size: 14, color: c.actionInk),
-          onDeleted: () => ref
-              .read(transactionsFilterProvider.notifier)
-              .state = null,
-        ),
-      ),
-    );
-  }
 }

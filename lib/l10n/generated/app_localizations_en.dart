@@ -203,6 +203,43 @@ class AppL10nEn extends AppL10n {
   String get txListEmpty => 'No transactions this month';
 
   @override
+  String txFilterAppliedCategory(String name) {
+    return 'Filtered by category: $name';
+  }
+
+  @override
+  String txFilterAppliedTag(String name) {
+    return 'Filtered by tag: $name';
+  }
+
+  @override
+  String get txFilterAppliedUntagged => 'Filtered: untagged';
+
+  @override
+  String get txFilterAppliedDateRange => 'Filtered by date range';
+
+  @override
+  String get txFilterClear => 'Clear';
+
+  @override
+  String get settingsSectionAccount => 'Account';
+
+  @override
+  String get settingsSectionLibrary => 'Library';
+
+  @override
+  String get settingsSectionDataIO => 'Data';
+
+  @override
+  String get settingsSectionPreferences => 'Preferences';
+
+  @override
+  String get settingsSectionSecurity => 'Security';
+
+  @override
+  String get settingsSectionAbout => 'About';
+
+  @override
   String get txMonthPrev => 'Previous month';
 
   @override
