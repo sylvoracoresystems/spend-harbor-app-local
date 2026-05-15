@@ -66,17 +66,16 @@ class _MetricsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final c = context.appColors;
-    // Net 颜色 / 背景跟随符号：≥0 走 income 配色，<0 走 expense 配色。
-    final netPositive = metrics.netCents >= 0;
-    final netColor = netPositive ? c.income : c.expense;
-    final netBg = netPositive ? c.incomeSoft : c.expenseSoft;
+    // Net 金额按符号上色保留语义；卡片底色统一走 mint 与 income/expense 区分。
+    final netColor = metrics.netCents >= 0 ? c.income : c.expense;
 
     final cards = <Widget>[
       _TileMetricCard(
         label: l.dashIncome,
         icon: LucideIcons.coins,
         accentColor: c.income,
-        bgColor: c.incomeSoft,
+        bgStart: c.incomeSoft,
+        bgEnd: Color.lerp(c.incomeSoft, c.income, 0.18)!,
         amount: _formatAmount(
           metrics.incomeCents,
           metrics.dominantCurrency,
@@ -89,7 +88,8 @@ class _MetricsGrid extends StatelessWidget {
         label: l.dashExpense,
         icon: LucideIcons.shoppingBag,
         accentColor: c.expense,
-        bgColor: c.expenseSoft,
+        bgStart: c.expenseSoft,
+        bgEnd: Color.lerp(c.expenseSoft, c.expense, 0.18)!,
         amount: _formatAmount(
           metrics.expenseCents,
           metrics.dominantCurrency,
@@ -99,11 +99,14 @@ class _MetricsGrid extends StatelessWidget {
         currencyBadge: metrics.dominantCurrency,
         otherCurrencyCount: metrics.otherCurrencyCount,
       ),
+      // Net：左上始终走品牌 mint（与 income/expense 卡形成可识别差异），
+      // 右下走符号色（≥0 → income 绿，<0 → expense 红），背景对角渐变即「品牌→符号」。
       _TileMetricCard(
         label: l.dashNet,
-        icon: LucideIcons.wallet,
+        icon: LucideIcons.scale,
         accentColor: netColor,
-        bgColor: netBg,
+        bgStart: c.mintTint,
+        bgEnd: Color.lerp(c.mintTint, netColor, 0.35)!,
         amount: _formatAmount(
           metrics.netCents,
           metrics.dominantCurrency,
@@ -116,7 +119,8 @@ class _MetricsGrid extends StatelessWidget {
         label: l.dashCount,
         icon: LucideIcons.listChecks,
         accentColor: c.info,
-        bgColor: c.infoSoft,
+        bgStart: c.infoSoft,
+        bgEnd: Color.lerp(c.infoSoft, c.info, 0.18)!,
         amount: '${metrics.transactionCount}',
         currencyBadge: null,
         otherCurrencyCount: 0,
@@ -139,7 +143,8 @@ class _TileMetricCard extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.accentColor,
-    required this.bgColor,
+    required this.bgStart,
+    required this.bgEnd,
     required this.amount,
     required this.currencyBadge,
     required this.otherCurrencyCount,
@@ -147,7 +152,8 @@ class _TileMetricCard extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color accentColor;
-  final Color bgColor;
+  final Color bgStart;
+  final Color bgEnd;
   final String amount;
   final String? currencyBadge;
   final int otherCurrencyCount;
@@ -159,7 +165,11 @@ class _TileMetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.x4),
       decoration: BoxDecoration(
-        color: bgColor,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [bgStart, bgEnd],
+        ),
         borderRadius: AppRadius.brXl,
       ),
       child: Column(
