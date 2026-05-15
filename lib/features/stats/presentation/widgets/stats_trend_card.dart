@@ -31,7 +31,7 @@ class StatsTrendCard extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.bar_chart, size: 18, color: c.textPrimary),
+                Icon(Icons.insert_chart, size: 18, color: c.action),
                 const SizedBox(width: 6),
                 Text(
                   l.statsTrendTitle,

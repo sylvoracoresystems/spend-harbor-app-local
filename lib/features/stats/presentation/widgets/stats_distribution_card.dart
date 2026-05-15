@@ -51,7 +51,7 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
           children: [
             Row(
               children: [
-                Icon(Icons.donut_large, size: 18, color: c.textPrimary),
+                Icon(Icons.pie_chart, size: 18, color: c.info),
                 const SizedBox(width: 6),
                 Text(
                   l.statsDistCategoryTitle,
@@ -162,7 +162,7 @@ class _TDState extends ConsumerState<TagDistributionCard> {
           children: [
             Row(
               children: [
-                Icon(Icons.label_outline, size: 18, color: c.textPrimary),
+                Icon(Icons.local_offer, size: 18, color: c.expense),
                 const SizedBox(width: 6),
                 Text(
                   l.statsDistTagTitle,

@@ -46,8 +46,7 @@ class _Top extends ConsumerState<StatsTopCard> {
           children: [
             Row(
               children: [
-                Icon(Icons.emoji_events_outlined,
-                    size: 18, color: c.textPrimary),
+                Icon(Icons.emoji_events, size: 18, color: c.warning),
                 const SizedBox(width: 6),
                 Text(
                   l.statsTopTitle,

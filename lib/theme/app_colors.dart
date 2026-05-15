@@ -16,6 +16,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.expenseSoft,
     required this.info,
     required this.infoSoft,
+    required this.warning,
+    required this.warningSoft,
     required this.textPrimary,
     required this.textBody,
     required this.textMuted,
@@ -40,6 +42,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color expenseSoft;
   final Color info;
   final Color infoSoft;
+  final Color warning;
+  final Color warningSoft;
 
   final Color textPrimary;
   final Color textBody;
@@ -65,6 +69,8 @@ class AppColors extends ThemeExtension<AppColors> {
     expenseSoft: Color(0xFFFEE2E2),
     info: Color(0xFF3B82F6),
     infoSoft: Color(0xFFDBEAFE),
+    warning: Color(0xFFF59E0B),
+    warningSoft: Color(0xFFFEF3C7),
     textPrimary: Color(0xFF0F172A),
     textBody: Color(0xFF334155),
     textMuted: Color(0xFF64748B),
@@ -89,6 +95,8 @@ class AppColors extends ThemeExtension<AppColors> {
     expenseSoft: Color(0xFF7F1D1D),
     info: Color(0xFF60A5FA),
     infoSoft: Color(0xFF1E3A8A),
+    warning: Color(0xFFFBBF24),
+    warningSoft: Color(0xFF78350F),
     textPrimary: Color(0xFFE2E8F0),
     textBody: Color(0xFFCBD5E1),
     textMuted: Color(0xFF94A3B8),
@@ -114,6 +122,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? expenseSoft,
     Color? info,
     Color? infoSoft,
+    Color? warning,
+    Color? warningSoft,
     Color? textPrimary,
     Color? textBody,
     Color? textMuted,
@@ -137,6 +147,8 @@ class AppColors extends ThemeExtension<AppColors> {
       expenseSoft: expenseSoft ?? this.expenseSoft,
       info: info ?? this.info,
       infoSoft: infoSoft ?? this.infoSoft,
+      warning: warning ?? this.warning,
+      warningSoft: warningSoft ?? this.warningSoft,
       textPrimary: textPrimary ?? this.textPrimary,
       textBody: textBody ?? this.textBody,
       textMuted: textMuted ?? this.textMuted,
@@ -165,6 +177,8 @@ class AppColors extends ThemeExtension<AppColors> {
       expenseSoft: Color.lerp(expenseSoft, other.expenseSoft, t)!,
       info: Color.lerp(info, other.info, t)!,
       infoSoft: Color.lerp(infoSoft, other.infoSoft, t)!,
+      warning: Color.lerp(warning, other.warning, t)!,
+      warningSoft: Color.lerp(warningSoft, other.warningSoft, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textBody: Color.lerp(textBody, other.textBody, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,
