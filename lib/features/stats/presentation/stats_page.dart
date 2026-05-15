@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_spacing.dart';
 import 'widgets/stats_distribution_card.dart';
 import 'widgets/stats_filter_bar.dart';
@@ -31,39 +32,27 @@ class _StatsPageState extends ConsumerState<StatsPage> {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.tabStats),
-        centerTitle: true,
-      ),
+    return RootPageScaffold(
+      title: l.tabStats,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.x3,
+          AppSpacing.x3,
+          AppSpacing.x3,
+          AppSpacing.x3,
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.x3),
-              child: StatsFilterBar(),
-            ),
+            const StatsFilterBar(),
             const SizedBox(height: AppSpacing.x3),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.x3),
-              child: StatsTrendCard(),
-            ),
+            const StatsTrendCard(),
             const SizedBox(height: AppSpacing.x3),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.x3),
-              child: CategoryDistributionCard(),
-            ),
+            const CategoryDistributionCard(),
             const SizedBox(height: AppSpacing.x3),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x3),
-              child: TagDistributionCard(cardKey: _tagDistKey),
-            ),
+            TagDistributionCard(cardKey: _tagDistKey),
             const SizedBox(height: AppSpacing.x3),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x3),
-              child: StatsTopCard(onJumpToTagDist: _jumpToTagDist),
-            ),
+            StatsTopCard(onJumpToTagDist: _jumpToTagDist),
           ],
         ),
       ),

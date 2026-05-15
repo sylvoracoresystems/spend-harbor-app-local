@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -14,7 +15,6 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    final c = context.appColors;
     final sections = <_SettingsSection>[
       _SettingsSection(l.settingsSectionAccount, [
         _SettingsItem(LucideIcons.user, l.settingsProfile, '/settings/profile',
@@ -67,15 +67,15 @@ class SettingsPage extends StatelessWidget {
       ]),
     ];
 
-    return Scaffold(
-      backgroundColor: c.surface,
-      appBar: AppBar(
-        title: Text(l.tabSettings),
-        centerTitle: true,
-        backgroundColor: c.surface,
-      ),
+    return RootPageScaffold(
+      title: l.tabSettings,
       body: ListView(
-        padding: const EdgeInsets.only(bottom: AppSpacing.x4),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.x4,
+          AppSpacing.x2,
+          AppSpacing.x4,
+          AppSpacing.x4,
+        ),
         children: [
           for (final s in sections) _SectionView(section: s),
         ],
@@ -91,34 +91,49 @@ class _SectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.x4,
-            AppSpacing.x4,
-            AppSpacing.x4,
-            AppSpacing.x2,
-          ),
-          child: Text(
-            section.title,
-            style: AppTypography.xs.copyWith(
-              color: c.textMuted,
-              fontWeight: AppTypography.weightSemibold,
-              letterSpacing: 0.6,
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.x4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.x2,
+              0,
+              AppSpacing.x2,
+              AppSpacing.x2,
+            ),
+            child: Text(
+              section.title,
+              style: AppTypography.xs.copyWith(
+                color: c.textMuted,
+                fontWeight: AppTypography.weightSemibold,
+                letterSpacing: 0.6,
+              ),
             ),
           ),
-        ),
-        for (var i = 0; i < section.items.length; i++) ...[
-          _ItemRow(item: section.items[i]),
-          if (i < section.items.length - 1)
-            Padding(
-              padding: const EdgeInsets.only(left: 64),
-              child: Divider(height: 1, color: c.border),
+          Container(
+            decoration: BoxDecoration(
+              color: c.surface,
+              borderRadius: AppRadius.brXl,
+              border: Border.all(color: c.border),
             ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                for (var i = 0; i < section.items.length; i++) ...[
+                  _ItemRow(item: section.items[i]),
+                  if (i < section.items.length - 1)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 64),
+                      child: Divider(height: 1, color: c.border),
+                    ),
+                ],
+              ],
+            ),
+          ),
         ],
-      ],
+      ),
     );
   }
 }

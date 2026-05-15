@@ -14,6 +14,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../data_io/presentation/backup_reminder_banner.dart';
 import '../../transactions/presentation/transaction_list_row.dart';
 import '../application/budget_progress_provider.dart';
@@ -26,51 +27,32 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
-    final c = context.appColors;
     final metricsAsync = ref.watch(dashboardMetricsProvider);
     final recentAsync = ref.watch(recentTransactionsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.tabDashboard),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          const DashboardFilterBar(),
-          Expanded(
-            child: metricsAsync.when(
-              loading: () =>
-                  const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('$e')),
-              data: (metrics) {
-                return ListView(
-                  padding: const EdgeInsets.all(AppSpacing.x4),
-                  children: [
-                    const BackupReminderBanner(),
-                    _MetricsGrid(metrics: metrics),
-                    if (metrics.isEmpty)
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: AppSpacing.x6),
-                        child: Center(
-                          child: Text(
-                            l.dashEmpty,
-                            textAlign: TextAlign.center,
-                            style: AppTypography.sm
-                                .copyWith(color: c.textMuted),
-                          ),
-                        ),
-                      ),
-                    const SizedBox(height: AppSpacing.x6),
-                    const _BudgetsSection(),
-                    _RecentSection(asyncRows: recentAsync),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+    return RootPageScaffold(
+      title: l.tabDashboard,
+      pageHeader: const DashboardFilterBar(),
+      body: metricsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text('$e')),
+        data: (metrics) {
+          return ListView(
+            padding: const EdgeInsets.all(AppSpacing.x4),
+            children: [
+              const BackupReminderBanner(),
+              _MetricsGrid(metrics: metrics),
+              if (metrics.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.x6),
+                  child: RootPageEmpty(text: l.dashEmpty),
+                ),
+              const SizedBox(height: AppSpacing.x6),
+              const _BudgetsSection(),
+              _RecentSection(asyncRows: recentAsync),
+            ],
+          );
+        },
       ),
     );
   }

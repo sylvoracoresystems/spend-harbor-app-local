@@ -268,6 +268,28 @@ Flutter 中使用 `BoxShadow`（不要 `Material elevation` 默认值，统一�
 - 顶部留白：依赖 `SafeArea`（自动处理刘海/状态栏）
 - 底部留白：依赖 `SafeArea` + 额外 `bottom: 96`（留给 FAB + 底部 tab）
 
+### 3.4 根 tab 页统一外壳（Dashboard / Stats / Transactions / Settings）
+
+四个根 tab 必须使用 `RootPageScaffold`（[lib/shared/widgets/root_page_scaffold.dart](../lib/shared/widgets/root_page_scaffold.dart)），保证视觉一致：
+
+| 维度          | 规则                                                                              |
+| ------------- | --------------------------------------------------------------------------------- |
+| Scaffold 背景 | `c.bgMint`（来自 theme 默认；root tab 不允许覆盖为 `surface`）                    |
+| AppBar 背景   | `c.bgMint`（来自 theme），`elevation = 0`，`scrolledUnderElevation = 0`           |
+| 标题          | `centerTitle: true`，字号 `AppTypography.lg`，`weightSemibold`                    |
+| 二级头        | 走 `pageHeader` slot（filter bar / period segmented），不带额外 padding           |
+| 自定义 AppBar | 走 `customAppBar`（如 Transactions 选中模式）                                     |
+| 空态          | 用 `RootPageEmpty(text: ...)` 渲染，文案统一 `AppTypography.sm` + `c.textMuted`   |
+
+**页面内容布局两种模式**（写进 PR 描述里说明用哪种）：
+
+- **卡片型**（Dashboard / Stats / Settings）：外层 padding `AppSpacing.x4`（`x3` 仅 Stats 因图表需要更大水平空间），内容由独立 `Container` / 卡片组成；卡片间距 `AppSpacing.x4–x6`；卡片背景 `c.surface`，圆角 `AppRadius.brXl`，`Border.all(color: c.border)`。
+- **列表型**（Transactions / Categories / Tags 等管理页）：外层 padding `0`，行级 padding `AppSpacing.x3` 或走 `ListTile` 默认；列表行不带圆角，依赖分组 header（如 `_DayHeader`）切片。
+
+二级头（`pageHeader`）与 body 之间不留额外间距，由 body 顶部 padding 控制。
+
+详情页（带返回按钮）保持 `centerTitle: false`（theme 默认），避免标题与返回箭头视觉冲突。
+
 ---
 
 ## 4. 响应式断点与适配规则

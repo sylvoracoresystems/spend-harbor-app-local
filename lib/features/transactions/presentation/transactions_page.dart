@@ -8,6 +8,7 @@ import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
@@ -53,48 +54,32 @@ class TransactionsPage extends ConsumerWidget {
       );
     });
 
-    return Scaffold(
-      appBar: selecting
-          ? _buildSelectionAppBar(context, ref, selection)
-          : AppBar(
-              title: Text(l.tabTransactions),
-              centerTitle: true,
-              actions: [
-                IconButton(
-                  tooltip: l.recycleBinTitle,
-                  icon: const Icon(LucideIcons.trash2),
-                  onPressed: () => context.push('/transactions/recycle-bin'),
-                ),
-              ],
-            ),
-      body: Column(
-        children: [
-          const DashboardFilterBar(),
-          Expanded(
-            child: async.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('$e')),
-              data: (rows) {
-                if (rows.isEmpty) {
-                  return Center(
-                    child: Text(
-                      l.txListEmpty,
-                      style: AppTypography.sm.copyWith(color: c.textMuted),
-                    ),
-                  );
-                }
-                final groups = groupByDay(rows);
-                return ListView.builder(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: AppSpacing.x2),
-                  itemCount: groups.length,
-                  itemBuilder: (context, i) =>
-                      _DayGroupView(group: groups[i]),
-                );
-              },
-            ),
-          ),
-        ],
+    return RootPageScaffold(
+      title: l.tabTransactions,
+      customAppBar:
+          selecting ? _buildSelectionAppBar(context, ref, selection) : null,
+      actions: [
+        IconButton(
+          tooltip: l.recycleBinTitle,
+          icon: const Icon(LucideIcons.trash2),
+          onPressed: () => context.push('/transactions/recycle-bin'),
+        ),
+      ],
+      pageHeader: const DashboardFilterBar(),
+      body: async.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text('$e')),
+        data: (rows) {
+          if (rows.isEmpty) {
+            return RootPageEmpty(text: l.txListEmpty);
+          }
+          final groups = groupByDay(rows);
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
+            itemCount: groups.length,
+            itemBuilder: (context, i) => _DayGroupView(group: groups[i]),
+          );
+        },
       ),
     );
   }
