@@ -10,6 +10,7 @@ import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
+import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../../dashboard/presentation/dashboard_filter_bar.dart';
@@ -37,19 +38,58 @@ class TransactionsPage extends ConsumerWidget {
       messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
         SnackBar(
-          content: Text(
-            msg,
-            style: AppTypography.sm.copyWith(color: c.actionInk),
+          content: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(LucideIcons.funnel, size: 16, color: c.textMuted),
+              const SizedBox(width: AppSpacing.x2),
+              Flexible(
+                child: Text(
+                  msg,
+                  style: AppTypography.sm.copyWith(color: c.textBody),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.x3),
+              InkWell(
+                borderRadius: AppRadius.brLg,
+                onTap: () {
+                  ref.read(transactionsFilterProvider.notifier).state = null;
+                  messenger.hideCurrentSnackBar();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.x2,
+                    vertical: AppSpacing.x1,
+                  ),
+                  child: Text(
+                    l.txFilterClear,
+                    style: AppTypography.sm.copyWith(
+                      color: c.action,
+                      fontWeight: AppTypography.weightSemibold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(milliseconds: 2500),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: c.mintTint,
-          action: SnackBarAction(
-            label: l.txFilterClear,
-            textColor: c.actionInk,
-            onPressed: () =>
-                ref.read(transactionsFilterProvider.notifier).state = null,
+          backgroundColor: c.surface,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: AppRadius.brXl,
+            side: BorderSide(color: c.border),
           ),
+          margin: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.x6,
+            vertical: AppSpacing.x4,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.x3,
+            vertical: AppSpacing.x2,
+          ),
+          dismissDirection: DismissDirection.horizontal,
         ),
       );
     });
