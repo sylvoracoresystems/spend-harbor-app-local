@@ -34,6 +34,7 @@ class _StatsPageState extends ConsumerState<StatsPage> {
     final l = AppL10n.of(context);
     return RootPageScaffold(
       title: l.tabStats,
+      pageHeader: const StatsFilterBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.x3,
@@ -44,8 +45,6 @@ class _StatsPageState extends ConsumerState<StatsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const StatsFilterBar(),
-            const SizedBox(height: AppSpacing.x3),
             const StatsTrendCard(),
             const SizedBox(height: AppSpacing.x3),
             const CategoryDistributionCard(),

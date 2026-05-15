@@ -69,16 +69,16 @@ class SettingsPage extends StatelessWidget {
 
     return RootPageScaffold(
       title: l.tabSettings,
-      body: ListView(
+      body: ListView.separated(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.x4,
-          AppSpacing.x2,
+          0,
           AppSpacing.x4,
           AppSpacing.x4,
         ),
-        children: [
-          for (final s in sections) _SectionView(section: s),
-        ],
+        itemCount: sections.length,
+        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.x4),
+        itemBuilder: (_, i) => _SectionView(section: sections[i]),
       ),
     );
   }
@@ -91,49 +91,46 @@ class _SectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    return Padding(
-      padding: const EdgeInsets.only(top: AppSpacing.x4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.x2,
-              0,
-              AppSpacing.x2,
-              AppSpacing.x2,
-            ),
-            child: Text(
-              section.title,
-              style: AppTypography.xs.copyWith(
-                color: c.textMuted,
-                fontWeight: AppTypography.weightSemibold,
-                letterSpacing: 0.6,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.x2,
+            0,
+            AppSpacing.x2,
+            AppSpacing.x2,
+          ),
+          child: Text(
+            section.title,
+            style: AppTypography.xs.copyWith(
+              color: c.textMuted,
+              fontWeight: AppTypography.weightSemibold,
+              letterSpacing: 0.6,
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: c.surface,
-              borderRadius: AppRadius.brXl,
-              border: Border.all(color: c.border),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                for (var i = 0; i < section.items.length; i++) ...[
-                  _ItemRow(item: section.items[i]),
-                  if (i < section.items.length - 1)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 64),
-                      child: Divider(height: 1, color: c.border),
-                    ),
-                ],
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: c.surface,
+            borderRadius: AppRadius.brXl,
+            border: Border.all(color: c.border),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              for (var i = 0; i < section.items.length; i++) ...[
+                _ItemRow(item: section.items[i]),
+                if (i < section.items.length - 1)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 64),
+                    child: Divider(height: 1, color: c.border),
+                  ),
               ],
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
