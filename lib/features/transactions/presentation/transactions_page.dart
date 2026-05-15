@@ -33,6 +33,7 @@ class TransactionsPage extends ConsumerWidget {
           ? _buildSelectionAppBar(context, ref, selection)
           : AppBar(
               title: Text(l.tabTransactions),
+              centerTitle: true,
               actions: [
                 IconButton(
                   tooltip: l.recycleBinTitle,

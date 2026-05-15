@@ -31,7 +31,10 @@ class DashboardPage extends ConsumerWidget {
     final recentAsync = ref.watch(recentTransactionsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.tabDashboard)),
+      appBar: AppBar(
+        title: Text(l.tabDashboard),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           const DashboardFilterBar(),

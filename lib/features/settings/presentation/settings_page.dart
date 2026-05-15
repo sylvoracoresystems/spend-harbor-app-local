@@ -31,7 +31,10 @@ class SettingsPage extends StatelessWidget {
     ];
     final c = context.appColors;
     return Scaffold(
-      appBar: AppBar(title: Text(l.tabSettings)),
+      appBar: AppBar(
+        title: Text(l.tabSettings),
+        centerTitle: true,
+      ),
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
         itemCount: items.length,
