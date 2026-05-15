@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
@@ -23,8 +24,8 @@ class _ImportPageState extends ConsumerState<ImportPage> {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final c = context.appColors;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.importTitle)),
+    return SubPageScaffold(
+      title: l.importTitle,
       body: Padding(
         padding: const EdgeInsets.all(AppSpacing.x4),
         child: Column(

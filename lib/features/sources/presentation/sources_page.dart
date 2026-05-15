@@ -9,6 +9,7 @@ import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -23,8 +24,15 @@ class SourcesPage extends ConsumerWidget {
     final c = context.appColors;
     final async = ref.watch(allSourcesProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsSources)),
+    return SubPageScaffold(
+      title: l.settingsSources,
+      actions: [
+        IconButton(
+          tooltip: l.srcAdd,
+          icon: const Icon(LucideIcons.plus),
+          onPressed: () => context.push('/settings/sources/new'),
+        ),
+      ],
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
@@ -45,11 +53,6 @@ class SourcesPage extends ConsumerWidget {
             itemBuilder: (context, i) => _SourceRow(src: rows[i]),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/settings/sources/new'),
-        icon: const Icon(LucideIcons.plus),
-        label: Text(l.srcAdd),
       ),
     );
   }

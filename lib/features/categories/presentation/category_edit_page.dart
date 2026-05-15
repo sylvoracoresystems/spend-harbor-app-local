@@ -5,6 +5,7 @@ import '../../../domain/enums/transaction_type.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
 import '../../../shared/widgets/color_grid.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../shared/widgets/transaction_type_toggle.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
@@ -55,12 +56,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
     final state = ref.watch(_provider());
     final notifier = ref.read(_provider().notifier);
 
-    return Scaffold(
-      backgroundColor: c.surface,
-      appBar: AppBar(
-        backgroundColor: c.surface,
-        title: Text(state.isEditing ? l.catEditTitle : l.catNewTitle),
-      ),
+    return SubPageScaffold(
+      title: state.isEditing ? l.catEditTitle : l.catNewTitle,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.x4),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../application/app_lock_controller.dart';
 
 class SecurityPage extends ConsumerWidget {
@@ -13,8 +14,8 @@ class SecurityPage extends ConsumerWidget {
     final state = ref.watch(appLockControllerProvider);
     final ctrl = ref.read(appLockControllerProvider.notifier);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.lockTitle)),
+    return SubPageScaffold(
+      title: l.lockTitle,
       body: ListView(
         children: [
           SwitchListTile(

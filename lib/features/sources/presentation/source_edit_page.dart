@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -50,10 +51,8 @@ class _SourceEditPageState extends ConsumerState<SourceEditPage> {
     final notifier = ref.read(_provider().notifier);
     final color = _hexToColor(state.color);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(state.isEditing ? l.srcEditTitle : l.srcNewTitle),
-      ),
+    return SubPageScaffold(
+      title: state.isEditing ? l.srcEditTitle : l.srcNewTitle,
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.x4),
         children: [

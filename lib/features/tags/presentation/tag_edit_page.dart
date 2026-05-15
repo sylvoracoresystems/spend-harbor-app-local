@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/color_grid.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -49,12 +50,8 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
     final state = ref.watch(_provider());
     final notifier = ref.read(_provider().notifier);
 
-    return Scaffold(
-      backgroundColor: c.surface,
-      appBar: AppBar(
-        backgroundColor: c.surface,
-        title: Text(state.isEditing ? l.tagEditTitle : l.tagNewTitle),
-      ),
+    return SubPageScaffold(
+      title: state.isEditing ? l.tagEditTitle : l.tagNewTitle,
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.x4),
         children: [

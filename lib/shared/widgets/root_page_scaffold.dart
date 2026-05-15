@@ -89,3 +89,50 @@ class RootPageEmpty extends StatelessWidget {
     );
   }
 }
+
+/// Settings 系子页面（profile / categories / tags / budgets / sources /
+/// data_io / language / currency / appearance / security / about / legal
+/// 以及它们的 edit/new 页）共用的外壳。与根 tab 形成层级对比：
+///
+/// - Scaffold + AppBar 背景统一为 `c.surface`（白），不再用 `bgMint`。
+/// - AppBar 默认带返回按钮（系统自动），`centerTitle` 走 theme 默认（false）。
+/// - 标题字号同 root tab：`AppTypography.lg + semibold`。
+class SubPageScaffold extends StatelessWidget {
+  const SubPageScaffold({
+    super.key,
+    required this.title,
+    required this.body,
+    this.actions,
+    this.leading,
+    this.bottom,
+    this.floatingActionButton,
+  });
+
+  final String title;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final PreferredSizeWidget? bottom;
+  final Widget body;
+  final Widget? floatingActionButton;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+    return Scaffold(
+      backgroundColor: c.surface,
+      appBar: AppBar(
+        backgroundColor: c.surface,
+        leading: leading,
+        title: Text(title),
+        titleTextStyle: AppTypography.lg.copyWith(
+          color: c.actionInk,
+          fontWeight: AppTypography.weightSemibold,
+        ),
+        actions: actions,
+        bottom: bottom,
+      ),
+      body: body,
+      floatingActionButton: floatingActionButton,
+    );
+  }
+}

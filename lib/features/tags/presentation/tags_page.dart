@@ -7,6 +7,7 @@ import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../data/seed/default_name_resolver.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -31,19 +32,15 @@ class _TagsPageState extends ConsumerState<TagsPage> {
     final c = context.appColors;
     final async = ref.watch(allTagsProvider);
 
-    return Scaffold(
-      backgroundColor: c.surface,
-      appBar: AppBar(
-        backgroundColor: c.surface,
-        title: Text(l.settingsTags),
-        actions: [
-          IconButton(
-            tooltip: l.tagAdd,
-            icon: const Icon(LucideIcons.plus),
-            onPressed: () => context.push('/settings/tags/new'),
-          ),
-        ],
-      ),
+    return SubPageScaffold(
+      title: l.settingsTags,
+      actions: [
+        IconButton(
+          tooltip: l.tagAdd,
+          icon: const Icon(LucideIcons.plus),
+          onPressed: () => context.push('/settings/tags/new'),
+        ),
+      ],
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),

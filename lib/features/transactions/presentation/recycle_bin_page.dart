@@ -8,6 +8,7 @@ import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -23,8 +24,8 @@ class RecycleBinPage extends ConsumerWidget {
     final c = context.appColors;
     final async = ref.watch(trashedTransactionsProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.recycleBinTitle)),
+    return SubPageScaffold(
+      title: l.recycleBinTitle,
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),

@@ -290,6 +290,20 @@ Flutter 中使用 `BoxShadow`（不要 `Material elevation` 默认值，统一�
 
 详情页（带返回按钮）保持 `centerTitle: false`（theme 默认），避免标题与返回箭头视觉冲突。
 
+### 3.5 Settings 系子页面统一外壳（含 list / edit / new 各种子页）
+
+Settings tab 下的所有子页面（profile / categories / tags / budgets / sources / import / export / backup / currency / language / appearance / security / about / legal）以及它们的 `*_edit_page.dart` / `*_new_page.dart` 必须使用 `SubPageScaffold`（[lib/shared/widgets/root_page_scaffold.dart](../lib/shared/widgets/root_page_scaffold.dart)）。
+
+| 维度          | 规则                                                                              |
+| ------------- | --------------------------------------------------------------------------------- |
+| Scaffold 背景 | `c.surface`（白；与 root tab 的 `bgMint` 形成层级对比，给「打开了一个抽屉」的感觉）|
+| AppBar 背景   | `c.surface`，`elevation = 0`（root tab 的 `pageHeader` 在这里不复用）              |
+| 标题          | `centerTitle: false`（theme 默认；左对齐让位返回箭头），字号 `AppTypography.lg`    |
+| 顶部 actions  | 加号 / 操作按钮放 `actions:` 槽位，**不要用 FAB**（与 Categories/Tags 风格对齐）    |
+| 列表行        | `ListTile` + `Divider(indent: AppSpacing.x4)` 分隔，`leading` 用 36×36 圆形图标   |
+
+特殊例外：`transaction_form` 是从全局 FAB 弹出的录入页，使用自定义全屏 header，不走 SubPageScaffold。
+
 ---
 
 ## 4. 响应式断点与适配规则

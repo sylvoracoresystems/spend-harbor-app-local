@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -35,8 +36,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final l = AppL10n.of(context);
     final c = context.appColors;
     final nickname = ref.watch(profileNicknameProvider);
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsProfile)),
+    return SubPageScaffold(
+      title: l.settingsProfile,
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.x4),
         children: [

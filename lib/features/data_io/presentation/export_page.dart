@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
@@ -27,8 +28,8 @@ class _ExportPageState extends ConsumerState<ExportPage> {
     final txAsync = ref.watch(transactionsOfMonthProvider);
     final isEmpty = (txAsync.valueOrNull ?? const []).isEmpty;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.exportTitle)),
+    return SubPageScaffold(
+      title: l.exportTitle,
       body: Padding(
         padding: const EdgeInsets.all(AppSpacing.x4),
         child: Column(

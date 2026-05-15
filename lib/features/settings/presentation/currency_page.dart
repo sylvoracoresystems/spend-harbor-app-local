@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../application/default_currency_provider.dart';
 
 class CurrencyPage extends ConsumerWidget {
@@ -15,8 +16,8 @@ class CurrencyPage extends ConsumerWidget {
     final current = ref.watch(defaultCurrencyProvider);
     final ctrl = ref.read(defaultCurrencyProvider.notifier);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsCurrency)),
+    return SubPageScaffold(
+      title: l.settingsCurrency,
       body: ListView.builder(
         itemCount: Currency.all.length,
         itemBuilder: (context, i) {

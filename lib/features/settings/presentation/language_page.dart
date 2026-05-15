@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/providers/locale_provider.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 
 class LanguagePage extends ConsumerWidget {
   const LanguagePage({super.key});
@@ -19,8 +20,8 @@ class LanguagePage extends ConsumerWidget {
       (const Locale('zh'), l.languageChinese),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsLanguage)),
+    return SubPageScaffold(
+      title: l.settingsLanguage,
       body: ListView(
         children: [
           for (final (locale, label) in options)

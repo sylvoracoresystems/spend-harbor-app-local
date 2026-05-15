@@ -10,6 +10,7 @@ import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -25,8 +26,15 @@ class BudgetsPage extends ConsumerWidget {
     final c = context.appColors;
     final async = ref.watch(allBudgetsProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsBudgets)),
+    return SubPageScaffold(
+      title: l.settingsBudgets,
+      actions: [
+        IconButton(
+          tooltip: l.budgetAdd,
+          icon: const Icon(LucideIcons.plus),
+          onPressed: () => context.push('/settings/budgets/new'),
+        ),
+      ],
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
@@ -47,11 +55,6 @@ class BudgetsPage extends ConsumerWidget {
             itemBuilder: (context, i) => _BudgetRow(b: rows[i]),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/settings/budgets/new'),
-        icon: const Icon(LucideIcons.plus),
-        label: Text(l.budgetAdd),
       ),
     );
   }

@@ -9,6 +9,7 @@ import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -33,19 +34,15 @@ class _CategoriesPageState extends ConsumerState<CategoriesPage> {
     final c = context.appColors;
     final async = ref.watch(allCategoriesProvider);
 
-    return Scaffold(
-      backgroundColor: c.surface,
-      appBar: AppBar(
-        backgroundColor: c.surface,
-        title: Text(l.settingsCategories),
-        actions: [
-          IconButton(
-            tooltip: l.catAdd,
-            icon: const Icon(LucideIcons.plus),
-            onPressed: () => context.push('/settings/categories/new'),
-          ),
-        ],
-      ),
+    return SubPageScaffold(
+      title: l.settingsCategories,
+      actions: [
+        IconButton(
+          tooltip: l.catAdd,
+          icon: const Icon(LucideIcons.plus),
+          onPressed: () => context.push('/settings/categories/new'),
+        ),
+      ],
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),

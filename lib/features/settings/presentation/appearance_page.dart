@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../application/theme_mode_provider.dart';
 
 class AppearancePage extends ConsumerWidget {
@@ -19,8 +20,8 @@ class AppearancePage extends ConsumerWidget {
       (ThemeMode.dark, l.appearanceDark),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsAppearance)),
+    return SubPageScaffold(
+      title: l.settingsAppearance,
       body: ListView(
         children: [
           for (final (mode, label) in options)

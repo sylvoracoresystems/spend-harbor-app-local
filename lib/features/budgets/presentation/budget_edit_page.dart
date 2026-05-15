@@ -9,6 +9,7 @@ import '../../../domain/enums/budget_scope.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
@@ -58,10 +59,8 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
     final effectiveStart = state.startsOn ??
         alignToPeriodStart(DateTime.now(), state.period);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(state.isEditing ? l.budgetEditTitle : l.budgetNewTitle),
-      ),
+    return SubPageScaffold(
+      title: state.isEditing ? l.budgetEditTitle : l.budgetNewTitle,
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.x4),
         children: [

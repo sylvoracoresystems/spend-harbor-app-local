@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
@@ -12,8 +13,8 @@ class LegalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final c = context.appColors;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsLegal)),
+    return SubPageScaffold(
+      title: l.settingsLegal,
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.x6),
         children: [
