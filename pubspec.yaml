@@ -103,14 +103,14 @@ flutter_launcher_icons:
 
 # Splash screen configuration (run: dart run flutter_native_splash:create)
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#E8FBF1"
   image: "assets/branding/splash.png"
-  color_dark: "#0F1115"
+  color_dark: "#0B1410"
   image_dark: "assets/branding/splash.png"
   android_12:
-    color: "#FFFFFF"
+    color: "#E8FBF1"
     image: "assets/branding/splash.png"
-    color_dark: "#0F1115"
+    color_dark: "#0B1410"
     image_dark: "assets/branding/splash.png"
   android: true
   ios: true
