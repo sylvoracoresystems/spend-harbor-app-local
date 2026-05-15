@@ -89,10 +89,11 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
     super.dispose();
   }
 
-  AutoDisposeStateNotifierProvider<TransactionFormController,
-          TransactionFormState>
-      _provider() =>
-          transactionFormControllerProvider(widget.editId);
+  AutoDisposeStateNotifierProvider<
+    TransactionFormController,
+    TransactionFormState
+  >
+  _provider() => transactionFormControllerProvider(widget.editId);
 
   @override
   Widget build(BuildContext context) {
@@ -107,20 +108,23 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
         child: Column(
           children: [
             _Header(
-              title: state.isEditing
-                  ? l.editTransactionTitle
-                  : l.newTransactionTitle,
+              title:
+                  state.isEditing
+                      ? l.editTransactionTitle
+                      : l.newTransactionTitle,
               showDelete: state.isEditing,
               onBack: () => Navigator.of(context).pop(),
-              onDelete: state.submitting
-                  ? null
-                  : () => _confirmDelete(context, notifier),
-              onSettings: state.submitting
-                  ? null
-                  : () {
-                      Navigator.of(context).pop();
-                      context.go('/settings');
-                    },
+              onDelete:
+                  state.submitting
+                      ? null
+                      : () => _confirmDelete(context, notifier),
+              onSettings:
+                  state.submitting
+                      ? null
+                      : () {
+                        Navigator.of(context).pop();
+                        context.go('/settings');
+                      },
             ),
             Expanded(
               child: ListView(
@@ -143,12 +147,12 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                     onCurrency: notifier.setCurrency,
                   ),
                   _ErrorIfAny(
-                    show: _fieldError == TransactionFormError.amountRequired ||
+                    show:
+                        _fieldError == TransactionFormError.amountRequired ||
                         _fieldError == TransactionFormError.amountInvalid ||
                         _fieldError == TransactionFormError.currencyRequired,
-                    message: _fieldError == null
-                        ? ''
-                        : _messageFor(l, _fieldError!),
+                    message:
+                        _fieldError == null ? '' : _messageFor(l, _fieldError!),
                   ),
                   const SizedBox(height: AppSpacing.x3),
                   _DateRow(
@@ -162,8 +166,7 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                     onPicked: notifier.setCategory,
                   ),
                   _ErrorIfAny(
-                    show:
-                        _fieldError == TransactionFormError.categoryRequired,
+                    show: _fieldError == TransactionFormError.categoryRequired,
                     message: l.txErrCategoryRequired,
                   ),
                   const SizedBox(height: AppSpacing.x3),
@@ -173,8 +176,8 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                     expanded: _tagsExpanded,
                     searchCtrl: _tagSearchCtrl,
                     onQueryChanged: (q) => setState(() => _tagQuery = q),
-                    onToggleExpand: () =>
-                        setState(() => _tagsExpanded = !_tagsExpanded),
+                    onToggleExpand:
+                        () => setState(() => _tagsExpanded = !_tagsExpanded),
                     onToggleTag: (id) {
                       final ok = notifier.toggleTag(id);
                       if (!ok) {
@@ -188,12 +191,16 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                     },
                   ),
                   const SizedBox(height: AppSpacing.x3),
-                  _NoteField(controller: _noteCtrl, onChanged: notifier.setNote),
+                  _NoteField(
+                    controller: _noteCtrl,
+                    onChanged: notifier.setNote,
+                  ),
                   const SizedBox(height: AppSpacing.x3),
                   _SourceDropdown(
                     selected: state.sourceId,
-                    onPicked: (id, cur) =>
-                        notifier.setSource(id, sourceCurrency: cur),
+                    onPicked:
+                        (id, cur) =>
+                            notifier.setSource(id, sourceCurrency: cur),
                   ),
                   _ErrorIfAny(
                     show: _fieldError == TransactionFormError.sourceRequired,
@@ -238,20 +245,21 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
     final l = AppL10n.of(context);
     final yes = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l.txDeleteConfirmTitle),
-        content: Text(l.txDeleteConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l.txCancel),
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(l.txDeleteConfirmTitle),
+            content: Text(l.txDeleteConfirmBody),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(l.txCancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(l.txDelete),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l.txDelete),
-          ),
-        ],
-      ),
     );
     if (yes == true) {
       await notifier.delete();
@@ -325,11 +333,7 @@ class _Header extends StatelessWidget {
                   color: c.mintTint,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  LucideIcons.settings,
-                  size: 18,
-                  color: c.action,
-                ),
+                child: Icon(LucideIcons.settings, size: 18, color: c.action),
               ),
             ),
           ),
@@ -372,8 +376,9 @@ class _AmountAndCurrencyRow extends StatelessWidget {
             height: _kFieldHeight,
             child: TextField(
               controller: amountCtrl,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
               ],
@@ -392,21 +397,29 @@ class _AmountAndCurrencyRow extends StatelessWidget {
           child: _OutlinedBox(
             height: _kFieldHeight,
             padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.x3, vertical: 0),
+              horizontal: AppSpacing.x3,
+              vertical: 0,
+            ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: currency,
                 isDense: true,
-                icon: Icon(LucideIcons.chevronDown,
-                    size: 16, color: c.textMuted),
+                icon: Icon(
+                  LucideIcons.chevronDown,
+                  size: 16,
+                  color: c.textMuted,
+                ),
                 style: AppTypography.sm.copyWith(
                   fontWeight: AppTypography.weightSemibold,
                   color: c.textPrimary,
                 ),
                 items: [
                   for (final cur in Currency.all)
-                    DropdownMenuItem(value: cur.code, child: Text(cur.code)),
+                    DropdownMenuItem(
+                      value: cur.code,
+                      child: Text('${cur.symbol} - ${cur.code}'),
+                    ),
                 ],
                 onChanged: (v) {
                   if (v != null) onCurrency(v);
@@ -424,7 +437,9 @@ class _OutlinedBox extends StatelessWidget {
   const _OutlinedBox({
     required this.child,
     this.padding = const EdgeInsets.symmetric(
-        horizontal: AppSpacing.x3, vertical: AppSpacing.x2),
+      horizontal: AppSpacing.x3,
+      vertical: AppSpacing.x2,
+    ),
     this.height,
   });
   final Widget child;
@@ -477,8 +492,7 @@ class _DateRow extends StatelessWidget {
                 context: context,
                 initialDate: value,
                 firstDate: DateTime(2000),
-                lastDate:
-                    DateTime.now().add(const Duration(days: 365 * 10)),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
               );
               if (picked != null) onPicked(picked);
             },
@@ -506,8 +520,7 @@ class _DateRow extends StatelessWidget {
           onTap: () => onPicked(quickTarget),
           child: _OutlinedBox(
             height: _kFieldHeight,
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppSpacing.x4),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4),
             child: Center(
               child: Text(
                 quickLabel,
@@ -547,8 +560,10 @@ class _CategoryGrid extends ConsumerWidget {
         final filtered = all.where((cat) => cat.type == type).toList();
         if (filtered.isEmpty) {
           return _OutlinedBox(
-            child: Text(l.txEmptyCategory,
-                style: AppTypography.sm.copyWith(color: c.textMuted)),
+            child: Text(
+              l.txEmptyCategory,
+              style: AppTypography.sm.copyWith(color: c.textMuted),
+            ),
           );
         }
         const crossCount = 4;
@@ -568,12 +583,12 @@ class _CategoryGrid extends ConsumerWidget {
             return SizedBox(
               height: height,
               child: GridView.builder(
-                physics: rows > maxVisibleRows
-                    ? const ClampingScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
+                physics:
+                    rows > maxVisibleRows
+                        ? const ClampingScrollPhysics()
+                        : const NeverScrollableScrollPhysics(),
                 itemCount: filtered.length,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossCount,
                   crossAxisSpacing: spacing,
                   mainAxisSpacing: spacing,
@@ -593,8 +608,11 @@ class _CategoryGrid extends ConsumerWidget {
           },
         );
       },
-      loading: () => const SizedBox(
-          height: 88, child: Center(child: CircularProgressIndicator())),
+      loading:
+          () => const SizedBox(
+            height: 88,
+            child: Center(child: CircularProgressIndicator()),
+          ),
       error: (e, _) => Text('$e'),
     );
   }
@@ -628,15 +646,16 @@ class _CategoryTile extends StatelessWidget {
               width: selected ? 1.5 : 1,
             ),
             borderRadius: AppRadius.brXl,
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: c.action.withValues(alpha: 0.12),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
+            boxShadow:
+                selected
+                    ? [
+                      BoxShadow(
+                        color: c.action.withValues(alpha: 0.12),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                    : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -652,8 +671,7 @@ class _CategoryTile extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
                 child: Text(
                   _categoryDisplay(context, cat),
                   maxLines: 1,
@@ -706,29 +724,29 @@ class _TagsSection extends ConsumerWidget {
       data: (all) {
         // 排序：选中置顶 → 近 30 天频次降序 → 创建时间倒序
         final sorted = [...all]..sort((a, b) {
-            final aSel = selectedIds.contains(a.id) ? 1 : 0;
-            final bSel = selectedIds.contains(b.id) ? 1 : 0;
-            if (aSel != bSel) return bSel - aSel;
-            final aU = usage[a.id] ?? 0;
-            final bU = usage[b.id] ?? 0;
-            if (aU != bU) return bU - aU;
-            return b.createdAt.compareTo(a.createdAt);
-          });
+          final aSel = selectedIds.contains(a.id) ? 1 : 0;
+          final bSel = selectedIds.contains(b.id) ? 1 : 0;
+          if (aSel != bSel) return bSel - aSel;
+          final aU = usage[a.id] ?? 0;
+          final bU = usage[b.id] ?? 0;
+          if (aU != bU) return bU - aU;
+          return b.createdAt.compareTo(a.createdAt);
+        });
 
         final q = query.trim().toLowerCase();
-        final filtered = q.isEmpty
-            ? sorted
-            : sorted.where((t) {
-                final display = _tagDisplay(context, t).toLowerCase();
-                return display.contains(q) ||
-                    t.name.toLowerCase().contains(q);
-              }).toList();
+        final filtered =
+            q.isEmpty
+                ? sorted
+                : sorted.where((t) {
+                  final display = _tagDisplay(context, t).toLowerCase();
+                  return display.contains(q) ||
+                      t.name.toLowerCase().contains(q);
+                }).toList();
 
         final collapsedLimit = 16;
         final showAll = expanded || q.isNotEmpty;
-        final visible = showAll
-            ? filtered
-            : filtered.take(collapsedLimit).toList();
+        final visible =
+            showAll ? filtered : filtered.take(collapsedLimit).toList();
         final overflow = filtered.length - visible.length;
 
         return Column(
@@ -753,8 +771,7 @@ class _TagsSection extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
                 child: Text(
                   l.txTagNoMatch,
-                  style:
-                      AppTypography.sm.copyWith(color: c.textMuted),
+                  style: AppTypography.sm.copyWith(color: c.textMuted),
                 ),
               )
             else
@@ -806,20 +823,23 @@ class _TagChip extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.x2 + 2, vertical: 4),
+            horizontal: AppSpacing.x2 + 2,
+            vertical: 4,
+          ),
           decoration: BoxDecoration(
             color: selected ? c.action : c.surface,
             border: Border.all(color: selected ? c.action : c.border),
             borderRadius: AppRadius.brFull,
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: c.action.withValues(alpha: 0.15),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ]
-                : null,
+            boxShadow:
+                selected
+                    ? [
+                      BoxShadow(
+                        color: c.action.withValues(alpha: 0.15),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ]
+                    : null,
           ),
           child: Text(
             label,
@@ -847,13 +867,12 @@ class _MoreChip extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.x3, vertical: 6),
+          horizontal: AppSpacing.x3,
+          vertical: 6,
+        ),
         decoration: BoxDecoration(
           borderRadius: AppRadius.brFull,
-          border: Border.all(
-            color: c.border,
-            style: BorderStyle.solid,
-          ),
+          border: Border.all(color: c.border, style: BorderStyle.solid),
         ),
         child: Text(
           label,
@@ -877,7 +896,9 @@ class _NoteField extends StatelessWidget {
     final l = AppL10n.of(context);
     return _OutlinedBox(
       padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x3, vertical: AppSpacing.x2 + 2),
+        horizontal: AppSpacing.x3,
+        vertical: AppSpacing.x2 + 2,
+      ),
       child: TextField(
         controller: controller,
         maxLines: 2,
@@ -910,14 +931,15 @@ class _SourceDropdown extends ConsumerWidget {
       data: (sources) {
         if (sources.isEmpty) {
           return _OutlinedBox(
-            child: Text(l.txEmptySource,
-                style: AppTypography.sm.copyWith(color: c.textMuted)),
+            child: Text(
+              l.txEmptySource,
+              style: AppTypography.sm.copyWith(color: c.textMuted),
+            ),
           );
         }
         return _OutlinedBox(
           height: _kFieldHeight,
-          padding:
-              const EdgeInsets.symmetric(horizontal: AppSpacing.x3),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x3),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               isExpanded: true,
@@ -927,15 +949,14 @@ class _SourceDropdown extends ConsumerWidget {
                 l.txSourcePlaceholder,
                 style: AppTypography.sm.copyWith(color: c.textHint),
               ),
-              icon: Icon(LucideIcons.chevronDown,
-                  size: 16, color: c.textMuted),
+              icon: Icon(LucideIcons.chevronDown, size: 16, color: c.textMuted),
               style: AppTypography.sm.copyWith(color: c.textPrimary),
               items: [
                 for (final s in sources)
                   DropdownMenuItem(
                     value: s.id,
                     child: Text(
-                      '${_sourceDisplay(context, s)} (${s.currency})',
+                      '${_sourceDisplay(context, s)} · ${Currency.isSupported(s.currency) ? Currency.byCode(s.currency).symbol : s.currency}',
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -991,8 +1012,7 @@ class _BottomBar extends StatelessWidget {
             child: OutlinedButton(
               onPressed: submitting ? null : onCancel,
               style: OutlinedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: AppSpacing.x3),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
                 shape: RoundedRectangleBorder(borderRadius: AppRadius.brFull),
                 side: BorderSide(color: c.border),
                 foregroundColor: c.textBody,
@@ -1005,8 +1025,7 @@ class _BottomBar extends StatelessWidget {
             child: FilledButton(
               onPressed: submitting ? null : onSave,
               style: FilledButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: AppSpacing.x3),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
                 shape: RoundedRectangleBorder(borderRadius: AppRadius.brFull),
                 backgroundColor: c.action,
               ),
@@ -1038,10 +1057,7 @@ class _ErrorIfAny extends StatelessWidget {
     final c = context.appColors;
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.x1),
-      child: Text(
-        message,
-        style: AppTypography.xs.copyWith(color: c.expense),
-      ),
+      child: Text(message, style: AppTypography.xs.copyWith(color: c.expense)),
     );
   }
 }

@@ -73,14 +73,11 @@ class CurrencyFilterDropdown extends StatelessWidget {
           value: value,
           items: [
             if (allLabel != null)
-              DropdownMenuItem<String?>(
-                value: null,
-                child: Text(allLabel!),
-              ),
+              DropdownMenuItem<String?>(value: null, child: Text(allLabel!)),
             for (final ccy in Currency.all)
               DropdownMenuItem<String?>(
                 value: ccy.code,
-                child: Text(ccy.code),
+                child: Text('${ccy.symbol} - ${ccy.code}'),
               ),
           ],
           onChanged: onChanged,
@@ -89,6 +86,10 @@ class CurrencyFilterDropdown extends StatelessWidget {
     );
   }
 }
+
+/// 不支持的币种 code（兼容旧/导入数据）→ 退回 code 自身作为符号占位。
+String _symbolOf(String code) =>
+    Currency.isSupported(code) ? Currency.byCode(code).symbol : code;
 
 /// 来源过滤下拉。当 [value] 不在 [sources] 中（来源被删）回退 null 防 crash。
 class SourceFilterDropdown extends StatelessWidget {
@@ -108,9 +109,8 @@ class SourceFilterDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final safe = value != null && sources.any((s) => s.id == value)
-        ? value
-        : null;
+    final safe =
+        value != null && sources.any((s) => s.id == value) ? value : null;
     return FilterPill(
       icon: LucideIcons.wallet,
       label: label,
@@ -120,14 +120,14 @@ class SourceFilterDropdown extends StatelessWidget {
           isDense: true,
           value: safe,
           items: [
-            DropdownMenuItem<String?>(
-              value: null,
-              child: Text(allLabel),
-            ),
+            DropdownMenuItem<String?>(value: null, child: Text(allLabel)),
             for (final s in sources)
               DropdownMenuItem<String?>(
                 value: s.id,
-                child: Text(s.name, overflow: TextOverflow.ellipsis),
+                child: Text(
+                  '${s.name} · ${_symbolOf(s.currency)}',
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
           ],
           onChanged: onChanged,
