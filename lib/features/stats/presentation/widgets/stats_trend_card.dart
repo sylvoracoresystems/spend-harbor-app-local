@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
+import '../../application/stats_buckets.dart';
 import '../../application/stats_controller.dart';
 import '../../application/stats_filter.dart';
 import '../../application/stats_filter_provider.dart';
@@ -123,7 +126,7 @@ class _RangeChip extends StatelessWidget {
   }
 }
 
-class _Bars extends StatelessWidget {
+class _Bars extends StatefulWidget {
   const _Bars({
     required this.rows,
     required this.selected,
@@ -138,40 +141,149 @@ class _Bars extends StatelessWidget {
   final String locale;
   final ValueChanged<DateTime> onTap;
 
+  @override
+  State<_Bars> createState() => _BarsState();
+}
+
+class _BarsState extends State<_Bars> {
+  static const double _yAxisWidth = 36;
+  static const double _bottomReserved = 28;
+
+  final ScrollController _ctrl = ScrollController();
+  double? _visibleMaxY;
+  bool _didInitialJump = false;
+  double _barSlot = 48; // 实际宽度按 viewport / defaultBucketCount 算
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl.addListener(_onScroll);
+  }
+
+  @override
+  void didUpdateWidget(covariant _Bars oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.rows != oldWidget.rows) {
+      _visibleMaxY = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _jumpToEnd();
+        _recompute();
+      });
+    }
+  }
+
+  /// 默认把视口贴到最右端（最近的桶），更直观。
+  void _jumpToEnd() {
+    if (!_ctrl.hasClients) return;
+    final maxExt = _ctrl.position.maxScrollExtent;
+    if (maxExt > 0 && _ctrl.offset != maxExt) {
+      _ctrl.jumpTo(maxExt);
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.removeListener(_onScroll);
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() => _recompute();
+
+  void _recompute() {
+    if (!_ctrl.hasClients) return;
+    final vw = _ctrl.position.viewportDimension;
+    final offset = _ctrl.offset;
+    final start =
+        (offset / _barSlot).floor().clamp(0, widget.rows.length - 1);
+    final end =
+        ((offset + vw) / _barSlot).ceil().clamp(start + 1, widget.rows.length);
+    final next = _maxOver(widget.rows.sublist(start, end));
+    if (next != _visibleMaxY) setState(() => _visibleMaxY = next);
+  }
+
+  double _maxOver(Iterable<TrendBucketValues> rs) {
+    final raw = rs
+        .map((r) => math.max(r.incomeCents, r.expenseCents))
+        .fold<int>(0, (a, b) => a > b ? a : b)
+        .toDouble();
+    return raw == 0 ? 100.0 : raw * 1.05;
+  }
+
   String _label(DateTime start) {
-    switch (period) {
+    switch (widget.period) {
       case StatsPeriod.week:
-        return DateFormat.MMMd(locale).format(start);
+        return DateFormat.MMMd(widget.locale).format(start);
       case StatsPeriod.month:
-        return DateFormat.MMM(locale).format(start);
+        return DateFormat.MMM(widget.locale).format(start);
       case StatsPeriod.year:
-        return DateFormat.y(locale).format(start);
+        return DateFormat.y(widget.locale).format(start);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final defaultCount = defaultBucketCount(widget.period);
+        final scrollable = widget.rows.length > defaultCount;
+        if (!scrollable) {
+          final maxY = _maxOver(widget.rows);
+          return _buildChart(
+            context,
+            maxY: maxY,
+            showLeftTitles: true,
+          );
+        }
+        // 滚动模式：viewport 正好放 defaultCount 个桶，slot 宽度由此推算
+        final viewport = constraints.maxWidth - _yAxisWidth;
+        _barSlot = viewport / defaultCount;
+        final contentWidth = widget.rows.length * _barSlot;
+        // 首次进入滚动模式：默认显示最右端（最近）的 defaultCount 个桶
+        final initialVisible =
+            widget.rows.sublist(widget.rows.length - defaultCount);
+        final maxY = _visibleMaxY ?? _maxOver(initialVisible);
+        if (!_didInitialJump) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            _jumpToEnd();
+            _didInitialJump = true;
+          });
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(width: _yAxisWidth, child: _buildYAxis(context, maxY)),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _ctrl,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: SizedBox(
+                  width: contentWidth,
+                  child: _buildChart(
+                    context,
+                    maxY: maxY,
+                    showLeftTitles: false,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildYAxis(BuildContext context, double maxY) {
     final c = context.appColors;
-    final rawMax = rows
-        .map((r) =>
-            r.incomeCents > r.expenseCents ? r.incomeCents : r.expenseCents)
-        .fold<int>(0, (a, b) => a > b ? a : b)
-        .toDouble();
-    final maxY = rawMax == 0 ? 100.0 : rawMax * 1.05;
     final interval = maxY / 4;
     return BarChart(
       BarChartData(
         maxY: maxY,
-        gridData: FlGridData(
-          show: true,
-          drawVerticalLine: false,
-          horizontalInterval: interval,
-          getDrawingHorizontalLine: (_) => FlLine(
-            color: c.borderSoft,
-            strokeWidth: 1,
-            dashArray: const [3, 3],
-          ),
-        ),
+        minY: 0,
+        alignment: BarChartAlignment.start,
+        gridData: const FlGridData(show: false),
         borderData: FlBorderData(
           show: true,
           border: Border(
@@ -184,7 +296,7 @@ class _Bars extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               interval: interval,
-              reservedSize: 36,
+              reservedSize: _yAxisWidth,
               getTitlesWidget: (v, _) {
                 if (v == 0) return const SizedBox();
                 return Padding(
@@ -205,14 +317,80 @@ class _Bars extends StatelessWidget {
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 28,
+              reservedSize: _bottomReserved,
+              getTitlesWidget: (_, __) => const SizedBox.shrink(),
+            ),
+          ),
+        ),
+        barTouchData: BarTouchData(enabled: false),
+        barGroups: const [],
+      ),
+    );
+  }
+
+  Widget _buildChart(
+    BuildContext context, {
+    required double maxY,
+    required bool showLeftTitles,
+  }) {
+    final c = context.appColors;
+    final interval = maxY / 4;
+    return BarChart(
+      BarChartData(
+        maxY: maxY,
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: false,
+          horizontalInterval: interval,
+          getDrawingHorizontalLine: (_) => FlLine(
+            color: c.borderSoft,
+            strokeWidth: 1,
+            dashArray: const [3, 3],
+          ),
+        ),
+        borderData: FlBorderData(
+          show: true,
+          border: Border(
+            left: showLeftTitles
+                ? BorderSide(color: c.borderSoft, width: 1)
+                : BorderSide.none,
+            bottom: BorderSide(color: c.borderSoft, width: 1),
+          ),
+        ),
+        titlesData: FlTitlesData(
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: showLeftTitles,
+              interval: interval,
+              reservedSize: showLeftTitles ? _yAxisWidth : 0,
+              getTitlesWidget: (v, _) {
+                if (v == 0) return const SizedBox();
+                return Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Text(
+                    _shortAmount(v),
+                    style: AppTypography.xs.copyWith(color: c.textMuted),
+                    textAlign: TextAlign.right,
+                  ),
+                );
+              },
+            ),
+          ),
+          rightTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: _bottomReserved,
               getTitlesWidget: (v, _) {
                 final i = v.toInt();
-                if (i < 0 || i >= rows.length) return const SizedBox();
+                if (i < 0 || i >= widget.rows.length) return const SizedBox();
                 return Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    _label(rows[i].bucket.start),
+                    _label(widget.rows[i].bucket.start),
                     style: AppTypography.xs.copyWith(color: c.textMuted),
                   ),
                 );
@@ -228,19 +406,19 @@ class _Bars extends StatelessWidget {
           touchCallback: (event, response) {
             if (event is FlTapUpEvent && response?.spot != null) {
               final i = response!.spot!.touchedBarGroupIndex;
-              onTap(rows[i].bucket.start);
+              widget.onTap(widget.rows[i].bucket.start);
             }
           },
         ),
         barGroups: [
-          for (var i = 0; i < rows.length; i++)
+          for (var i = 0; i < widget.rows.length; i++)
             BarChartGroupData(
               x: i,
               barsSpace: 3,
               barRods: [
                 BarChartRodData(
-                  toY: rows[i].incomeCents.toDouble(),
-                  color: rows[i].bucket.start == selected
+                  toY: widget.rows[i].incomeCents.toDouble(),
+                  color: widget.rows[i].bucket.start == widget.selected
                       ? c.income
                       : c.income.withValues(alpha: 0.4),
                   width: 14,
@@ -249,8 +427,8 @@ class _Bars extends StatelessWidget {
                   ),
                 ),
                 BarChartRodData(
-                  toY: rows[i].expenseCents.toDouble(),
-                  color: rows[i].bucket.start == selected
+                  toY: widget.rows[i].expenseCents.toDouble(),
+                  color: widget.rows[i].bucket.start == widget.selected
                       ? c.expense
                       : c.expense.withValues(alpha: 0.4),
                   width: 14,

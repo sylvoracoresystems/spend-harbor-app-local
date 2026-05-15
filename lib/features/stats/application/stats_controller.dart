@@ -20,7 +20,8 @@ class TrendBucketValues {
   final int expenseCents;
 }
 
-/// Trend 数据：6/3 桶。
+/// Trend 数据：桶数 = max(默认 6/3, 最早 tx 到 anchor 的 period 跨度 + 1)，
+/// 让用户能横向滚回到全部历史数据。
 final trendBucketsProvider =
     FutureProvider<List<TrendBucketValues>>((ref) async {
   final f = ref.watch(statsFilterProvider);
@@ -29,8 +30,19 @@ final trendBucketsProvider =
     StatsPeriod.month => DateTime.now(),
     StatsPeriod.year => DateTime.now(),
   };
-  final buckets = generateBuckets(f.period, anchor);
   final dao = ref.watch(transactionDaoProvider);
+  final earliestIso = await dao.findEarliestDate(
+    currency: f.currency,
+    sourceId: f.sourceId,
+  );
+  int count = defaultBucketCount(f.period);
+  if (earliestIso != null) {
+    final earliest = alignToPeriodStart(DateTime.parse(earliestIso), f.period);
+    final rightStart = alignToPeriodStart(anchor, f.period);
+    final span = periodStepsBetween(earliest, rightStart, f.period) + 1;
+    if (span > count) count = span;
+  }
+  final buckets = generateBuckets(f.period, anchor, count: count);
   final start = buckets.first.start;
   final end = buckets.last.end;
   final rows = await dao.findByDateRange(isoDate(start), isoDate(end));

@@ -35,6 +35,24 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
         .watch();
   }
 
+  /// 当前 filter 下最早的 transactedOn（ISO 字符串）。无数据返回 null。
+  Future<String?> findEarliestDate({
+    required String currency,
+    String? sourceId,
+  }) async {
+    final q = select(transactions)
+      ..where((t) =>
+          t.deletedAt.isNull() &
+          t.currency.equals(currency) &
+          (sourceId == null
+              ? const Constant(true)
+              : t.sourceId.equals(sourceId)))
+      ..orderBy([(t) => OrderingTerm.asc(t.transactedOn)])
+      ..limit(1);
+    final r = await q.getSingleOrNull();
+    return r?.transactedOn;
+  }
+
   /// 一次性按 [startIso] (含) ~ [endIso] (含) 取交易（未删除）。
   Future<List<Transaction>> findByDateRange(String startIso, String endIso) {
     return (select(transactions)

@@ -21,6 +21,21 @@ DateTime alignToPeriodStart(DateTime d, StatsPeriod p) {
 int _bucketCount(StatsPeriod p) =>
     p == StatsPeriod.year ? 3 : 6;
 
+/// 公开默认桶数，供 provider 计算"最少桨数底线"。
+int defaultBucketCount(StatsPeriod p) => _bucketCount(p);
+
+/// 两个对齐起点之间相差多少个 period 步长（b - a，可能为负）。
+int periodStepsBetween(DateTime a, DateTime b, StatsPeriod p) {
+  switch (p) {
+    case StatsPeriod.week:
+      return b.difference(a).inDays ~/ 7;
+    case StatsPeriod.month:
+      return (b.year - a.year) * 12 + (b.month - a.month);
+    case StatsPeriod.year:
+      return b.year - a.year;
+  }
+}
+
 DateTime _addPeriod(DateTime start, StatsPeriod p, int n) {
   switch (p) {
     case StatsPeriod.week:
@@ -44,11 +59,11 @@ DateTime _endOfBucket(DateTime start, StatsPeriod p) {
   }
 }
 
-List<TrendBucket> generateBuckets(StatsPeriod p, DateTime anchor) {
+List<TrendBucket> generateBuckets(StatsPeriod p, DateTime anchor, {int? count}) {
   final rightStart = alignToPeriodStart(anchor, p);
-  final count = _bucketCount(p);
+  final n = count ?? _bucketCount(p);
   final out = <TrendBucket>[];
-  for (var i = count - 1; i >= 0; i--) {
+  for (var i = n - 1; i >= 0; i--) {
     final start = _addPeriod(rightStart, p, -i);
     out.add(TrendBucket(start: start, end: _endOfBucket(start, p)));
   }
