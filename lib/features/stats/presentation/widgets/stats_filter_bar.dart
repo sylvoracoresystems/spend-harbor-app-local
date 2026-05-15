@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../data/database/app_database_provider.dart';
-import '../../../../domain/value_objects/currency.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../shared/widgets/filter_pill.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
-import '../../../../theme/app_typography.dart';
 import '../../application/stats_filter.dart';
 import '../../application/stats_filter_provider.dart';
 
@@ -31,16 +30,9 @@ class StatsFilterBar extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: _PillDropdown<String>(
+                  child: CurrencyFilterDropdown(
                     value: f.currency,
-                    icon: Icons.attach_money,
-                    items: [
-                      for (final c in Currency.all)
-                        DropdownMenuItem(
-                          value: c.code,
-                          child: Text('${c.code} ${c.symbol}'),
-                        ),
-                    ],
+                    label: l.dashFilterCurrency,
                     onChanged: (v) {
                       if (v != null) {
                         ref.read(statsFilterProvider.notifier).setCurrency(v);
@@ -48,22 +40,13 @@ class StatsFilterBar extends ConsumerWidget {
                     },
                   ),
                 ),
-                const SizedBox(width: AppSpacing.x2),
+                const SizedBox(width: AppSpacing.x3),
                 Expanded(
-                  child: _PillDropdown<String?>(
+                  child: SourceFilterDropdown(
                     value: f.sourceId,
-                    icon: Icons.account_balance_wallet_outlined,
-                    items: [
-                      DropdownMenuItem<String?>(
-                        value: null,
-                        child: Text(l.statsFilterAllSources),
-                      ),
-                      for (final s in filteredSources)
-                        DropdownMenuItem<String?>(
-                          value: s.id,
-                          child: Text(s.name),
-                        ),
-                    ],
+                    label: l.dashFilterSource,
+                    allLabel: l.statsFilterAllSources,
+                    sources: filteredSources,
                     onChanged: (v) =>
                         ref.read(statsFilterProvider.notifier).setSourceId(v),
                   ),
@@ -129,49 +112,3 @@ class StatsFilterBar extends ConsumerWidget {
   }
 }
 
-class _PillDropdown<T> extends StatelessWidget {
-  const _PillDropdown({
-    required this.value,
-    required this.icon,
-    required this.items,
-    required this.onChanged,
-  });
-
-  final T value;
-  final IconData icon;
-  final List<DropdownMenuItem<T>> items;
-  final ValueChanged<T?> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Container(
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: c.surfacePress,
-        border: Border.all(color: c.borderSoft),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 14, color: c.textMuted),
-          const SizedBox(width: 6),
-          Expanded(
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<T>(
-                value: value,
-                isExpanded: true,
-                isDense: true,
-                style: AppTypography.sm.copyWith(color: c.textPrimary),
-                icon: Icon(Icons.expand_more, size: 18, color: c.textMuted),
-                items: items,
-                onChanged: onChanged,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

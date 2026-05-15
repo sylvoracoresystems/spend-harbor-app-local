@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
+import '../../dashboard/application/dashboard_filter_provider.dart';
 
 /// 年-月 值对象（YYYY-MM）。
 class YearMonth {
@@ -124,7 +125,7 @@ final _monthChangeListenerProvider = Provider<void>((ref) {
 });
 
 /// 预加载当前列表所有交易的标签关联。
-final _tagsForCurrentListProvider =
+final tagsForCurrentListProvider =
     FutureProvider<Map<String, List<String>>>((ref) async {
   final rows = await ref.watch(transactionsOfMonthProvider.future);
   if (rows.isEmpty) return const {};
@@ -138,16 +139,23 @@ final filteredTransactionsProvider =
     Provider<AsyncValue<List<Transaction>>>((ref) {
   ref.watch(_monthChangeListenerProvider);
   final filter = ref.watch(transactionsFilterProvider);
+  final dash = ref.watch(dashboardFilterProvider);
   final txAsync = ref.watch(transactionsOfMonthProvider);
-  if (filter == null || filter.isEmpty) return txAsync;
 
-  final needsTags = filter.tagId != null || filter.untagged;
-  if (!needsTags) {
-    return txAsync.whenData(
-      (rows) => rows.where((t) => filter.matches(t)).toList(),
-    );
+  bool dashMatches(Transaction t) {
+    if (dash.currency != null && t.currency != dash.currency) return false;
+    if (dash.sourceId != null && t.sourceId != dash.sourceId) return false;
+    return true;
   }
-  final tagsAsync = ref.watch(_tagsForCurrentListProvider);
+
+  final filterEmpty = filter == null || filter.isEmpty;
+  final needsTags = !filterEmpty && (filter.tagId != null || filter.untagged);
+  if (!needsTags) {
+    return txAsync.whenData((rows) => rows
+        .where((t) => dashMatches(t) && (filterEmpty || filter.matches(t)))
+        .toList());
+  }
+  final tagsAsync = ref.watch(tagsForCurrentListProvider);
   if (tagsAsync is AsyncLoading) {
     return const AsyncValue.loading();
   }
@@ -157,7 +165,9 @@ final filteredTransactionsProvider =
   final tagsByTx = tagsAsync.value ?? const <String, List<String>>{};
   return txAsync.whenData((rows) {
     return rows
-        .where((t) => filter.matches(t, tagIds: tagsByTx[t.id]?.toSet()))
+        .where((t) =>
+            dashMatches(t) &&
+            filter.matches(t, tagIds: tagsByTx[t.id]?.toSet()))
         .toList();
   });
 });

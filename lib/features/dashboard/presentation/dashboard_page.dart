@@ -6,7 +6,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../data/seed/default_name_resolver.dart';
-import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/app_colors.dart';
@@ -16,6 +15,7 @@ import '../../../theme/app_typography.dart';
 import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
 import '../../data_io/presentation/backup_reminder_banner.dart';
+import '../../transactions/presentation/transaction_list_row.dart';
 import '../application/budget_progress_provider.dart';
 import '../application/dashboard_summary_controller.dart';
 import 'dashboard_filter_bar.dart';
@@ -283,7 +283,7 @@ class _RecentSection extends ConsumerWidget {
           child: Column(
             children: [
               for (var i = 0; i < rows.length; i++) ...[
-                _RecentRow(tx: rows[i]),
+                TransactionListRow(tx: rows[i]),
                 if (i < rows.length - 1)
                   Divider(height: 1, color: c.border),
               ],
@@ -291,69 +291,6 @@ class _RecentSection extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _RecentRow extends ConsumerWidget {
-  const _RecentRow({required this.tx});
-  final Transaction tx;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.appColors;
-    final categories = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
-    final cat = categories.where((x) => x.id == tx.categoryId).firstOrNull;
-    final isExpense = tx.type == TransactionType.expense;
-    final amount = _formatAmount(
-      isExpense ? -tx.amountCents : tx.amountCents,
-      tx.currency,
-      signed: true,
-    );
-    final amountColor = isExpense ? c.expense : c.income;
-    final catLabel = cat == null
-        ? '—'
-        : (resolveDefaultName(AppL10n.of(context), cat.nameKey) ?? cat.name);
-    return InkWell(
-      onTap: () => context.push('/transactions/${tx.id}/edit'),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x4,
-          vertical: AppSpacing.x3,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    catLabel,
-                    style: AppTypography.sm.copyWith(
-                      color: c.actionInk,
-                      fontWeight: AppTypography.weightSemibold,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      tx.transactedOn,
-                      style: AppTypography.xs.copyWith(color: c.textMuted),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              amount,
-              style: AppTypography.sm.merge(AppTypography.mono).copyWith(
-                    color: amountColor,
-                    fontWeight: AppTypography.weightSemibold,
-                  ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

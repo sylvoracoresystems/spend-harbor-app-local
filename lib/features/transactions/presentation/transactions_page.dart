@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -11,10 +10,11 @@ import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/app_colors.dart';
-import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
+import '../../dashboard/presentation/dashboard_filter_bar.dart';
 import '../application/transactions_list_controller.dart';
+import 'transaction_list_row.dart';
 
 class TransactionsPage extends ConsumerWidget {
   const TransactionsPage({super.key});
@@ -23,7 +23,6 @@ class TransactionsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final c = context.appColors;
-    final ym = ref.watch(currentMonthProvider);
     final async = ref.watch(filteredTransactionsProvider);
     final filter = ref.watch(transactionsFilterProvider);
     final selection = ref.watch(selectionControllerProvider);
@@ -41,12 +40,27 @@ class TransactionsPage extends ConsumerWidget {
                   onPressed: () => context.push('/transactions/recycle-bin'),
                 ),
               ],
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(48),
-                child: _MonthSwitcher(value: ym),
-              ),
             ),
-      body: async.when(
+      body: Column(
+        children: [
+          const DashboardFilterBar(),
+          Expanded(
+            child: _buildList(context, ref, async, filter, l, c),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildList(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<List<Transaction>> async,
+    TransactionsFilter? filter,
+    AppL10n l,
+    AppColors c,
+  ) {
+    return async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
         data: (rows) {
@@ -75,8 +89,7 @@ class TransactionsPage extends ConsumerWidget {
             ],
           );
         },
-      ),
-    );
+      );
   }
 }
 
@@ -134,45 +147,6 @@ Future<void> _confirmBulkDelete(
   ref.read(selectionControllerProvider.notifier).clear();
 }
 
-class _MonthSwitcher extends ConsumerWidget {
-  const _MonthSwitcher({required this.value});
-  final YearMonth value;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppL10n.of(context);
-    final c = context.appColors;
-    final ctrl = ref.read(currentMonthProvider.notifier);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x3),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            tooltip: l.txMonthPrev,
-            icon: const Icon(LucideIcons.chevronLeft),
-            onPressed: ctrl.prev,
-          ),
-          const SizedBox(width: AppSpacing.x4),
-          Text(
-            value.key,
-            style: AppTypography.base.copyWith(
-              color: c.actionInk,
-              fontWeight: AppTypography.weightSemibold,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.x4),
-          IconButton(
-            tooltip: l.txMonthNext,
-            icon: const Icon(LucideIcons.chevronRight),
-            onPressed: ctrl.next,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _DayGroupView extends ConsumerWidget {
   const _DayGroupView({required this.group});
   final DayGroup group;
@@ -180,148 +154,63 @@ class _DayGroupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.appColors;
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.x3,
-        vertical: AppSpacing.x2,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.x2,
-              vertical: AppSpacing.x2,
-            ),
-            child: Text(
-              _formatDayLabel(context, group.date),
-              style: AppTypography.xs.copyWith(
-                color: c.textMuted,
-                fontWeight: AppTypography.weightMedium,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: c.surface,
-              borderRadius: AppRadius.brXl,
-              border: Border.all(color: c.border),
-            ),
-            child: Column(
-              children: [
-                for (var i = 0; i < group.items.length; i++) ...[
-                  _TransactionRow(tx: group.items[i]),
-                  if (i < group.items.length - 1)
-                    Divider(height: 1, color: c.border),
-                ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _DayHeader(group: group),
+        Container(
+          color: c.surface,
+          child: Column(
+            children: [
+              for (var i = 0; i < group.items.length; i++) ...[
+                TransactionListRow(
+                  tx: group.items[i],
+                  enableSelection: true,
+                ),
+                if (i < group.items.length - 1)
+                  Divider(height: 1, color: c.border),
               ],
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-class _TransactionRow extends ConsumerWidget {
-  const _TransactionRow({required this.tx});
-  final Transaction tx;
+class _DayHeader extends StatelessWidget {
+  const _DayHeader({required this.group});
+  final DayGroup group;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final c = context.appColors;
-    final categories = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
-    final sources = ref.watch(allSourcesProvider).valueOrNull ?? const [];
-    final cat = categories.where((x) => x.id == tx.categoryId).firstOrNull;
-    final src = sources.where((x) => x.id == tx.sourceId).firstOrNull;
-    final isExpense = tx.type == TransactionType.expense;
-    final amountColor = isExpense ? c.expense : c.income;
-    final sign = isExpense ? '-' : '+';
-    final symbol = Currency.byCode(tx.currency).symbol;
-    final amount =
-        '$sign$symbol${(tx.amountCents / 100).toStringAsFixed(2)}';
-    final selection = ref.watch(selectionControllerProvider);
-    final selectionCtrl = ref.read(selectionControllerProvider.notifier);
-    final selecting = selection.isNotEmpty;
-    final selected = selection.contains(tx.id);
-
-    return InkWell(
-      onTap: () {
-        if (selecting) {
-          selectionCtrl.toggle(tx.id);
-        } else {
-          context.push('/transactions/${tx.id}/edit');
-        }
-      },
-      onLongPress: () {
-        HapticFeedback.mediumImpact();
-        selectionCtrl.toggle(tx.id);
-      },
-      borderRadius: AppRadius.brXl,
-      child: Container(
-        color: selected ? c.mintSoft : null,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x4,
-          vertical: AppSpacing.x3,
-        ),
-        child: Row(
-          children: [
-            if (selecting) ...[
-              Icon(
-                selected ? LucideIcons.checkCircle2 : LucideIcons.circle,
-                size: 20,
-                color: selected ? c.action : c.textMuted,
-              ),
-              const SizedBox(width: AppSpacing.x3),
-            ],
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    cat == null
-                        ? '—'
-                        : (resolveDefaultName(AppL10n.of(context), cat.nameKey) ??
-                            cat.name),
-                    style: AppTypography.sm.copyWith(
-                      color: c.actionInk,
-                      fontWeight: AppTypography.weightSemibold,
-                    ),
-                  ),
-                  if (tx.note != null && tx.note!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        tx.note!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTypography.xs.copyWith(color: c.textBody),
-                      ),
-                    ),
-                  if (src != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        resolveDefaultName(AppL10n.of(context), src.nameKey) ??
-                            src.name,
-                        style: AppTypography.xs.copyWith(color: c.textMuted),
-                      ),
-                    ),
-                ],
+    return Container(
+      width: double.infinity,
+      color: c.mintTint,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.x4,
+        vertical: AppSpacing.x2,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              _formatDayLabel(context, group.date),
+              style: AppTypography.sm.copyWith(
+                color: c.actionInk,
+                fontWeight: AppTypography.weightSemibold,
               ),
             ),
-            const SizedBox(width: AppSpacing.x3),
-            Text(
-              amount,
-              style: AppTypography.sm
-                  .merge(AppTypography.mono)
-                  .copyWith(
-                    color: amountColor,
-                    fontWeight: AppTypography.weightSemibold,
-                  ),
-            ),
-          ],
-        ),
+          ),
+          Text(
+            _formatDayNet(group),
+            style: AppTypography.sm.merge(AppTypography.mono).copyWith(
+                  color: c.actionInk,
+                  fontWeight: AppTypography.weightSemibold,
+                ),
+          ),
+        ],
       ),
     );
   }
@@ -336,12 +225,35 @@ String _formatDayLabel(BuildContext context, DateTime date) {
   final y = today.subtract(const Duration(days: 1));
   final isYesterday =
       y.year == date.year && y.month == date.month && y.day == date.day;
-  final ds =
-      '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  if (isToday) return '${l.dayToday} · $ds';
-  if (isYesterday) return '${l.dayYesterday} · $ds';
-  return ds;
+  if (isToday) return l.dayToday;
+  if (isYesterday) return l.dayYesterday;
+  return '${date.year.toString().padLeft(4, '0')}-'
+      '${date.month.toString().padLeft(2, '0')}-'
+      '${date.day.toString().padLeft(2, '0')}';
 }
+
+/// 多币种不换算：取该日组内出现次数最多的货币，签名汇总（income +, expense -）。
+/// 若组内有其他币种则附加 " +N"。
+String _formatDayNet(DayGroup group) {
+  final byCcy = <String, int>{};
+  final counts = <String, int>{};
+  for (final t in group.items) {
+    final sign = t.type == TransactionType.income ? 1 : -1;
+    byCcy[t.currency] = (byCcy[t.currency] ?? 0) + sign * t.amountCents;
+    counts[t.currency] = (counts[t.currency] ?? 0) + 1;
+  }
+  if (byCcy.isEmpty) return '';
+  final dominant = counts.entries
+      .reduce((a, b) => a.value >= b.value ? a : b)
+      .key;
+  final cents = byCcy[dominant]!;
+  final symbol = Currency.byCode(dominant).symbol;
+  final body = '$symbol${(cents.abs() / 100).toStringAsFixed(2)}';
+  final signed = cents < 0 ? '-$body' : body;
+  final others = byCcy.length - 1;
+  return others > 0 ? '$signed  +$others' : signed;
+}
+
 
 class _FilterChip extends ConsumerWidget {
   const _FilterChip({required this.filter});
