@@ -625,7 +625,22 @@ class AppL10nEn extends AppL10n {
   String get catEmptyIncome => 'No income categories yet';
 
   @override
+  String get catEmpty => 'No categories yet';
+
+  @override
   String get catAdd => 'Add category';
+
+  @override
+  String get catSearchHint => 'Search categories';
+
+  @override
+  String get colorCustomTitle => 'Custom color';
+
+  @override
+  String get catTypeExpenseBadge => 'EXP';
+
+  @override
+  String get catTypeIncomeBadge => 'INC';
 
   @override
   String get tagNewTitle => 'New Tag';
@@ -650,6 +665,9 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get tagAdd => 'Add tag';
+
+  @override
+  String get tagSearchHint => 'Search tags';
 
   @override
   String get srcNewTitle => 'New Source';

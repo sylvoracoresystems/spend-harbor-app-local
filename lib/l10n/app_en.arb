@@ -279,7 +279,12 @@
   "catDeleteConfirmBody": "Existing transactions keep their reference but this category will no longer appear in pickers.",
   "catEmptyExpense": "No expense categories yet",
   "catEmptyIncome": "No income categories yet",
+  "catEmpty": "No categories yet",
   "catAdd": "Add category",
+  "catSearchHint": "Search categories",
+  "colorCustomTitle": "Custom color",
+  "catTypeExpenseBadge": "EXP",
+  "catTypeIncomeBadge": "INC",
 
   "tagNewTitle": "New Tag",
   "tagEditTitle": "Edit Tag",
@@ -289,6 +294,7 @@
   "tagDeleteConfirmBody": "Existing transactions keep their reference but this tag will no longer appear in pickers.",
   "tagEmpty": "No tags yet",
   "tagAdd": "Add tag",
+  "tagSearchHint": "Search tags",
 
   "srcNewTitle": "New Source",
   "srcEditTitle": "Edit Source",

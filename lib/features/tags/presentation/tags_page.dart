@@ -12,17 +12,38 @@ import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 
-class TagsPage extends ConsumerWidget {
+/// 与 categories_page 共用阈值：超过即显示搜索框。
+const int _kSearchThreshold = 15;
+
+class TagsPage extends ConsumerStatefulWidget {
   const TagsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TagsPage> createState() => _TagsPageState();
+}
+
+class _TagsPageState extends ConsumerState<TagsPage> {
+  String _query = '';
+
+  @override
+  Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final c = context.appColors;
     final async = ref.watch(allTagsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.settingsTags)),
+      backgroundColor: c.surface,
+      appBar: AppBar(
+        backgroundColor: c.surface,
+        title: Text(l.settingsTags),
+        actions: [
+          IconButton(
+            tooltip: l.tagAdd,
+            icon: const Icon(LucideIcons.plus),
+            onPressed: () => context.push('/settings/tags/new'),
+          ),
+        ],
+      ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
@@ -35,19 +56,84 @@ class TagsPage extends ConsumerWidget {
               ),
             );
           }
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
-            itemCount: rows.length,
-            separatorBuilder: (_, __) =>
-                Divider(height: 1, color: c.border, indent: AppSpacing.x4),
-            itemBuilder: (context, i) => _TagRow(tag: rows[i]),
+          final filtered = _filter(context, rows, _query);
+          return Column(
+            children: [
+              if (rows.length > _kSearchThreshold)
+                _SearchField(
+                  hint: l.tagSearchHint,
+                  onChanged: (v) => setState(() => _query = v),
+                ),
+              Expanded(
+                child: ListView.separated(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: AppSpacing.x2),
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, __) => Divider(
+                      height: 1,
+                      color: c.border,
+                      indent: AppSpacing.x4),
+                  itemBuilder: (context, i) => _TagRow(tag: filtered[i]),
+                ),
+              ),
+            ],
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/settings/tags/new'),
-        icon: const Icon(LucideIcons.plus),
-        label: Text(l.tagAdd),
+    );
+  }
+
+  List<Tag> _filter(BuildContext context, List<Tag> rows, String q) {
+    final l = AppL10n.of(context);
+    if (q.trim().isEmpty) return rows;
+    final needle = q.trim().toLowerCase();
+    return rows.where((r) {
+      final name = (resolveDefaultName(l, r.nameKey) ?? r.name).toLowerCase();
+      return name.contains(needle);
+    }).toList();
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  const _SearchField({required this.hint, required this.onChanged});
+  final String hint;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.x4,
+        AppSpacing.x3,
+        AppSpacing.x4,
+        AppSpacing.x2,
+      ),
+      child: TextField(
+        onChanged: onChanged,
+        style: AppTypography.sm.copyWith(color: c.textPrimary),
+        decoration: InputDecoration(
+          isDense: true,
+          prefixIcon: Icon(LucideIcons.search, size: 18, color: c.textMuted),
+          hintText: hint,
+          hintStyle: AppTypography.sm.copyWith(color: c.textMuted),
+          filled: true,
+          fillColor: c.surface,
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.x3, vertical: AppSpacing.x3),
+          border: OutlineInputBorder(
+            borderRadius: AppRadius.brXl,
+            borderSide: BorderSide(color: c.border),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: AppRadius.brXl,
+            borderSide: BorderSide(color: c.border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: AppRadius.brXl,
+            borderSide: BorderSide(color: c.action),
+          ),
+        ),
       ),
     );
   }
@@ -71,7 +157,7 @@ class _TagRow extends StatelessWidget {
           color: color.withValues(alpha: 0.15),
           borderRadius: AppRadius.brFull,
         ),
-        child: Icon(LucideIcons.hash, color: color, size: 18),
+        child: Icon(LucideIcons.tag, color: color, size: 18),
       ),
       title: Text(
         label,

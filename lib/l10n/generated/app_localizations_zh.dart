@@ -625,7 +625,22 @@ class AppL10nZh extends AppL10n {
   String get catEmptyIncome => '暂无收入分类';
 
   @override
+  String get catEmpty => '暂无分类';
+
+  @override
   String get catAdd => '新建分类';
+
+  @override
+  String get catSearchHint => '搜索分类';
+
+  @override
+  String get colorCustomTitle => '自定义颜色';
+
+  @override
+  String get catTypeExpenseBadge => '支出';
+
+  @override
+  String get catTypeIncomeBadge => '收入';
 
   @override
   String get tagNewTitle => '新建标签';
@@ -650,6 +665,9 @@ class AppL10nZh extends AppL10n {
 
   @override
   String get tagAdd => '新建标签';
+
+  @override
+  String get tagSearchHint => '搜索标签';
 
   @override
   String get srcNewTitle => '新建来源';

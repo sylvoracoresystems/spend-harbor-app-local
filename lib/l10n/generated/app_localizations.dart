@@ -1259,11 +1259,41 @@ abstract class AppL10n {
   /// **'No income categories yet'**
   String get catEmptyIncome;
 
+  /// No description provided for @catEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet'**
+  String get catEmpty;
+
   /// No description provided for @catAdd.
   ///
   /// In en, this message translates to:
   /// **'Add category'**
   String get catAdd;
+
+  /// No description provided for @catSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search categories'**
+  String get catSearchHint;
+
+  /// No description provided for @colorCustomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom color'**
+  String get colorCustomTitle;
+
+  /// No description provided for @catTypeExpenseBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'EXP'**
+  String get catTypeExpenseBadge;
+
+  /// No description provided for @catTypeIncomeBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'INC'**
+  String get catTypeIncomeBadge;
 
   /// No description provided for @tagNewTitle.
   ///
@@ -1312,6 +1342,12 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Add tag'**
   String get tagAdd;
+
+  /// No description provided for @tagSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tags'**
+  String get tagSearchHint;
 
   /// No description provided for @srcNewTitle.
   ///

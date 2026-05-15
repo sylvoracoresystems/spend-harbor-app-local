@@ -276,7 +276,12 @@
   "catDeleteConfirmBody": "已有交易仍保留对该分类的引用，但此分类将不再出现在选择列表中。",
   "catEmptyExpense": "暂无支出分类",
   "catEmptyIncome": "暂无收入分类",
+  "catEmpty": "暂无分类",
   "catAdd": "新建分类",
+  "catSearchHint": "搜索分类",
+  "colorCustomTitle": "自定义颜色",
+  "catTypeExpenseBadge": "支出",
+  "catTypeIncomeBadge": "收入",
 
   "tagNewTitle": "新建标签",
   "tagEditTitle": "编辑标签",
@@ -286,6 +291,7 @@
   "tagDeleteConfirmBody": "已有交易仍保留对该标签的引用，但此标签将不再出现在选择列表中。",
   "tagEmpty": "暂无标签",
   "tagAdd": "新建标签",
+  "tagSearchHint": "搜索标签",
 
   "srcNewTitle": "新建来源",
   "srcEditTitle": "编辑来源",

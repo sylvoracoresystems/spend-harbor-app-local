@@ -11,6 +11,7 @@ import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/widgets/transaction_type_toggle.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -130,7 +131,7 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                   AppSpacing.x3,
                 ),
                 children: [
-                  _TypeSegmented(
+                  TransactionTypeToggle(
                     value: state.type,
                     onChanged: notifier.setType,
                   ),
@@ -339,85 +340,6 @@ class _Header extends StatelessWidget {
 }
 
 // ---------- Type segmented ----------
-
-class _TypeSegmented extends StatelessWidget {
-  const _TypeSegmented({required this.value, required this.onChanged});
-  final TransactionType value;
-  final ValueChanged<TransactionType> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final c = context.appColors;
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: c.borderSoft,
-        borderRadius: AppRadius.brFull,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _TypeSeg(
-              label: l.txTypeExpense,
-              active: value == TransactionType.expense,
-              activeColor: c.expense,
-              onTap: () => onChanged(TransactionType.expense),
-            ),
-          ),
-          Expanded(
-            child: _TypeSeg(
-              label: l.txTypeIncome,
-              active: value == TransactionType.income,
-              activeColor: c.income,
-              onTap: () => onChanged(TransactionType.income),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TypeSeg extends StatelessWidget {
-  const _TypeSeg({
-    required this.label,
-    required this.active,
-    required this.activeColor,
-    required this.onTap,
-  });
-  final String label;
-  final bool active;
-  final Color activeColor;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: AppRadius.brFull,
-        onTap: onTap,
-        child: Container(
-          height: 36,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: active ? activeColor : Colors.transparent,
-            borderRadius: AppRadius.brFull,
-          ),
-          child: Text(
-            label,
-            style: AppTypography.sm.copyWith(
-              fontWeight: AppTypography.weightSemibold,
-              color: active ? Colors.white : c.textMuted,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // ---------- Amount + currency ----------
 
