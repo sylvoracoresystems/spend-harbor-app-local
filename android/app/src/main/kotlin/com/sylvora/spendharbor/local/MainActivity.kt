@@ -1,4 +1,4 @@
-package com.example.spend_harbor_app_local
+package com.sylvora.spendharbor.local
 
 import io.flutter.embedding.android.FlutterActivity
 
