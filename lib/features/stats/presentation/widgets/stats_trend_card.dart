@@ -227,8 +227,16 @@ class _BarsState extends State<_Bars> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final defaultCount = defaultBucketCount(widget.period);
-        final scrollable = widget.rows.length > defaultCount;
+        // 视口里目标可见桶数：按 viewport 自适应，每根柱子目标宽度 ~56pt，
+        // 不少于 defaultBucketCount（窄屏的最低底线）。
+        // 例：iPhone 322pt → 5~6 桶；iPad 横屏 ~1000pt → 17 桶左右。
+        final viewport = constraints.maxWidth - _yAxisWidth;
+        final minCount = defaultBucketCount(widget.period);
+        final visibleCount = math.max(
+          minCount,
+          (viewport / 56).floor(),
+        );
+        final scrollable = widget.rows.length > visibleCount;
         if (!scrollable) {
           final maxY = _maxOver(widget.rows);
           return _buildChart(
@@ -237,13 +245,12 @@ class _BarsState extends State<_Bars> {
             showLeftTitles: true,
           );
         }
-        // 滚动模式：viewport 正好放 defaultCount 个桶，slot 宽度由此推算
-        final viewport = constraints.maxWidth - _yAxisWidth;
-        _barSlot = viewport / defaultCount;
+        // 滚动模式：viewport 正好放 visibleCount 个桶，slot 宽度由此推算
+        _barSlot = viewport / visibleCount;
         final contentWidth = widget.rows.length * _barSlot;
-        // 首次进入滚动模式：默认显示最右端（最近）的 defaultCount 个桶
+        // 首次进入滚动模式：默认显示最右端（最近）的 visibleCount 个桶
         final initialVisible =
-            widget.rows.sublist(widget.rows.length - defaultCount);
+            widget.rows.sublist(widget.rows.length - visibleCount);
         final maxY = _visibleMaxY ?? _maxOver(initialVisible);
         if (!_didInitialJump) {
           WidgetsBinding.instance.addPostFrameCallback((_) {

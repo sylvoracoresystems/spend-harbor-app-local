@@ -115,13 +115,32 @@ class TransactionsPage extends ConsumerWidget {
             return RootPageEmpty(text: l.txListEmpty);
           }
           final groups = groupByDay(rows);
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
-            itemCount: groups.length + 1,
-            itemBuilder: (context, i) {
-              if (i == 0) return _ListSummary(rows: rows);
-              return _DayGroupView(group: groups[i - 1]);
-            },
+          // 宽屏（iPad / 大屏横屏）下按 dashboard / settings 的卡片风格展示：
+          // 左右留出 padding，每个 day group 包成带边框的圆角卡片。
+          final isWide = MediaQuery.sizeOf(context).width >= 720;
+          // Summary 固定在列表上方，滚动时不消失。
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _ListSummary(rows: rows),
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.fromLTRB(
+                    isWide ? AppSpacing.x4 : 0,
+                    AppSpacing.x2,
+                    isWide ? AppSpacing.x4 : 0,
+                    AppSpacing.x2,
+                  ),
+                  itemCount: groups.length,
+                  itemBuilder: (context, i) {
+                    return _DayGroupView(
+                      group: groups[i],
+                      cardStyle: isWide,
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -211,13 +230,14 @@ Future<void> _confirmBulkDelete(
 }
 
 class _DayGroupView extends ConsumerWidget {
-  const _DayGroupView({required this.group});
+  const _DayGroupView({required this.group, this.cardStyle = false});
   final DayGroup group;
+  final bool cardStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.appColors;
-    return Column(
+    final inner = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _DayHeader(group: group),
@@ -237,6 +257,18 @@ class _DayGroupView extends ConsumerWidget {
           ),
         ),
       ],
+    );
+    if (!cardStyle) return inner;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.x3),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.brXl,
+          border: Border.all(color: c.border),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: inner,
+      ),
     );
   }
 }

@@ -15,8 +15,10 @@ class ColorGrid extends StatelessWidget {
   final String value;
   final ValueChanged<String> onPicked;
 
-  static const _cols = 10;
   static const _spacing = 6.0;
+  // 单元格最大尺寸 ~36pt：列数随视口自适应，iPhone ~9 列、iPad/横屏 ~16 列，
+  // 既保持色块小巧，又能横向铺满。
+  static const _maxCellExtent = 36.0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,8 @@ class ColorGrid extends StatelessWidget {
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _cols,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: _maxCellExtent,
         mainAxisSpacing: _spacing,
         crossAxisSpacing: _spacing,
       ),

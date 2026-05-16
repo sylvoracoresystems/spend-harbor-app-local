@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -571,15 +573,21 @@ class _CategoryGrid extends ConsumerWidget {
             ),
           );
         }
-        const crossCount = 4;
         const spacing = AppSpacing.x2;
         const aspectRatio = 1.05;
         const maxVisibleRows = 3;
-        final rows = (filtered.length / crossCount).ceil();
-        final visibleRows = rows.clamp(1, maxVisibleRows);
+        const targetTileWidth = 90.0;
 
         return LayoutBuilder(
           builder: (ctx, cons) {
+            // 列数随视口自适应（iPhone 4 列、iPad/横屏 6~8 列），
+            // 保证单 tile 接近 90pt，避免宽屏下被强行拉成大色块。
+            final crossCount = math.max(
+              4,
+              ((cons.maxWidth + spacing) / (targetTileWidth + spacing)).floor(),
+            );
+            final rows = (filtered.length / crossCount).ceil();
+            final visibleRows = rows.clamp(1, maxVisibleRows);
             final tileWidth =
                 (cons.maxWidth - spacing * (crossCount - 1)) / crossCount;
             final tileHeight = tileWidth / aspectRatio;
@@ -593,7 +601,7 @@ class _CategoryGrid extends ConsumerWidget {
                         ? const ClampingScrollPhysics()
                         : const NeverScrollableScrollPhysics(),
                 itemCount: filtered.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossCount,
                   crossAxisSpacing: spacing,
                   mainAxisSpacing: spacing,
