@@ -482,6 +482,12 @@ class AppL10nEn extends AppL10n {
   String get importPickFile => 'Pick file (xlsx or csv)';
 
   @override
+  String get importAllowDuplicatesLabel => 'Allow duplicate rows';
+
+  @override
+  String get importAllowDuplicatesHint => 'Import every row even if an existing transaction has the same date, type, category, source, amount, currency and note.';
+
+  @override
   String get importHint => 'Pick a SpendHarbor xlsx (transactions or taxonomy) or CSV. Missing categories/tags/sources are auto-created on transaction import.';
 
   @override

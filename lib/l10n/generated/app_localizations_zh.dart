@@ -475,6 +475,12 @@ class AppL10nZh extends AppL10n {
   String get importPickFile => '选择文件（xlsx 或 csv）';
 
   @override
+  String get importAllowDuplicatesLabel => '允许重复导入';
+
+  @override
+  String get importAllowDuplicatesHint => '即使已存在「同日期 / 类型 / 分类 / 账户 / 金额 / 币种 / 备注」完全相同的交易，也照样写入。';
+
+  @override
   String get importHint => '请选择 SpendHarbor 的 xlsx（交易 / 分类配置）或 CSV 文件。导入交易时缺失的分类/标签/来源会自动新建。';
 
   @override

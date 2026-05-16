@@ -983,6 +983,18 @@ abstract class AppL10n {
   /// **'Pick file (xlsx or csv)'**
   String get importPickFile;
 
+  /// No description provided for @importAllowDuplicatesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow duplicate rows'**
+  String get importAllowDuplicatesLabel;
+
+  /// No description provided for @importAllowDuplicatesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Import every row even if an existing transaction has the same date, type, category, source, amount, currency and note.'**
+  String get importAllowDuplicatesHint;
+
   /// No description provided for @importHint.
   ///
   /// In en, this message translates to:
