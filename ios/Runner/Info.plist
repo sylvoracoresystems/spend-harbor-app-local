@@ -6,6 +6,12 @@
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
 		<string>SpendHarbor</string>
+		<key>LSApplicationCategoryType</key>
+		<string>public.app-category.finance</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Unlock SpendHarbor with Face ID. Authentication happens entirely on this device — no data leaves your phone.</string>
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
