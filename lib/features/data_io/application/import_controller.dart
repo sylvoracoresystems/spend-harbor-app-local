@@ -47,9 +47,11 @@ class ImportSummary {
 }
 
 /// 用户取消选择文件时返回 null。支持 .csv 和 .xlsx（按扩展名分发）。
+/// [allowDuplicates] 为 true 时跳过去重检查，所有行都会写入。
 Future<ImportSummary?> importTransactionsFromPicker({
   required WidgetRef ref,
   required AppL10n l,
+  bool allowDuplicates = false,
 }) async {
   final picked = await FilePicker.pickFiles(
     type: FileType.custom,
@@ -64,11 +66,13 @@ Future<ImportSummary?> importTransactionsFromPicker({
   if (ext == 'xlsx') {
     final bytes = await File(path).readAsBytes();
     final outcomes = parseTransactionsXlsx(_asUint8(bytes));
-    return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+    return _ingestOutcomes(
+      ref: ref, l: l, outcomes: outcomes, allowDuplicates: allowDuplicates);
   } else {
     final body = await File(path).readAsString();
     final outcomes = parseCsv(body);
-    return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+    return _ingestOutcomes(
+      ref: ref, l: l, outcomes: outcomes, allowDuplicates: allowDuplicates);
   }
 }
 
@@ -77,9 +81,11 @@ Future<ImportSummary> importCsvFromString({
   required WidgetRef ref,
   required AppL10n l,
   required String body,
+  bool allowDuplicates = false,
 }) async {
   final outcomes = parseCsv(body);
-  return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+  return _ingestOutcomes(
+    ref: ref, l: l, outcomes: outcomes, allowDuplicates: allowDuplicates);
 }
 
 /// 直接从 xlsx 字节导入（UI 已自行 detect kind 后调用此函数）。
@@ -87,9 +93,11 @@ Future<ImportSummary> importTransactionsFromXlsx({
   required WidgetRef ref,
   required AppL10n l,
   required List<int> bytes,
+  bool allowDuplicates = false,
 }) async {
   final outcomes = parseTransactionsXlsx(_asUint8(bytes));
-  return _ingestOutcomes(ref: ref, l: l, outcomes: outcomes);
+  return _ingestOutcomes(
+    ref: ref, l: l, outcomes: outcomes, allowDuplicates: allowDuplicates);
 }
 
 /// 把解析结果写入数据库。
@@ -101,6 +109,7 @@ Future<ImportSummary> _ingestOutcomes({
   required WidgetRef ref,
   required AppL10n l,
   required List<CsvRowOutcome> outcomes,
+  bool allowDuplicates = false,
 }) async {
   final db = ref.read(appDatabaseProvider);
   final txDao = ref.read(transactionDaoProvider);
@@ -203,7 +212,7 @@ Future<ImportSummary> _ingestOutcomes({
         currency: r.currency,
         note: r.note,
       );
-      if (existingKeys.contains(key)) {
+      if (!allowDuplicates && existingKeys.contains(key)) {
         duplicates++;
         continue;
       }

@@ -24,6 +24,7 @@ class ImportPage extends ConsumerStatefulWidget {
 
 class _ImportPageState extends ConsumerState<ImportPage> {
   bool _busy = false;
+  bool _allowDuplicates = false;
   ImportSummary? _txResult;
   TaxonomyImportSummary? _taxResult;
 
@@ -42,7 +43,23 @@ class _ImportPageState extends ConsumerState<ImportPage> {
               l.importHint,
               style: AppTypography.sm.copyWith(color: c.textBody),
             ),
-            const SizedBox(height: AppSpacing.x4),
+            const SizedBox(height: AppSpacing.x3),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: _allowDuplicates,
+              onChanged: _busy
+                  ? null
+                  : (v) => setState(() => _allowDuplicates = v),
+              title: Text(
+                l.importAllowDuplicatesLabel,
+                style: AppTypography.sm.copyWith(color: c.textPrimary),
+              ),
+              subtitle: Text(
+                l.importAllowDuplicatesHint,
+                style: AppTypography.xs.copyWith(color: c.textMuted),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.x2),
             FilledButton.icon(
               icon: _busy
                   ? const SizedBox(
@@ -123,7 +140,8 @@ class _ImportPageState extends ConsumerState<ImportPage> {
 
       if (ext == 'csv') {
         final body = await File(path).readAsString();
-        final summary = await importCsvFromString(ref: ref, l: l, body: body);
+        final summary = await importCsvFromString(
+          ref: ref, l: l, body: body, allowDuplicates: _allowDuplicates);
         if (!mounted) return;
         setState(() => _txResult = summary);
         return;
@@ -150,6 +168,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
             ref: ref,
             l: l,
             bytes: bytes,
+            allowDuplicates: _allowDuplicates,
           );
           if (!mounted) return;
           setState(() => _txResult = summary);

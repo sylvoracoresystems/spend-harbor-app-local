@@ -199,6 +199,8 @@
 
   "importTitle": "Import Data",
   "importPickFile": "Pick file (xlsx or csv)",
+  "importAllowDuplicatesLabel": "Allow duplicate rows",
+  "importAllowDuplicatesHint": "Import every row even if an existing transaction has the same date, type, category, source, amount, currency and note.",
   "importHint": "Pick a SpendHarbor xlsx (transactions or taxonomy) or CSV. Missing categories/tags/sources are auto-created on transaction import.",
   "importTxSummary": "Parsed {parsed} · Imported {imported} · Duplicates {duplicates} · Invalid {invalid}",
   "@importTxSummary": {
