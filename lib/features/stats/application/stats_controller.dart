@@ -25,11 +25,7 @@ class TrendBucketValues {
 final trendBucketsProvider =
     FutureProvider<List<TrendBucketValues>>((ref) async {
   final f = ref.watch(statsFilterProvider);
-  final anchor = switch (f.period) {
-    StatsPeriod.week => f.rememberedMonthAnchor,
-    StatsPeriod.month => DateTime.now(),
-    StatsPeriod.year => DateTime.now(),
-  };
+  final anchor = DateTime.now();
   final dao = ref.watch(transactionDaoProvider);
   final earliestIso = await dao.findEarliestDate(
     currency: f.currency,

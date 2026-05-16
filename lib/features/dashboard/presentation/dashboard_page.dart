@@ -213,17 +213,20 @@ class _TileMetricCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.x1),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              amount,
-              maxLines: 1,
-              softWrap: false,
-              style: AppTypography.xl.merge(AppTypography.mono).copyWith(
-                    color: accentColor,
-                    fontWeight: AppTypography.weightBold,
-                  ),
+          SizedBox(
+            width: double.infinity,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                amount,
+                maxLines: 1,
+                softWrap: false,
+                style: AppTypography.xl.merge(AppTypography.mono).copyWith(
+                      color: accentColor,
+                      fontWeight: AppTypography.weightBold,
+                    ),
+              ),
             ),
           ),
         ],

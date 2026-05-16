@@ -38,21 +38,21 @@ void main() {
     expect(f.rememberedYearAnchor, DateTime(2026, 1, 1));
   });
 
-  test('applySetPeriod month → week anchors at remembered month last week', () {
+  test('applySetPeriod → week anchors at today\'s week regardless of memory', () {
     var f = initialFilter(currency: 'CAD', today: DateTime(2026, 5, 14))
         .copyWith(rememberedMonthAnchor: DateTime(2026, 2, 1));
     f = applySetPeriod(f, StatsPeriod.week, today: DateTime(2026, 5, 14));
-    // Feb 2026 ends on the 28th (Saturday) → its Monday is 2026-02-23
+    // 2026-05-14 是周四 → 当周一为 2026-05-11
     expect(f.period, StatsPeriod.week);
-    expect(f.selectedBucketStart, DateTime(2026, 2, 23));
+    expect(f.selectedBucketStart, DateTime(2026, 5, 11));
   });
 
-  test('applySetPeriod year → month uses remembered year December', () {
+  test('applySetPeriod → month uses today\'s month regardless of memory', () {
     var f = initialFilter(currency: 'CAD', today: DateTime(2026, 5, 14))
         .copyWith(rememberedYearAnchor: DateTime(2024, 1, 1));
     f = applySetPeriod(f, StatsPeriod.month, today: DateTime(2026, 5, 14));
     expect(f.period, StatsPeriod.month);
-    expect(f.selectedBucketStart, DateTime(2024, 12, 1));
+    expect(f.selectedBucketStart, DateTime(2026, 5, 1));
   });
 
   test('applySetPeriod week → year uses today year', () {

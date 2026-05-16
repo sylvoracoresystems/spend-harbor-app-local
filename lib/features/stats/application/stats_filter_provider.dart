@@ -47,21 +47,7 @@ StatsFilter applySetPeriod(
   StatsPeriod p, {
   required DateTime today,
 }) {
-  final DateTime anchor;
-  switch (p) {
-    case StatsPeriod.week:
-      final mo = f.rememberedMonthAnchor;
-      final monthEnd = DateTime(mo.year, mo.month + 1, 0);
-      anchor = alignToPeriodStart(monthEnd, StatsPeriod.week);
-      break;
-    case StatsPeriod.month:
-      final yr = f.rememberedYearAnchor;
-      anchor = DateTime(yr.year, 12, 1);
-      break;
-    case StatsPeriod.year:
-      anchor = alignToPeriodStart(today, StatsPeriod.year);
-      break;
-  }
+  final anchor = alignToPeriodStart(today, p);
   return f.copyWith(period: p, selectedBucketStart: anchor);
 }
 

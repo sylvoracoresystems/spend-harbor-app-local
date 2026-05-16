@@ -141,12 +141,19 @@ class _StatsDonutState extends State<StatsDonut>
                 ),
               ),
               const SizedBox(height: AppSpacing.x1),
-              Text(
-                widget.centerAmount,
-                style: AppTypography.base.copyWith(
-                  fontWeight: AppTypography.weightBold,
-                  fontFamily: 'monospace',
-                  color: widget.centerColor,
+              SizedBox(
+                width: StatsDonut._centerRadius * 2 - 16,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    widget.centerAmount,
+                    maxLines: 1,
+                    style: AppTypography.base.copyWith(
+                      fontWeight: AppTypography.weightBold,
+                      fontFamily: 'monospace',
+                      color: widget.centerColor,
+                    ),
+                  ),
                 ),
               ),
             ],
