@@ -50,10 +50,16 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
     final state = ref.watch(_provider());
     final notifier = ref.read(_provider().notifier);
 
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     return SubPageScaffold(
       title: state.isEditing ? l.tagEditTitle : l.tagNewTitle,
       body: ListView(
-        padding: const EdgeInsets.all(AppSpacing.x4),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.x4,
+          AppSpacing.x4,
+          AppSpacing.x4,
+          AppSpacing.x6 + bottomInset,
+        ),
         children: [
           _PreviewCard(
             color: _hexToColor(state.color),

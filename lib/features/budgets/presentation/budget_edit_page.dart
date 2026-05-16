@@ -60,10 +60,16 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
     final effectiveStart = state.startsOn ??
         alignToPeriodStart(DateTime.now(), state.period);
 
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     return SubPageScaffold(
       title: state.isEditing ? l.budgetEditTitle : l.budgetNewTitle,
       body: ListView(
-        padding: const EdgeInsets.all(AppSpacing.x4),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.x4,
+          AppSpacing.x4,
+          AppSpacing.x4,
+          AppSpacing.x6 + bottomInset,
+        ),
         children: [
           _SectionLabel(text: l.budgetFieldPeriod),
           const SizedBox(height: AppSpacing.x2),

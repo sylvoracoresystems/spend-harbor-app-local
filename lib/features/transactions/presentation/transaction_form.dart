@@ -127,7 +127,10 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                       },
             ),
             Expanded(
-              child: ListView(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: ListView(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.x4,
                   AppSpacing.x3,
@@ -208,6 +211,8 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                   ),
                   const SizedBox(height: AppSpacing.x6),
                 ],
+              ),
+                ),
               ),
             ),
             _BottomBar(

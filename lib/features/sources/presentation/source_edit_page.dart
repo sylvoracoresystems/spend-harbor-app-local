@@ -51,11 +51,19 @@ class _SourceEditPageState extends ConsumerState<SourceEditPage> {
     final state = ref.watch(_provider());
     final notifier = ref.read(_provider().notifier);
 
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     return SubPageScaffold(
       title: state.isEditing ? l.srcEditTitle : l.srcNewTitle,
       body: SafeArea(
+        top: false,
+        bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.x4),
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.x4,
+            AppSpacing.x4,
+            AppSpacing.x4,
+            AppSpacing.x6 + bottomInset,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

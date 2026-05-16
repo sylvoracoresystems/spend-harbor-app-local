@@ -126,13 +126,16 @@ class _MetricsGrid extends StatelessWidget {
         otherCurrencyCount: 0,
       ),
     ];
+    // 横屏（宽 > 高）时改 4 列 1 行，避免按 2 列宽高比纵向拉伸到溢出一屏。
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
+      crossAxisCount: isLandscape ? 4 : 2,
       mainAxisSpacing: AppSpacing.x3,
       crossAxisSpacing: AppSpacing.x3,
-      childAspectRatio: 1.35,
+      childAspectRatio: isLandscape ? 1.1 : 1.35,
       children: cards,
     );
   }

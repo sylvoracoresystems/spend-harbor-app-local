@@ -131,7 +131,15 @@ class SubPageScaffold extends StatelessWidget {
         actions: actions,
         bottom: bottom,
       ),
-      body: body,
+      body: SafeArea(
+        top: false,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: body,
+          ),
+        ),
+      ),
       floatingActionButton: floatingActionButton,
     );
   }

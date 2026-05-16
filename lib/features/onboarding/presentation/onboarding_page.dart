@@ -18,7 +18,10 @@ class OnboardingPage extends ConsumerWidget {
     final c = context.appColors;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: Padding(
           padding: const EdgeInsets.all(AppSpacing.x6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,6 +55,8 @@ class OnboardingPage extends ConsumerWidget {
                 child: Text(l.onboardingGetStarted),
               ),
             ],
+          ),
+        ),
           ),
         ),
       ),
