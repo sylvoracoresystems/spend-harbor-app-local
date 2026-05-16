@@ -132,7 +132,7 @@ class _MetricsGrid extends StatelessWidget {
       crossAxisCount: 2,
       mainAxisSpacing: AppSpacing.x3,
       crossAxisSpacing: AppSpacing.x3,
-      childAspectRatio: 1.45,
+      childAspectRatio: 1.35,
       children: cards,
     );
   }
@@ -213,14 +213,18 @@ class _TileMetricCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.x1),
-          Text(
-            amount,
-            style: AppTypography.xl.merge(AppTypography.mono).copyWith(
-                  color: accentColor,
-                  fontWeight: AppTypography.weightBold,
-                ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              amount,
+              maxLines: 1,
+              softWrap: false,
+              style: AppTypography.xl.merge(AppTypography.mono).copyWith(
+                    color: accentColor,
+                    fontWeight: AppTypography.weightBold,
+                  ),
+            ),
           ),
         ],
       ),

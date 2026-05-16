@@ -59,7 +59,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
     return SubPageScaffold(
       title: state.isEditing ? l.catEditTitle : l.catNewTitle,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.x4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,7 +89,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
               const SizedBox(height: AppSpacing.x4),
               _SectionLabel(text: l.catFieldIcon),
               const SizedBox(height: AppSpacing.x2),
-              Expanded(
+              SizedBox(
+                height: 240,
                 child: _IconPicker(
                   value: state.icon,
                   color: _hexToColor(state.color),

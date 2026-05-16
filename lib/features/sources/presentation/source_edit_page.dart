@@ -54,7 +54,7 @@ class _SourceEditPageState extends ConsumerState<SourceEditPage> {
     return SubPageScaffold(
       title: state.isEditing ? l.srcEditTitle : l.srcNewTitle,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.x4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,7 +94,8 @@ class _SourceEditPageState extends ConsumerState<SourceEditPage> {
               const SizedBox(height: AppSpacing.x4),
               _SectionLabel(text: l.catFieldIcon),
               const SizedBox(height: AppSpacing.x2),
-              Expanded(
+              SizedBox(
+                height: 240,
                 child: _IconPicker(
                   value: state.icon,
                   color: _hexToColor(state.color),
