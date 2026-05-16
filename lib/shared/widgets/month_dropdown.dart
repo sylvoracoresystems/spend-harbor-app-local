@@ -176,13 +176,21 @@ class _MonthCell extends StatelessWidget {
             border: Border.all(color: selected ? c.action : c.border),
             borderRadius: AppRadius.brLg,
           ),
-          child: Text(
-            label,
-            style: AppTypography.sm.copyWith(
-              color: selected ? c.action : c.textBody,
-              fontWeight: selected
-                  ? AppTypography.weightSemibold
-                  : AppTypography.weightMedium,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.sm.copyWith(
+                  color: selected ? c.action : c.textBody,
+                  fontWeight: selected
+                      ? AppTypography.weightSemibold
+                      : AppTypography.weightMedium,
+                ),
+              ),
             ),
           ),
         ),

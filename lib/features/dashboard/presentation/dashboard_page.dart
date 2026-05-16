@@ -126,18 +126,29 @@ class _MetricsGrid extends StatelessWidget {
         otherCurrencyCount: 0,
       ),
     ];
-    // 横屏（宽 > 高）时改 4 列 1 行，避免按 2 列宽高比纵向拉伸到溢出一屏。
-    final isLandscape =
-        MediaQuery.orientationOf(context) == Orientation.landscape;
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: isLandscape ? 4 : 2,
-      mainAxisSpacing: AppSpacing.x3,
-      crossAxisSpacing: AppSpacing.x3,
-      childAspectRatio: isLandscape ? 1.1 : 1.35,
-      children: cards,
-    );
+    // 宽屏（iPad 竖/横屏、大屏横屏）改 4 列 1 行，避免 2 列布局下卡片被撑得过大。
+    // 高度由内容决定（IntrinsicHeight），同行卡片自动等高，避免 aspect ratio 写死导致的溢出。
+    final isWide = MediaQuery.sizeOf(context).width >= 720;
+    final cols = isWide ? 4 : 2;
+    const gap = AppSpacing.x3;
+    final rows = <Widget>[];
+    for (var i = 0; i < cards.length; i += cols) {
+      final rowCards = cards.sublist(i, (i + cols).clamp(0, cards.length));
+      final children = <Widget>[];
+      for (var j = 0; j < rowCards.length; j++) {
+        if (j > 0) children.add(const SizedBox(width: gap));
+        children.add(Expanded(child: rowCards[j]));
+      }
+      for (var j = rowCards.length; j < cols; j++) {
+        children.add(const SizedBox(width: gap));
+        children.add(const Expanded(child: SizedBox.shrink()));
+      }
+      if (rows.isNotEmpty) rows.add(const SizedBox(height: gap));
+      rows.add(IntrinsicHeight(
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+      ));
+    }
+    return Column(children: rows);
   }
 }
 

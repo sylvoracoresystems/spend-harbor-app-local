@@ -53,14 +53,17 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
               children: [
                 Icon(Icons.pie_chart, size: 18, color: c.info),
                 const SizedBox(width: 6),
-                Text(
-                  l.statsDistCategoryTitle,
-                  style: AppTypography.base.copyWith(
-                    fontWeight: AppTypography.weightSemibold,
-                    color: c.textPrimary,
+                Expanded(
+                  child: Text(
+                    l.statsDistCategoryTitle,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.base.copyWith(
+                      fontWeight: AppTypography.weightSemibold,
+                      color: c.textPrimary,
+                    ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: AppSpacing.x2),
                 TypePillToggle(
                   value: _type,
                   onChanged: (v) => setState(() => _type = v),
@@ -166,14 +169,17 @@ class _TDState extends ConsumerState<TagDistributionCard> {
               children: [
                 Icon(Icons.local_offer, size: 18, color: c.expense),
                 const SizedBox(width: 6),
-                Text(
-                  l.statsDistTagTitle,
-                  style: AppTypography.base.copyWith(
-                    fontWeight: AppTypography.weightSemibold,
-                    color: c.textPrimary,
+                Expanded(
+                  child: Text(
+                    l.statsDistTagTitle,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.base.copyWith(
+                      fontWeight: AppTypography.weightSemibold,
+                      color: c.textPrimary,
+                    ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: AppSpacing.x2),
                 TypePillToggle(
                   value: _type,
                   onChanged: (v) => setState(() => _type = v),
@@ -362,7 +368,10 @@ Widget _tagRow(
     padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
     child: Row(
       children: [
-        TagPill(label: name, color: _tagColor(tag), compact: true),
+        Flexible(
+          child: TagPill(label: name, color: _tagColor(tag), compact: true),
+        ),
+        const SizedBox(width: AppSpacing.x2),
         const Spacer(),
         Text(
           _formatAmount(cents, currency, type),
@@ -392,12 +401,15 @@ Widget _untaggedRow(
     padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
     child: Row(
       children: [
-        TagPill(
-          label: l.statsUntagged,
-          color: c.textMuted,
-          italic: true,
-          compact: true,
+        Flexible(
+          child: TagPill(
+            label: l.statsUntagged,
+            color: c.textMuted,
+            italic: true,
+            compact: true,
+          ),
         ),
+        const SizedBox(width: AppSpacing.x2),
         const Spacer(),
         Text(
           _formatAmount(cents, currency, type),

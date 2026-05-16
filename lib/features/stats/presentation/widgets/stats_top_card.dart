@@ -311,10 +311,13 @@ class _ByTagBody extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          TagPill(
-                            label: _tagName(l, findTag(row.tagId)),
-                            color: _tagColor(findTag(row.tagId)),
+                          Flexible(
+                            child: TagPill(
+                              label: _tagName(l, findTag(row.tagId)),
+                              color: _tagColor(findTag(row.tagId)),
+                            ),
                           ),
+                          const SizedBox(width: AppSpacing.x2),
                           const Spacer(),
                           Text(
                             _formatAmount(row.totalCents, currency, type),
@@ -365,11 +368,14 @@ class _ByTagBody extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Row(
                     children: [
-                      TagPill(
-                        label: l.statsUntagged,
-                        color: c.textMuted,
-                        italic: true,
+                      Flexible(
+                        child: TagPill(
+                          label: l.statsUntagged,
+                          color: c.textMuted,
+                          italic: true,
+                        ),
                       ),
+                      const SizedBox(width: AppSpacing.x2),
                       const Spacer(),
                       Text(
                         _formatAmount(

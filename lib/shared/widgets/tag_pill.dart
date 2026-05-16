@@ -31,6 +31,8 @@ class TagPill extends StatelessWidget {
       ),
       child: Text(
         label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: (compact ? AppTypography.xs : AppTypography.sm).copyWith(
           color: Colors.white,
           fontWeight: AppTypography.weightSemibold,
