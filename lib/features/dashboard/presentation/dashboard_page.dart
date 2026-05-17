@@ -473,9 +473,8 @@ String _formatAmount(
 }) {
   // 无数据：占位 0.00（不带符号），统一对齐视觉。
   if (code == null) return '0.00';
-  final symbol = Currency.byCode(code).symbol;
   final abs = cents.abs();
-  final body = '$symbol${(abs / 100).toStringAsFixed(2)}';
+  final body = (abs / 100).toStringAsFixed(2);
   if (forceNegative && cents > 0) return '-$body';
   if (!signed || cents == 0) return body;
   return cents < 0 ? '-$body' : '+$body';

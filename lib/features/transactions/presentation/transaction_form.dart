@@ -400,7 +400,7 @@ class _AmountAndCurrencyRow extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.x3),
         SizedBox(
-          width: 96,
+          width: 120,
           child: _OutlinedBox(
             height: _kFieldHeight,
             padding: const EdgeInsets.symmetric(
@@ -522,18 +522,21 @@ class _DateRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.x3),
-        InkWell(
-          borderRadius: AppRadius.brXl,
-          onTap: () => onPicked(quickTarget),
-          child: _OutlinedBox(
-            height: _kFieldHeight,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4),
-            child: Center(
-              child: Text(
-                quickLabel,
-                style: AppTypography.sm.copyWith(
-                  fontWeight: AppTypography.weightSemibold,
-                  color: c.textBody,
+        SizedBox(
+          width: 120,
+          child: InkWell(
+            borderRadius: AppRadius.brXl,
+            onTap: () => onPicked(quickTarget),
+            child: _OutlinedBox(
+              height: _kFieldHeight,
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4),
+              child: Center(
+                child: Text(
+                  quickLabel,
+                  style: AppTypography.sm.copyWith(
+                    fontWeight: AppTypography.weightSemibold,
+                    color: c.textBody,
+                  ),
                 ),
               ),
             ),
