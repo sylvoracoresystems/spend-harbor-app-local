@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase R4 — byId 扩展 + syncedTextController ✅
-- **当前 Step**：stats × 2 + 4 edit 页 + transaction_form 共 6+5 处简化
+- **当前阶段**：Phase R5 — dashboard / transactions 页拆 part 文件 ✅
+- **当前 Step**：dashboard 481 → 63 + 3 part；transactions 456 → 223 + 2 part
 - **最近更新**：2026-05-24
 
 ---
@@ -17,6 +17,30 @@
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase R5 — dashboard / transactions 页拆 part 文件 ✅
+
+**Phase R5 子任务**：
+
+- [x] R5.1 dashboard_page 481 行拆分：
+  - `dashboard_page/metrics.dart`（212）— `_MetricsGrid` + `_TileMetricCard` + `_formatAmount`
+  - `dashboard_page/recent.dart`（62）— `_RecentSection`
+  - `dashboard_page/budgets.dart`（154）— `_BudgetsSection` + `_BudgetRow`
+  - 主文件 63 行：imports + part 指令 + `DashboardPage`
+- [x] R5.2 transactions_page 456 行拆分：
+  - `transactions_page/day_group.dart`（120）— `_DayGroupView` + `_DayHeader` + `_formatDayLabel` + `_formatDayNet`
+  - `transactions_page/list_summary.dart`（107）— `_ListSummary` + `_SummaryAmounts`
+  - 主文件 223 行：imports + part + `TransactionsPage` + selection AppBar + filter toast + bulk delete
+- [x] R5.3 顺手清理：`_confirmBulkDelete` 内联 AlertDialog 迁到 `showConfirmDialog`（带 confirmText 参数）。
+- [x] R5.4 `flutter analyze` 0 issues + `flutter test` 通过（171 tests）
+
+**Phase R5 收益**：
+
+- dashboard 主文件从 481 行缩到 63 行（−87%），骨架一眼可读。
+- transactions 主文件从 456 行缩到 223 行（−51%），剩下的核心是 selection + filter toast 逻辑，与 list-rendering 解耦。
+- 所有私有 widget 仍保持 `_` 前缀（与 R3 transaction_form 一致的 part 文件惯例）。
+
+**已完成 Step Phase R4**：
 
 **当前 Step**：Phase R4 — byId 扩展 + syncedTextController ✅
 
