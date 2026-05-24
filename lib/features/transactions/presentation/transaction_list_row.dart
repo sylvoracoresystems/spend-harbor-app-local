@@ -11,6 +11,7 @@ import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/utils/hex_color.dart';
 import '../../../shared/widgets/tag_pill.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
@@ -62,7 +63,7 @@ class TransactionListRow extends ConsumerWidget {
     final selecting = selection.isNotEmpty;
     final selected = selection.contains(tx.id);
 
-    final catColor = cat == null ? c.textMuted : _hexToColor(cat.color);
+    final catColor = cat == null ? c.textMuted : HexColor.fromHex(cat.color);
     final catIcon = cat == null ? LucideIcons.helpCircle : iconFor(cat.icon);
     final catLabel = cat == null
         ? '—'
@@ -137,7 +138,7 @@ class TransactionListRow extends ConsumerWidget {
                               label: resolveDefaultName(
                                       AppL10n.of(context), t.nameKey) ??
                                   t.name,
-                              color: _hexToColor(t.color),
+                              color: HexColor.fromHex(t.color),
                               compact: true,
                             ),
                         ],
@@ -184,9 +185,4 @@ class TransactionListRow extends ConsumerWidget {
       ),
     );
   }
-}
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
 }

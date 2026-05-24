@@ -9,6 +9,7 @@ import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/utils/hex_color.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
@@ -67,7 +68,7 @@ class _SourceRow extends StatelessWidget {
     final c = context.appColors;
     final label =
         resolveDefaultName(AppL10n.of(context), src.nameKey) ?? src.name;
-    final color = _hexToColor(src.color);
+    final color = HexColor.fromHex(src.color);
     return ListTile(
       leading: Container(
         width: 36,
@@ -93,9 +94,4 @@ class _SourceRow extends StatelessWidget {
       onTap: () => context.push('/settings/sources/${src.id}/edit'),
     );
   }
-}
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
 }

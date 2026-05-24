@@ -13,6 +13,8 @@ import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/utils/hex_color.dart';
+import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/transaction_type_toggle.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
@@ -250,28 +252,14 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
     TransactionFormController notifier,
   ) async {
     final l = AppL10n.of(context);
-    final yes = await showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: Text(l.txDeleteConfirmTitle),
-            content: Text(l.txDeleteConfirmBody),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text(l.txCancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(l.txDelete),
-              ),
-            ],
-          ),
+    final ok = await showConfirmDialog(
+      context,
+      title: l.txDeleteConfirmTitle,
+      body: l.txDeleteConfirmBody,
     );
-    if (yes == true) {
-      await notifier.delete();
-      if (context.mounted) Navigator.of(context).pop(true);
-    }
+    if (!ok) return;
+    await notifier.delete();
+    if (context.mounted) Navigator.of(context).pop(true);
   }
 }
 
@@ -647,7 +635,7 @@ class _CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    final iconColor = _hexToColor(cat.color);
+    final iconColor = HexColor.fromHex(cat.color);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -1093,9 +1081,4 @@ String _sourceDisplay(BuildContext context, Source s) {
 String _tagDisplay(BuildContext context, Tag t) {
   final localized = resolveDefaultName(AppL10n.of(context), t.nameKey);
   return localized ?? t.name;
-}
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
 }

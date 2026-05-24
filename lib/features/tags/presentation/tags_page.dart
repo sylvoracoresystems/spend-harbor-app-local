@@ -7,6 +7,7 @@ import '../../../data/database/app_database.dart';
 import '../../../data/database/app_database_provider.dart';
 import '../../../data/seed/default_name_resolver.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/utils/hex_color.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
@@ -145,7 +146,7 @@ class _TagRow extends StatelessWidget {
     final c = context.appColors;
     final label =
         resolveDefaultName(AppL10n.of(context), tag.nameKey) ?? tag.name;
-    final color = _hexToColor(tag.color);
+    final color = HexColor.fromHex(tag.color);
     return ListTile(
       leading: Container(
         width: 36,
@@ -167,9 +168,4 @@ class _TagRow extends StatelessWidget {
       onTap: () => context.push('/settings/tags/${tag.id}/edit'),
     );
   }
-}
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
 }

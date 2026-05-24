@@ -4,13 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
+import '../../../shared/utils/hex_color.dart';
 import '../../../shared/widgets/color_grid.dart';
+import '../../../shared/widgets/confirm_dialog.dart';
+import '../../../shared/widgets/icon_picker.dart';
+import '../../../shared/widgets/preview_card.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
+import '../../../shared/widgets/section_label.dart';
 import '../../../shared/widgets/transaction_type_toggle.dart';
 import '../../../theme/app_colors.dart';
-import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
-import '../../../theme/app_typography.dart';
 import '../application/category_form_controller.dart';
 
 class CategoryEditPage extends ConsumerStatefulWidget {
@@ -72,9 +75,9 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _PreviewCard(
+              PreviewCard(
                 icon: iconFor(state.icon),
-                color: _hexToColor(state.color),
+                color: HexColor.fromHex(state.color),
                 name: state.name,
                 placeholder: l.catFieldName,
               ),
@@ -91,17 +94,17 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                 onChanged: notifier.setName,
               ),
               const SizedBox(height: AppSpacing.x4),
-              _SectionLabel(text: l.catFieldColor),
+              SectionLabel(l.catFieldColor),
               const SizedBox(height: AppSpacing.x2),
               ColorGrid(value: state.color, onPicked: notifier.setColor),
               const SizedBox(height: AppSpacing.x4),
-              _SectionLabel(text: l.catFieldIcon),
+              SectionLabel(l.catFieldIcon),
               const SizedBox(height: AppSpacing.x2),
               SizedBox(
                 height: 240,
-                child: _IconPicker(
+                child: IconPicker(
                   value: state.icon,
-                  color: _hexToColor(state.color),
+                  color: HexColor.fromHex(state.color),
                   onPicked: notifier.setIcon,
                 ),
               ),
@@ -149,165 +152,13 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
     CategoryFormController notifier,
   ) async {
     final l = AppL10n.of(context);
-    final yes = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l.catDeleteConfirmTitle),
-        content: Text(l.catDeleteConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l.txCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l.txDelete),
-          ),
-        ],
-      ),
+    final ok = await showConfirmDialog(
+      context,
+      title: l.catDeleteConfirmTitle,
+      body: l.catDeleteConfirmBody,
     );
-    if (yes == true) {
-      await notifier.delete();
-      if (context.mounted) Navigator.of(context).pop(true);
-    }
+    if (!ok) return;
+    await notifier.delete();
+    if (context.mounted) Navigator.of(context).pop(true);
   }
-}
-
-class _PreviewCard extends StatelessWidget {
-  const _PreviewCard({
-    required this.icon,
-    required this.color,
-    required this.name,
-    required this.placeholder,
-  });
-  final IconData icon;
-  final Color color;
-  final String name;
-  final String placeholder;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    final showPlaceholder = name.trim().isEmpty;
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.x4),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: AppRadius.brXl,
-        boxShadow: [
-          BoxShadow(
-            color: c.actionInk.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: c.actionInk.withValues(alpha: 0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Icon(icon, size: 28, color: Colors.white),
-          ),
-          const SizedBox(width: AppSpacing.x3),
-          Expanded(
-            child: Text(
-              showPlaceholder ? placeholder : name,
-              style: AppTypography.base.copyWith(
-                color: showPlaceholder ? c.textMuted : c.actionInk,
-                fontWeight: AppTypography.weightSemibold,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.text});
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Text(
-      text,
-      style: AppTypography.xs.copyWith(
-        color: c.textMuted,
-        fontWeight: AppTypography.weightMedium,
-      ),
-    );
-  }
-}
-
-class _IconPicker extends StatelessWidget {
-  const _IconPicker({
-    required this.value,
-    required this.color,
-    required this.onPicked,
-  });
-  final String value;
-  final Color color;
-  final ValueChanged<String> onPicked;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    final entries = kIconRegistry.entries.toList();
-    return Container(
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: AppRadius.brXl,
-        border: Border.all(color: c.border),
-      ),
-      padding: const EdgeInsets.all(AppSpacing.x2),
-      child: GridView.builder(
-        padding: EdgeInsets.zero,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 48,
-          mainAxisSpacing: AppSpacing.x2,
-          crossAxisSpacing: AppSpacing.x2,
-          childAspectRatio: 1,
-        ),
-        itemCount: entries.length,
-        itemBuilder: (context, i) {
-          final entry = entries[i];
-          final selected = value == entry.key;
-          return GestureDetector(
-            onTap: () => onPicked(entry.key),
-            child: Container(
-              decoration: BoxDecoration(
-                color: selected ? color : c.surfacePress,
-                borderRadius: AppRadius.brFull,
-                border: Border.all(color: selected ? color : c.border),
-              ),
-              child: Icon(
-                entry.value,
-                size: 18,
-                color: selected ? Colors.white : c.textMuted,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
 }

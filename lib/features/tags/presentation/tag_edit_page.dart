@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/utils/hex_color.dart';
 import '../../../shared/widgets/color_grid.dart';
+import '../../../shared/widgets/confirm_dialog.dart';
+import '../../../shared/widgets/preview_card.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
+import '../../../shared/widgets/section_label.dart';
 import '../../../theme/app_colors.dart';
-import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
-import '../../../theme/app_typography.dart';
 import '../application/tag_form_controller.dart';
 
 class TagEditPage extends ConsumerStatefulWidget {
@@ -61,8 +63,9 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
           AppSpacing.x6 + bottomInset,
         ),
         children: [
-          _PreviewCard(
-            color: _hexToColor(state.color),
+          PreviewCard(
+            icon: LucideIcons.tag,
+            color: HexColor.fromHex(state.color),
             name: state.name,
             placeholder: l.catFieldName,
           ),
@@ -74,7 +77,7 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
             onChanged: notifier.setName,
           ),
           const SizedBox(height: AppSpacing.x4),
-          _SectionLabel(text: l.catFieldColor),
+          SectionLabel(l.catFieldColor),
           const SizedBox(height: AppSpacing.x2),
           ColorGrid(value: state.color, onPicked: notifier.setColor),
           const SizedBox(height: AppSpacing.x6),
@@ -117,109 +120,13 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
     TagFormController notifier,
   ) async {
     final l = AppL10n.of(context);
-    final yes = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l.tagDeleteConfirmTitle),
-        content: Text(l.tagDeleteConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l.txCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l.txDelete),
-          ),
-        ],
-      ),
+    final ok = await showConfirmDialog(
+      context,
+      title: l.tagDeleteConfirmTitle,
+      body: l.tagDeleteConfirmBody,
     );
-    if (yes == true) {
-      await notifier.delete();
-      if (context.mounted) Navigator.of(context).pop(true);
-    }
+    if (!ok) return;
+    await notifier.delete();
+    if (context.mounted) Navigator.of(context).pop(true);
   }
-}
-
-class _PreviewCard extends StatelessWidget {
-  const _PreviewCard({
-    required this.color,
-    required this.name,
-    required this.placeholder,
-  });
-  final Color color;
-  final String name;
-  final String placeholder;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    final showPlaceholder = name.trim().isEmpty;
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.x4),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: AppRadius.brXl,
-        boxShadow: [
-          BoxShadow(
-            color: c.actionInk.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: c.actionInk.withValues(alpha: 0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Icon(LucideIcons.tag, size: 28, color: Colors.white),
-          ),
-          const SizedBox(width: AppSpacing.x3),
-          Expanded(
-            child: Text(
-              showPlaceholder ? placeholder : name,
-              style: AppTypography.base.copyWith(
-                color: showPlaceholder ? c.textMuted : c.actionInk,
-                fontWeight: AppTypography.weightSemibold,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.text});
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Text(
-      text,
-      style: AppTypography.xs.copyWith(
-        color: c.textMuted,
-        fontWeight: AppTypography.weightMedium,
-      ),
-    );
-  }
-}
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
 }

@@ -9,8 +9,10 @@ import '../../../domain/enums/budget_scope.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/pill_segmented.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
+import '../../../shared/widgets/section_label.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
@@ -71,7 +73,7 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
           AppSpacing.x6 + bottomInset,
         ),
         children: [
-          _SectionLabel(text: l.budgetFieldPeriod),
+          SectionLabel(l.budgetFieldPeriod),
           const SizedBox(height: AppSpacing.x2),
           PillSegmented<BudgetPeriod>(
             value: state.period,
@@ -92,7 +94,7 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
             onChanged: notifier.setPeriod,
           ),
           const SizedBox(height: AppSpacing.x4),
-          _SectionLabel(text: l.budgetFieldScope),
+          SectionLabel(l.budgetFieldScope),
           const SizedBox(height: AppSpacing.x2),
           PillToggle<BudgetScope>(
             value: state.scope,
@@ -206,43 +208,14 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
     BudgetFormController notifier,
   ) async {
     final l = AppL10n.of(context);
-    final yes = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l.budgetDeleteConfirmTitle),
-        content: Text(l.budgetDeleteConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l.txCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l.txDelete),
-          ),
-        ],
-      ),
+    final ok = await showConfirmDialog(
+      context,
+      title: l.budgetDeleteConfirmTitle,
+      body: l.budgetDeleteConfirmBody,
     );
-    if (yes == true) {
-      await notifier.delete();
-      if (context.mounted) Navigator.of(context).pop(true);
-    }
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.text});
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Text(
-      text,
-      style: AppTypography.xs.copyWith(
-        color: c.textMuted,
-        fontWeight: AppTypography.weightMedium,
-      ),
-    );
+    if (!ok) return;
+    await notifier.delete();
+    if (context.mounted) Navigator.of(context).pop(true);
   }
 }
 

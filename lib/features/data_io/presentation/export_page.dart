@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/pill_segmented.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
+import '../../../shared/widgets/section_label.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
@@ -51,7 +52,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           _SectionCard(
             title: l.exportSectionTransactions,
             children: [
-              _SectionLabel(text: l.exportFormatLabel),
+              SectionLabel(l.exportFormatLabel),
               const SizedBox(height: AppSpacing.x2),
               PillSegmented<ExportFormat>(
                 value: _format,
@@ -68,7 +69,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
                 onChanged: (v) => setState(() => _format = v),
               ),
               const SizedBox(height: AppSpacing.x4),
-              _SectionLabel(text: l.exportScopeLabel),
+              SectionLabel(l.exportScopeLabel),
               const SizedBox(height: AppSpacing.x2),
               PillSegmented<ExportScope>(
                 value: _scope,
@@ -242,22 +243,6 @@ class _SectionCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.x3),
           ...children,
         ],
-      ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.text});
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Text(
-      text,
-      style: AppTypography.xs.copyWith(
-        color: c.textMuted,
-        fontWeight: AppTypography.weightMedium,
       ),
     );
   }

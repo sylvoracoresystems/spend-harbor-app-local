@@ -8,15 +8,36 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase 9 — Add / Edit Transaction 页面重构 ✅
-- **当前 Step**：Phase 9 全部子项完成（custom header / amount+currency / category grid / tag search / source-last）
-- **最近更新**：2026-05-14
+- **当前阶段**：Phase R1 — 共享 widgets / utils 抽取 ✅
+- **当前 Step**：4 个 edit 页 + transaction_form + 列表页 + export 页迁到 shared 组件
+- **最近更新**：2026-05-24
 
 ---
 
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase R1 — 共享 widgets / utils 抽取 ✅
+
+**Phase R1 子任务**：
+
+- [x] R1.1 `lib/shared/utils/hex_color.dart`：`HexColor.fromHex(String)` 扩展，替代 10 处重复的 `_hexToColor`。
+- [x] R1.2 `lib/shared/widgets/section_label.dart`：`SectionLabel(text)`，替代 5 处内联 `_SectionLabel`（4 edit 页 + export_page）。
+- [x] R1.3 `lib/shared/widgets/confirm_dialog.dart`：`showConfirmDialog(context, title, body)` helper，替代 5 处复制的"确认删除" AlertDialog（4 edit 页 + transaction_form）。
+- [x] R1.4 `lib/shared/widgets/preview_card.dart`：`PreviewCard(icon?, color, name, placeholder)`，替代 3 处 `_PreviewCard`（category / tag / source edit）。
+- [x] R1.5 `lib/shared/widgets/icon_picker.dart`：`IconPicker(value, color, onPicked)`，替代 2 处 `_IconPicker`（category / source edit）。
+- [x] R1.6 替换调用：categories_page / tags_page / sources_page / transaction_list_row / transaction_form / 4 个 edit 页 / export_page。
+- [x] R1.7 `flutter analyze` 0 issues + `flutter test` 通过（171 tests）。
+
+**Phase R1 收益**：
+
+- category_edit_page 314 → 159 行（-49%）
+- tag_edit_page 226 → 128 行（-43%）
+- source_edit_page 325 → 173 行（-47%）
+- 4 处 `_PreviewCard`、5 处 `_SectionLabel`、10 处 `_hexToColor`、5 处 AlertDialog 块全部归一。
+
+**已完成 Step Phase 10**：
 
 **当前 Step**：Phase 10 — XLSX 导入导出（交易 + Taxonomy）✅
 
