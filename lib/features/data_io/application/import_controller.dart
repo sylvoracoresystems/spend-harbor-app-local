@@ -1,3 +1,13 @@
+/// Transactions 导入控制器（csv + xlsx 自动按扩展名分发）。
+///
+/// 关键语义：
+/// - **缺失的 category/tag/source 会自动新建**（用 _kDefault* 配色），不要求用户先
+///   导入 taxonomy。autoCreated 计数返回给 UI 展示。
+/// - **去重**默认开启：同 (transactedOn, type, currency, amountCents, categoryId,
+///   sourceId, note) 视为重复，跳过。[allowDuplicates] 可强制写入。
+/// - 行级错误不中断批次，单独收集到 [ImportSummary.invalidReasons]。
+library;
+
 import 'dart:io';
 import 'dart:typed_data';
 

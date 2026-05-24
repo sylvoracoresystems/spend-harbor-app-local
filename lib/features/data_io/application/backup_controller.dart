@@ -1,3 +1,11 @@
+/// `.shbak` 全库快照的导出 / 导入入口。
+///
+/// `.shbak` 实际是改名的 JSON（见 [backup_serializer.dart]），用独立扩展名是
+/// 为了在系统分享面板能与"transactions xlsx / csv"清晰区分；语义也不同：
+/// **完整覆盖**目标库 vs 增量合并。所以这里和 import_controller / export_controller
+/// 是两个独立子系统，不共用代码路径。
+library;
+
 import 'dart:io';
 
 import 'package:drift/drift.dart';

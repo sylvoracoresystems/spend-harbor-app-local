@@ -1,3 +1,11 @@
+/// Stats Top 卡片的纯函数聚合：把同一份 transaction 列表分别按 category / tag 维度聚合。
+///
+/// 重要语义：
+/// - Tag 聚合时一条交易计入它**每一个** tag 的总和（不是均摊）。
+/// - 未挂任何 tag 的交易聚到 [UntaggedRow]，与 tagged 维度并列展示。
+/// - 多币种不换算：调用方按 currency 传入已过滤的 rows。
+library;
+
 import '../../../data/database/app_database.dart';
 import '../../../domain/enums/transaction_type.dart';
 

@@ -1,3 +1,18 @@
+/// Drift 表定义。跨表共通约定（不再每张表重复）：
+///
+/// - **主键**：所有业务表都用 String UUID（[uuid] 包生成），方便备份导入时直接复用 id。
+/// - **软删除**：所有 user-facing 表都有 `deletedAt`（含 index），DAO 查询默认 `IS NULL`。
+///   物理删除只在 transactions 的 purge / purgeOlderThan 走（保留期满或用户清空回收站）。
+/// - **i18n**：种子项有 `nameKey`（对应 ARB key），用户重命名后清空（[name] 接管）。
+/// - **金额**：minor units（"分"），int 存储，绝对避免浮点。type 列决定正负方向，
+///   amountCents 始终非负。
+/// - **日期 vs 时间戳**：业务日期（[Transactions.transactedOn] / [Budgets.startsOn]）
+///   存 ISO `YYYY-MM-DD` 字符串便于按月 / 日跨时区聚合；系统戳（createdAt 等）走 DateTime。
+/// - **币种**：所有持币列共用 [currencyCheck] 白名单 CHECK；多币种不换算（PRODUCT_SPEC §1）。
+/// - **外键**：用 `.references()`，drift 生成 SQL 的 REFERENCES 子句。Taxonomy 软删除
+///   不会撤回引用（FK-safe，见 taxonomy_import_controller.dart）。
+library;
+
 import 'package:drift/drift.dart';
 
 import '../../domain/enums/budget_period.dart';

@@ -1,3 +1,11 @@
+/// 极简自研 xlsx 编解码：只支持 string / number 单元格 + sharedStrings + 多 sheet，
+/// 不支持公式、样式、合并、日期类型等高级特性。
+///
+/// 为什么不直接用 `excel` 包：它依赖的 `archive` 大版本与 `flutter_native_splash`
+/// 冲突。本项目对 xlsx 的需求很窄（只用于 transactions / taxonomy 导入导出），
+/// 自己实现一个 OOXML SpreadsheetML 最小子集反而更稳定。
+library;
+
 import 'dart:convert';
 import 'dart:typed_data';
 

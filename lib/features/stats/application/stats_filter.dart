@@ -47,4 +47,6 @@ class StatsFilter {
   }
 }
 
+/// sentinel：用于 copyWith 区分"没传"（保留旧值）和"显式传 null"（清空）。
+/// 仅适用于 nullable 字段；普通字段直接用 `?? this.x` 即可。
 const _unset = Object();

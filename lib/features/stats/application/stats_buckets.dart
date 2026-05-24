@@ -1,3 +1,7 @@
+/// Stats 视图的时间桶纯函数：period 对齐、桶序列生成、相对位移。
+/// 不依赖 DB / provider / Flutter，所以单测里随便造时间也安全。
+library;
+
 import 'stats_filter.dart';
 
 class TrendBucket {
@@ -6,6 +10,8 @@ class TrendBucket {
   final DateTime end;
 }
 
+/// 把任意时刻对齐到所属 period 的起点：周一 00:00 / 月一 00:00 / 1月1日 00:00。
+/// 周起点固定为周一（ISO 8601 / 也是 Dart `weekday` 的 1）。
 DateTime alignToPeriodStart(DateTime d, StatsPeriod p) {
   switch (p) {
     case StatsPeriod.week:
@@ -18,6 +24,7 @@ DateTime alignToPeriodStart(DateTime d, StatsPeriod p) {
   }
 }
 
+/// 视口里"目标可见桶数"的底线：年 3 / 周月 6。横向超出的部分用户可滚动。
 int _bucketCount(StatsPeriod p) =>
     p == StatsPeriod.year ? 3 : 6;
 
@@ -59,6 +66,8 @@ DateTime _endOfBucket(DateTime start, StatsPeriod p) {
   }
 }
 
+/// 生成最右端含 [anchor] 所在桶、向左铺 n-1 个的连续桶序列。
+/// 调用方传 [count] 是为了让最早交易也可见（见 trendBucketsProvider）。
 List<TrendBucket> generateBuckets(StatsPeriod p, DateTime anchor, {int? count}) {
   final rightStart = alignToPeriodStart(anchor, p);
   final n = count ?? _bucketCount(p);

@@ -1,3 +1,9 @@
+/// Stats 页面的 provider DAG。所有衍生 provider 链最终都收敛到两个共享 future：
+/// - [bucketTransactionsProvider]：选中桶 + currency/source 过滤后的 raw rows
+/// - [bucketTagsByTxProvider]：上述 rows 的 tagId 反查
+/// 这样 distribution / top / 等卡片切换 type/mode 时只重算聚合、不重新查 DB。
+library;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/database/app_database.dart';
@@ -64,6 +70,7 @@ final trendBucketsProvider =
 });
 
 /// 选中桶范围内 + currency/source 过滤后的原始 rows（给 Distribution / Top 复用）。
+/// [start, end] 闭区间；month/year 的 end 走 "下月/年首减 1 天" 算法避免硬编码月长。
 final bucketTransactionsProvider =
     FutureProvider<List<Transaction>>((ref) async {
   final f = ref.watch(statsFilterProvider);

@@ -36,6 +36,8 @@ class AppDatabase extends _$AppDatabase {
   /// 测试场景下注入内存数据库。
   AppDatabase.forTesting(super.executor);
 
+  /// 当任何 [tables] 里的列 / 约束 / 索引变更时必须 +1，并实现 [MigrationStrategy]。
+  /// 当前 schema 处于 v1（首发版本），未实现 onUpgrade。
   @override
   int get schemaVersion => 1;
 
