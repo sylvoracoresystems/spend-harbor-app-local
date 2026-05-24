@@ -34,47 +34,47 @@ class StatsFilterBar extends ConsumerWidget {
         border: Border(bottom: BorderSide(color: c.borderSoft)),
       ),
       child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: CurrencyFilterDropdown(
-                    value: f.currency,
-                    label: l.dashFilterCurrency,
-                    onChanged: (v) {
-                      if (v != null) {
-                        ref.read(statsFilterProvider.notifier).setCurrency(v);
-                      }
-                    },
-                  ),
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: CurrencyFilterDropdown(
+                  value: f.currency,
+                  label: l.dashFilterCurrency,
+                  onChanged: (v) {
+                    if (v != null) {
+                      ref.read(statsFilterProvider.notifier).setCurrency(v);
+                    }
+                  },
                 ),
-                const SizedBox(width: AppSpacing.x3),
-                Expanded(
-                  child: SourceFilterDropdown(
-                    value: f.sourceId,
-                    label: l.dashFilterSource,
-                    allLabel: l.statsFilterAllSources,
-                    sources: filteredSources,
-                    onChanged: (v) =>
-                        ref.read(statsFilterProvider.notifier).setSourceId(v),
-                  ),
+              ),
+              const SizedBox(width: AppSpacing.x3),
+              Expanded(
+                child: SourceFilterDropdown(
+                  value: f.sourceId,
+                  label: l.dashFilterSource,
+                  allLabel: l.statsFilterAllSources,
+                  sources: filteredSources,
+                  onChanged:
+                      (v) =>
+                          ref.read(statsFilterProvider.notifier).setSourceId(v),
                 ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.x2),
-            PillSegmented<StatsPeriod>(
-              value: f.period,
-              segments: [
-                PillSegment(value: StatsPeriod.week, label: l.statsPeriodWeek),
-                PillSegment(value: StatsPeriod.month, label: l.statsPeriodMonth),
-                PillSegment(value: StatsPeriod.year, label: l.statsPeriodYear),
-              ],
-              onChanged: (v) =>
-                  ref.read(statsFilterProvider.notifier).setPeriod(v),
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.x2),
+          PillSegmented<StatsPeriod>(
+            value: f.period,
+            segments: [
+              PillSegment(value: StatsPeriod.week, label: l.statsPeriodWeek),
+              PillSegment(value: StatsPeriod.month, label: l.statsPeriodMonth),
+              PillSegment(value: StatsPeriod.year, label: l.statsPeriodYear),
+            ],
+            onChanged:
+                (v) => ref.read(statsFilterProvider.notifier).setPeriod(v),
+          ),
+        ],
+      ),
     );
   }
 }
-

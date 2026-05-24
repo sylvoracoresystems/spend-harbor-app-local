@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase R1 — 共享 widgets / utils 抽取 ✅
-- **当前 Step**：4 个 edit 页 + transaction_form + 列表页 + export 页迁到 shared 组件
+- **当前阶段**：Phase R2 — Stats 卡片骨架抽取 ✅
+- **当前 Step**：StatsSectionCard + StatsCardPlaceholder；3 张卡片改造
 - **最近更新**：2026-05-24
 
 ---
@@ -17,6 +17,24 @@
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase R2 — Stats 卡片骨架抽取 ✅
+
+**Phase R2 子任务**：
+
+- [x] R2.1 `stats_section_card.dart`：`StatsSectionCard(icon, iconColor, title, trailing?, child)` 封装 Card+Padding+Row(icon+title+trailing) 骨架；`StatsCardPlaceholder.loading/error/empty` 统一占位样式（vertical 24 + center + sm）。
+- [x] R2.2 `stats_trend_card.dart`：Card+header 用 `StatsSectionCard`；内部 chart loading/error 保持 xs 字号不变（不同视觉上下文）。
+- [x] R2.3 `stats_distribution_card.dart`：两张分布卡（Category / Tag）改造 + `StatsCardPlaceholder` 替换本地 `_loading/_error/_empty` + `HexColor.fromHex` 替换残留 `_hexToColor`。
+- [x] R2.4 `stats_top_card.dart`：Card+header 改造 + 两个 body (_ByCategoryBody / _ByTagBody) 的 placeholder 替换 + `HexColor.fromHex`。
+- [x] R2.5 `dart format` + `flutter analyze` 0 issues + `flutter test` 通过（171 tests）。
+
+**Phase R2 收益**：
+
+- 3 张卡片的 Card+Padding+Row(icon+title+toggle) 骨架（每处 ~25 行）归一为 `StatsSectionCard` 调用。
+- 6 处 `_loading/_error/_empty` 内部局部函数删除，归一为 `StatsCardPlaceholder.{loading,error,empty}`。
+- 2 处残留 `_hexToColor`（R1 漏网，因 grep 顺序差异）随手补齐。
+
+**已完成 Step Phase R1**：
 
 **当前 Step**：Phase R1 — 共享 widgets / utils 抽取 ✅
 

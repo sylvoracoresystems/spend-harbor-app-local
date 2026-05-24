@@ -14,6 +14,7 @@ import '../../application/stats_buckets.dart';
 import '../../application/stats_controller.dart';
 import '../../application/stats_filter.dart';
 import '../../application/stats_filter_provider.dart';
+import 'stats_section_card.dart';
 
 class StatsTrendCard extends ConsumerWidget {
   const StatsTrendCard({super.key});
@@ -26,67 +27,57 @@ class StatsTrendCard extends ConsumerWidget {
     final dataAsync = ref.watch(trendBucketsProvider);
     final locale = Localizations.localeOf(context).toLanguageTag();
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x3),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.insert_chart, size: 18, color: c.action),
-                const SizedBox(width: 6),
-                Text(
-                  l.statsTrendTitle,
-                  style: AppTypography.base.copyWith(
-                    fontWeight: AppTypography.weightSemibold,
-                    color: c.textPrimary,
+    return StatsSectionCard(
+      icon: Icons.insert_chart,
+      iconColor: c.action,
+      title: l.statsTrendTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: AppSpacing.x1),
+          _RangeChip(filter: f, locale: locale),
+          const SizedBox(height: AppSpacing.x3),
+          _Legend(
+            incomeColor: c.income,
+            expenseColor: c.expense,
+            incomeLabel: l.statsTypeIncome,
+            expenseLabel: l.statsTypeExpense,
+            mutedColor: c.textBody,
+          ),
+          const SizedBox(height: AppSpacing.x2),
+          SizedBox(
+            height: 180,
+            child: dataAsync.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
+              loading:
+                  () => Center(
+                    child: Text(
+                      l.statsLoading,
+                      style: AppTypography.xs.copyWith(color: c.textMuted),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.x1),
-            _RangeChip(filter: f, locale: locale),
-            const SizedBox(height: AppSpacing.x3),
-            _Legend(
-              incomeColor: c.income,
-              expenseColor: c.expense,
-              incomeLabel: l.statsTypeIncome,
-              expenseLabel: l.statsTypeExpense,
-              mutedColor: c.textBody,
-            ),
-            const SizedBox(height: AppSpacing.x2),
-            SizedBox(
-              height: 180,
-              child: dataAsync.when(
-                skipLoadingOnReload: true,
-                skipLoadingOnRefresh: true,
-                loading: () => Center(
-                  child: Text(
-                    l.statsLoading,
-                    style: AppTypography.xs.copyWith(color: c.textMuted),
+              error:
+                  (e, _) => Center(
+                    child: Text(
+                      l.statsError,
+                      style: AppTypography.xs.copyWith(color: c.expense),
+                    ),
                   ),
-                ),
-                error: (e, _) => Center(
-                  child: Text(
-                    l.statsError,
-                    style: AppTypography.xs.copyWith(color: c.expense),
+              data:
+                  (rows) => _Bars(
+                    rows: rows,
+                    selected: f.selectedBucketStart,
+                    period: f.period,
+                    locale: locale,
+                    onTap:
+                        (start) => ref
+                            .read(statsFilterProvider.notifier)
+                            .selectBucket(start),
                   ),
-                ),
-                data: (rows) => _Bars(
-                  rows: rows,
-                  selected: f.selectedBucketStart,
-                  period: f.period,
-                  locale: locale,
-                  onTap: (start) => ref
-                      .read(statsFilterProvider.notifier)
-                      .selectBucket(start),
-                ),
-              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -121,10 +112,7 @@ class _RangeChip extends StatelessWidget {
         color: c.mintSoft,
         borderRadius: AppRadius.brLg,
       ),
-      child: Text(
-        text,
-        style: AppTypography.xs.copyWith(color: c.actionInk),
-      ),
+      child: Text(text, style: AppTypography.xs.copyWith(color: c.actionInk)),
     );
   }
 }
@@ -196,19 +184,21 @@ class _BarsState extends State<_Bars> {
     if (!_ctrl.hasClients) return;
     final vw = _ctrl.position.viewportDimension;
     final offset = _ctrl.offset;
-    final start =
-        (offset / _barSlot).floor().clamp(0, widget.rows.length - 1);
-    final end =
-        ((offset + vw) / _barSlot).ceil().clamp(start + 1, widget.rows.length);
+    final start = (offset / _barSlot).floor().clamp(0, widget.rows.length - 1);
+    final end = ((offset + vw) / _barSlot).ceil().clamp(
+      start + 1,
+      widget.rows.length,
+    );
     final next = _maxOver(widget.rows.sublist(start, end));
     if (next != _visibleMaxY) setState(() => _visibleMaxY = next);
   }
 
   double _maxOver(Iterable<TrendBucketValues> rs) {
-    final raw = rs
-        .map((r) => math.max(r.incomeCents, r.expenseCents))
-        .fold<int>(0, (a, b) => a > b ? a : b)
-        .toDouble();
+    final raw =
+        rs
+            .map((r) => math.max(r.incomeCents, r.expenseCents))
+            .fold<int>(0, (a, b) => a > b ? a : b)
+            .toDouble();
     return raw == 0 ? 100.0 : raw * 1.05;
   }
 
@@ -232,25 +222,19 @@ class _BarsState extends State<_Bars> {
         // 例：iPhone 322pt → 5~6 桶；iPad 横屏 ~1000pt → 17 桶左右。
         final viewport = constraints.maxWidth - _yAxisWidth;
         final minCount = defaultBucketCount(widget.period);
-        final visibleCount = math.max(
-          minCount,
-          (viewport / 56).floor(),
-        );
+        final visibleCount = math.max(minCount, (viewport / 56).floor());
         final scrollable = widget.rows.length > visibleCount;
         if (!scrollable) {
           final maxY = _maxOver(widget.rows);
-          return _buildChart(
-            context,
-            maxY: maxY,
-            showLeftTitles: true,
-          );
+          return _buildChart(context, maxY: maxY, showLeftTitles: true);
         }
         // 滚动模式：viewport 正好放 visibleCount 个桶，slot 宽度由此推算
         _barSlot = viewport / visibleCount;
         final contentWidth = widget.rows.length * _barSlot;
         // 首次进入滚动模式：默认显示最右端（最近）的 visibleCount 个桶
-        final initialVisible =
-            widget.rows.sublist(widget.rows.length - visibleCount);
+        final initialVisible = widget.rows.sublist(
+          widget.rows.length - visibleCount,
+        );
         final maxY = _visibleMaxY ?? _maxOver(initialVisible);
         if (!_didInitialJump) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -319,10 +303,12 @@ class _BarsState extends State<_Bars> {
               },
             ),
           ),
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -351,18 +337,20 @@ class _BarsState extends State<_Bars> {
           show: true,
           drawVerticalLine: false,
           horizontalInterval: interval,
-          getDrawingHorizontalLine: (_) => FlLine(
-            color: c.borderSoft,
-            strokeWidth: 1,
-            dashArray: const [3, 3],
-          ),
+          getDrawingHorizontalLine:
+              (_) => FlLine(
+                color: c.borderSoft,
+                strokeWidth: 1,
+                dashArray: const [3, 3],
+              ),
         ),
         borderData: FlBorderData(
           show: true,
           border: Border(
-            left: showLeftTitles
-                ? BorderSide(color: c.borderSoft, width: 1)
-                : BorderSide.none,
+            left:
+                showLeftTitles
+                    ? BorderSide(color: c.borderSoft, width: 1)
+                    : BorderSide.none,
             bottom: BorderSide(color: c.borderSoft, width: 1),
           ),
         ),
@@ -385,10 +373,12 @@ class _BarsState extends State<_Bars> {
               },
             ),
           ),
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -427,9 +417,10 @@ class _BarsState extends State<_Bars> {
               barRods: [
                 BarChartRodData(
                   toY: widget.rows[i].incomeCents.toDouble(),
-                  color: widget.rows[i].bucket.start == widget.selected
-                      ? c.income
-                      : c.income.withValues(alpha: 0.4),
+                  color:
+                      widget.rows[i].bucket.start == widget.selected
+                          ? c.income
+                          : c.income.withValues(alpha: 0.4),
                   width: 14,
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(4),
@@ -437,9 +428,10 @@ class _BarsState extends State<_Bars> {
                 ),
                 BarChartRodData(
                   toY: widget.rows[i].expenseCents.toDouble(),
-                  color: widget.rows[i].bucket.start == widget.selected
-                      ? c.expense
-                      : c.expense.withValues(alpha: 0.4),
+                  color:
+                      widget.rows[i].bucket.start == widget.selected
+                          ? c.expense
+                          : c.expense.withValues(alpha: 0.4),
                   width: 14,
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(4),
@@ -473,10 +465,17 @@ class _Legend extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _LegendDot(color: incomeColor, label: incomeLabel, textColor: mutedColor),
+        _LegendDot(
+          color: incomeColor,
+          label: incomeLabel,
+          textColor: mutedColor,
+        ),
         const SizedBox(width: 20),
         _LegendDot(
-            color: expenseColor, label: expenseLabel, textColor: mutedColor),
+          color: expenseColor,
+          label: expenseLabel,
+          textColor: mutedColor,
+        ),
       ],
     );
   }
@@ -504,10 +503,7 @@ class _LegendDot extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
-        Text(
-          label,
-          style: AppTypography.sm.copyWith(color: textColor),
-        ),
+        Text(label, style: AppTypography.sm.copyWith(color: textColor)),
       ],
     );
   }

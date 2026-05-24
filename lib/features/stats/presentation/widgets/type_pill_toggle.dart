@@ -38,11 +38,13 @@ class TypePillToggle extends StatelessWidget {
     );
     final scaler = MediaQuery.textScalerOf(context);
 
-    final halfW = _maxLabelWidth(
-      [l.statsTypeExpense, l.statsTypeIncome],
-      textStyle,
-      scaler,
-    ) + _hPad * 2;
+    final halfW =
+        _maxLabelWidth(
+          [l.statsTypeExpense, l.statsTypeIncome],
+          textStyle,
+          scaler,
+        ) +
+        _hPad * 2;
 
     return Container(
       height: _height,
@@ -144,9 +146,7 @@ class _Half extends StatelessWidget {
           child: AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOut,
-            style: style.copyWith(
-              color: active ? Colors.white : c.textMuted,
-            ),
+            style: style.copyWith(color: active ? Colors.white : c.textMuted),
             child: Text(label),
           ),
         ),

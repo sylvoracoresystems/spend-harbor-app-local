@@ -8,6 +8,7 @@ import '../../../../domain/enums/transaction_type.dart';
 import '../../../../domain/value_objects/currency.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../shared/icons/icon_registry.dart';
+import '../../../../shared/utils/hex_color.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
@@ -15,6 +16,7 @@ import '../../application/stats_controller.dart';
 import '../../application/stats_filter_provider.dart';
 import '../stats_navigation.dart';
 import 'stats_donut.dart';
+import 'stats_section_card.dart';
 import '../../../../shared/widgets/tag_pill.dart';
 import 'type_pill_toggle.dart';
 
@@ -42,91 +44,78 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
       return null;
     }
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x3),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.pie_chart, size: 18, color: c.info),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    l.statsDistCategoryTitle,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.base.copyWith(
-                      fontWeight: AppTypography.weightSemibold,
-                      color: c.textPrimary,
+    return StatsSectionCard(
+      icon: Icons.pie_chart,
+      iconColor: c.info,
+      title: l.statsDistCategoryTitle,
+      trailing: TypePillToggle(
+        value: _type,
+        onChanged: (v) => setState(() => _type = v),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: AppSpacing.x3),
+          async.when(
+            skipLoadingOnReload: true,
+            skipLoadingOnRefresh: true,
+            loading: () => StatsCardPlaceholder.loading(context, l),
+            error: (_, __) => StatsCardPlaceholder.error(context, l),
+            data: (data) {
+              if (data.slices.isEmpty) {
+                return StatsCardPlaceholder.empty(context, l.statsNoData);
+              }
+              final centerColor =
+                  _type == TransactionType.expense ? c.expense : c.income;
+              return Column(
+                children: [
+                  StatsDonut(
+                    slices: [
+                      for (final s in data.slices)
+                        DonutSlice(
+                          color: _categoryColor(findCat(s.categoryId)),
+                          value: s.totalCents.toDouble(),
+                          icon: iconFor(findCat(s.categoryId)?.icon ?? 'tag'),
+                        ),
+                    ],
+                    centerLabel:
+                        _type == TransactionType.expense
+                            ? l.statsDistCenterExpense
+                            : l.statsDistCenterIncome,
+                    centerAmount: _formatAmount(
+                      data.totalCents,
+                      f.currency,
+                      _type,
                     ),
+                    centerColor: centerColor,
                   ),
-                ),
-                const SizedBox(width: AppSpacing.x2),
-                TypePillToggle(
-                  value: _type,
-                  onChanged: (v) => setState(() => _type = v),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.x3),
-            async.when(
-              skipLoadingOnReload: true,
-              skipLoadingOnRefresh: true,
-              loading: () => _loading(context, l),
-              error: (_, __) => _error(context, l),
-              data: (data) {
-                if (data.slices.isEmpty) {
-                  return _empty(context, l.statsNoData);
-                }
-                final centerColor =
-                    _type == TransactionType.expense ? c.expense : c.income;
-                return Column(
-                  children: [
-                    StatsDonut(
-                      slices: [
-                        for (final s in data.slices)
-                          DonutSlice(
-                            color: _categoryColor(findCat(s.categoryId)),
-                            value: s.totalCents.toDouble(),
-                            icon: iconFor(findCat(s.categoryId)?.icon ?? 'tag'),
+                  const SizedBox(height: AppSpacing.x3),
+                  _bounded(
+                    children: [
+                      for (final s in data.slices)
+                        InkWell(
+                          onTap:
+                              () => navigateToTransactions(
+                                context,
+                                ref,
+                                categoryId: s.categoryId,
+                              ),
+                          child: _categoryRow(
+                            context,
+                            l,
+                            findCat(s.categoryId),
+                            s.totalCents,
+                            f.currency,
+                            _type,
                           ),
-                      ],
-                      centerLabel: _type == TransactionType.expense
-                          ? l.statsDistCenterExpense
-                          : l.statsDistCenterIncome,
-                      centerAmount:
-                          _formatAmount(data.totalCents, f.currency, _type),
-                      centerColor: centerColor,
-                    ),
-                    const SizedBox(height: AppSpacing.x3),
-                    _bounded(
-                      children: [
-                        for (final s in data.slices)
-                          InkWell(
-                            onTap: () => navigateToTransactions(
-                              context,
-                              ref,
-                              categoryId: s.categoryId,
-                            ),
-                            child: _categoryRow(
-                              context,
-                              l,
-                              findCat(s.categoryId),
-                              s.totalCents,
-                              f.currency,
-                              _type,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+                        ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -157,140 +146,98 @@ class _TDState extends ConsumerState<TagDistributionCard> {
       return null;
     }
 
-    return Card(
-      key: widget.cardKey,
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x3),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.local_offer, size: 18, color: c.expense),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    l.statsDistTagTitle,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.base.copyWith(
-                      fontWeight: AppTypography.weightSemibold,
-                      color: c.textPrimary,
+    return StatsSectionCard(
+      cardKey: widget.cardKey,
+      icon: Icons.local_offer,
+      iconColor: c.expense,
+      title: l.statsDistTagTitle,
+      trailing: TypePillToggle(
+        value: _type,
+        onChanged: (v) => setState(() => _type = v),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: AppSpacing.x3),
+          async.when(
+            skipLoadingOnReload: true,
+            skipLoadingOnRefresh: true,
+            loading: () => StatsCardPlaceholder.loading(context, l),
+            error: (_, __) => StatsCardPlaceholder.error(context, l),
+            data: (data) {
+              if (data.slices.isEmpty && data.untaggedCents == 0) {
+                return StatsCardPlaceholder.empty(context, l.statsNoTaggedData);
+              }
+              final centerColor =
+                  _type == TransactionType.expense ? c.expense : c.income;
+              return Column(
+                children: [
+                  StatsDonut(
+                    slices: [
+                      for (final s in data.slices)
+                        DonutSlice(
+                          color: _tagColor(findTag(s.tagId)),
+                          value: s.totalCents.toDouble(),
+                        ),
+                    ],
+                    centerLabel:
+                        _type == TransactionType.expense
+                            ? l.statsDistCenterExpense
+                            : l.statsDistCenterIncome,
+                    centerAmount: _formatAmount(
+                      data.totalCents,
+                      f.currency,
+                      _type,
                     ),
+                    centerColor: centerColor,
                   ),
-                ),
-                const SizedBox(width: AppSpacing.x2),
-                TypePillToggle(
-                  value: _type,
-                  onChanged: (v) => setState(() => _type = v),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.x3),
-            async.when(
-              skipLoadingOnReload: true,
-              skipLoadingOnRefresh: true,
-              loading: () => _loading(context, l),
-              error: (_, __) => _error(context, l),
-              data: (data) {
-                if (data.slices.isEmpty && data.untaggedCents == 0) {
-                  return _empty(context, l.statsNoTaggedData);
-                }
-                final centerColor =
-                    _type == TransactionType.expense ? c.expense : c.income;
-                return Column(
-                  children: [
-                    StatsDonut(
-                      slices: [
-                        for (final s in data.slices)
-                          DonutSlice(
-                            color: _tagColor(findTag(s.tagId)),
-                            value: s.totalCents.toDouble(),
+                  const SizedBox(height: AppSpacing.x3),
+                  _bounded(
+                    children: [
+                      for (final s in data.slices)
+                        InkWell(
+                          onTap:
+                              () => navigateToTransactions(
+                                context,
+                                ref,
+                                tagId: s.tagId,
+                              ),
+                          child: _tagRow(
+                            context,
+                            l,
+                            findTag(s.tagId),
+                            s.totalCents,
+                            f.currency,
+                            _type,
                           ),
-                      ],
-                      centerLabel: _type == TransactionType.expense
-                          ? l.statsDistCenterExpense
-                          : l.statsDistCenterIncome,
-                      centerAmount:
-                          _formatAmount(data.totalCents, f.currency, _type),
-                      centerColor: centerColor,
-                    ),
-                    const SizedBox(height: AppSpacing.x3),
-                    _bounded(
-                      children: [
-                        for (final s in data.slices)
-                          InkWell(
-                            onTap: () => navigateToTransactions(
-                              context,
-                              ref,
-                              tagId: s.tagId,
-                            ),
-                            child: _tagRow(
-                              context,
-                              l,
-                              findTag(s.tagId),
-                              s.totalCents,
-                              f.currency,
-                              _type,
-                            ),
+                        ),
+                      if (data.untaggedCents > 0)
+                        InkWell(
+                          onTap:
+                              () => navigateToTransactions(
+                                context,
+                                ref,
+                                untagged: true,
+                              ),
+                          child: _untaggedRow(
+                            context,
+                            l,
+                            data.untaggedCents,
+                            f.currency,
+                            _type,
                           ),
-                        if (data.untaggedCents > 0)
-                          InkWell(
-                            onTap: () => navigateToTransactions(
-                              context,
-                              ref,
-                              untagged: true,
-                            ),
-                            child: _untaggedRow(
-                              context,
-                              l,
-                              data.untaggedCents,
-                              f.currency,
-                              _type,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+                        ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 }
-
-Widget _loading(BuildContext context, AppL10n l) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Center(
-        child: Text(
-          l.statsLoading,
-          style: AppTypography.sm.copyWith(color: context.appColors.textMuted),
-        ),
-      ),
-    );
-
-Widget _error(BuildContext context, AppL10n l) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Center(
-        child: Text(
-          l.statsError,
-          style: AppTypography.sm.copyWith(color: context.appColors.expense),
-        ),
-      ),
-    );
-
-Widget _empty(BuildContext context, String text) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Center(
-        child: Text(
-          text,
-          style: AppTypography.sm.copyWith(color: context.appColors.textMuted),
-        ),
-      ),
-    );
 
 Widget _bounded({required List<Widget> children}) {
   if (children.length <= 10) return Column(children: children);
@@ -311,9 +258,8 @@ Widget _categoryRow(
   final c = context.appColors;
   final color = _categoryColor(cat);
   final iconKey = cat?.icon ?? 'tag';
-  final name = cat == null
-      ? '—'
-      : (resolveDefaultName(l, cat.nameKey) ?? cat.name);
+  final name =
+      cat == null ? '—' : (resolveDefaultName(l, cat.nameKey) ?? cat.name);
   return Container(
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(color: c.borderSoft)),
@@ -358,9 +304,8 @@ Widget _tagRow(
   TransactionType type,
 ) {
   final c = context.appColors;
-  final name = tag == null
-      ? '—'
-      : (resolveDefaultName(l, tag.nameKey) ?? tag.name);
+  final name =
+      tag == null ? '—' : (resolveDefaultName(l, tag.nameKey) ?? tag.name);
   return Container(
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(color: c.borderSoft)),
@@ -425,14 +370,9 @@ Widget _untaggedRow(
 }
 
 Color _categoryColor(Category? c) =>
-    c == null ? AppColors.light.textHint : _hexToColor(c.color);
+    c == null ? AppColors.light.textHint : HexColor.fromHex(c.color);
 Color _tagColor(Tag? t) =>
-    t == null ? AppColors.light.textHint : _hexToColor(t.color);
-
-Color _hexToColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  return Color(int.parse('ff$cleaned', radix: 16));
-}
+    t == null ? AppColors.light.textHint : HexColor.fromHex(t.color);
 
 String _formatAmount(int cents, String currency, TransactionType type) {
   final abs = (cents.abs() / 100).toStringAsFixed(2);

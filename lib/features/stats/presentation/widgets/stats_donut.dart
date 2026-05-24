@@ -8,11 +8,7 @@ import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
 
 class DonutSlice {
-  const DonutSlice({
-    required this.color,
-    required this.value,
-    this.icon,
-  });
+  const DonutSlice({required this.color, required this.value, this.icon});
 
   final Color color;
   final double value;
@@ -97,16 +93,21 @@ class _StatsDonutState extends State<StatsDonut>
                       startDegreeOffset: -90,
                       sectionsSpace: 1.5,
                       centerSpaceRadius: StatsDonut._centerRadius,
-                      sections: total <= 0
-                          ? [
-                              PieChartSectionData(
-                                color: c.borderSoft,
-                                value: 1,
-                                radius: StatsDonut._ringRadius,
-                                showTitle: false,
+                      sections:
+                          total <= 0
+                              ? [
+                                PieChartSectionData(
+                                  color: c.borderSoft,
+                                  value: 1,
+                                  radius: StatsDonut._ringRadius,
+                                  showTitle: false,
+                                ),
+                              ]
+                              : _buildSections(
+                                context,
+                                total,
+                                fullyShown ? 1.0 : t,
                               ),
-                            ]
-                          : _buildSections(context, total, fullyShown ? 1.0 : t),
                     ),
                     // sweep 期间禁用 fl_chart 自带 lerp（由 t 接管）；
                     // sweep 完成后交回给 fl_chart 做新旧 section 平滑过渡。
@@ -193,15 +194,16 @@ class _StatsDonutState extends State<StatsDonut>
             radius: StatsDonut._ringRadius,
             showTitle: false,
             // 完整出现后再挂 badge，避免 sweep 中途 badge 在错误的中点抖动
-            badgeWidget: isComplete && pct >= StatsDonut._badgeThreshold
-                ? _SliceBadge(
-                    color: s.color,
-                    icon: s.icon,
-                    percent: (pct * 100).round(),
-                    isRight: isRight,
-                    textColor: c.textBody,
-                  )
-                : null,
+            badgeWidget:
+                isComplete && pct >= StatsDonut._badgeThreshold
+                    ? _SliceBadge(
+                      color: s.color,
+                      icon: s.icon,
+                      percent: (pct * 100).round(),
+                      isRight: isRight,
+                      textColor: c.textBody,
+                    )
+                    : null,
             badgePositionPercentageOffset: StatsDonut._badgeOffset,
           ),
         );
@@ -247,10 +249,7 @@ class _StatsDonutState extends State<StatsDonut>
       if (isComplete && pct >= StatsDonut._badgeThreshold) {
         final midValue = start + s.value / 2;
         final degFromStart = (midValue / total) * 360;
-        out.add(_LeaderEntry(
-          degFromStart: degFromStart,
-          color: s.color,
-        ));
+        out.add(_LeaderEntry(degFromStart: degFromStart, color: s.color));
       }
       cum = end;
     }
@@ -288,10 +287,11 @@ class _LeaderLinesPainter extends CustomPainter {
       final rad = (-90 + e.degFromStart) * math.pi / 180;
       final p1 = Offset(c.dx + r1 * math.cos(rad), c.dy + r1 * math.sin(rad));
       final p2 = Offset(c.dx + r2 * math.cos(rad), c.dy + r2 * math.sin(rad));
-      final paint = Paint()
-        ..color = e.color
-        ..strokeWidth = 1.2
-        ..strokeCap = StrokeCap.round;
+      final paint =
+          Paint()
+            ..color = e.color
+            ..strokeWidth = 1.2
+            ..strokeCap = StrokeCap.round;
       canvas.drawLine(p1, p2, paint);
     }
   }
@@ -341,9 +341,10 @@ class _SliceBadge extends StatelessWidget {
     // icon 放在 Row 远离圆心的一侧、百分比靠近圆心：指引线落在两者之间，不被 icon 遮住。
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: isRight
-          ? [pctText, const SizedBox(width: 4), iconWidget]
-          : [iconWidget, const SizedBox(width: 4), pctText],
+      children:
+          isRight
+              ? [pctText, const SizedBox(width: 4), iconWidget]
+              : [iconWidget, const SizedBox(width: 4), pctText],
     );
   }
 }
