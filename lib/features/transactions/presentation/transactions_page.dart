@@ -9,6 +9,7 @@ import '../../../data/seed/default_name_resolver.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/utils/lookup_by_id.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
@@ -185,8 +186,7 @@ String? _filterLabel(
   final l = AppL10n.of(context);
   if (filter.categoryId != null) {
     final categories = ref.read(allCategoriesProvider).valueOrNull ?? const [];
-    final cat =
-        categories.where((x) => x.id == filter.categoryId).firstOrNull;
+    final cat = categories.byId(filter.categoryId!);
     final name = cat == null
         ? filter.categoryId!
         : (resolveDefaultName(l, cat.nameKey) ?? cat.name);
@@ -194,7 +194,7 @@ String? _filterLabel(
   }
   if (filter.tagId != null) {
     final tags = ref.read(allTagsProvider).valueOrNull ?? const [];
-    final tag = tags.where((x) => x.id == filter.tagId).firstOrNull;
+    final tag = tags.byId(filter.tagId!);
     final name = tag?.name ?? filter.tagId!;
     return l.txFilterAppliedTag(name);
   }

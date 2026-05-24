@@ -10,6 +10,7 @@ import '../../../domain/enums/budget_period.dart';
 import '../../../domain/enums/budget_scope.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/utils/lookup_by_id.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_radius.dart';

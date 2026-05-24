@@ -74,9 +74,7 @@ class _BudgetRow extends ConsumerWidget {
     final c = context.appColors;
     final b = progress.budget;
     final categories = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
-    final cat = b.categoryId == null
-        ? null
-        : categories.where((x) => x.id == b.categoryId).firstOrNull;
+    final cat = b.categoryId == null ? null : categories.byId(b.categoryId!);
     final scopeLabel = b.scope == BudgetScope.total
         ? l.dashBudgetTotal
         : cat == null
