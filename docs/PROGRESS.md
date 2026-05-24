@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase R2 — Stats 卡片骨架抽取 ✅
-- **当前 Step**：StatsSectionCard + StatsCardPlaceholder；3 张卡片改造
+- **当前阶段**：Phase R3 — transaction_form 拆 part 文件 ✅
+- **当前 Step**：1101 行单文件 → 主 272 + 5 part（74~194 行）
 - **最近更新**：2026-05-24
 
 ---
@@ -17,6 +17,26 @@
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase R3 — transaction_form 拆 part 文件 ✅
+
+**Phase R3 子任务**：
+
+- [x] R3.1 `transaction_form/header.dart` — `_Header`（74 行）
+- [x] R3.2 `transaction_form/amount_currency_date.dart` — `_AmountAndCurrencyRow` + `_OutlinedBox` + `_DateRow`（192 行）
+- [x] R3.3 `transaction_form/category_grid.dart` — `_CategoryGrid` + `_CategoryTile` + `_categoryDisplay`（161 行）
+- [x] R3.4 `transaction_form/tag_section.dart` — `_TagsSection` + `_TagChip` + `_MoreChip` + `_tagDisplay`（194 行）
+- [x] R3.5 `transaction_form/footer.dart` — `_NoteField` + `_SourceDropdown` + `_BottomBar` + `_ErrorIfAny` + `_sourceDisplay`（178 行）
+- [x] R3.6 主 `transaction_form.dart` 改为含 5 个 `part` 指令的 library：imports + consts + `TransactionForm` + state + `_messageFor` + `_confirmDelete`（272 行）
+- [x] R3.7 `flutter analyze` 0 issues + `flutter test` 通过（171 tests）
+
+**Phase R3 收益**：
+
+- 1101 行单文件 → 272 行主文件 + 5 个 74~194 行的 part 文件，每个 part 单一职责，找代码定位时间显著缩短。
+- 私有类（`_Header` 等）保持 `_` 前缀（part 文件共享 library 私有作用域），公共 API 表面 0 变化（仍只导出 `TransactionForm`）。
+- 局部 helper（`_categoryDisplay` / `_sourceDisplay` / `_tagDisplay`）就近迁到对应 part 文件。
+
+**已完成 Step Phase R2**：
 
 **当前 Step**：Phase R2 — Stats 卡片骨架抽取 ✅
 
