@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase R3 — transaction_form 拆 part 文件 ✅
-- **当前 Step**：1101 行单文件 → 主 272 + 5 part（74~194 行）
+- **当前阶段**：Phase R4 — byId 扩展 + syncedTextController ✅
+- **当前 Step**：stats × 2 + 4 edit 页 + transaction_form 共 6+5 处简化
 - **最近更新**：2026-05-24
 
 ---
@@ -17,6 +17,26 @@
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase R4 — byId 扩展 + syncedTextController ✅
+
+**Phase R4 子任务**：
+
+- [x] R4.1 `shared/utils/lookup_by_id.dart`：`List<Category>` / `List<Tag>` / `List<Source>` 的 `byId(String)` 扩展。替代 stats 卡片 6 处 `findCat`/`findTag` 闭包。
+- [x] R4.2 `shared/utils/synced_text_controller.dart`：`syncedTextController<S>({ref, provider, selector, watch})` 工厂，封装 `TextEditingController + ref.listenManual + 文本相同时跳过写回` 模板（顺带修了原 transaction_form 没做 `text != next` 检查、状态变化可能引起光标重置的小 bug）。
+- [x] R4.3 改造调用方：
+  - stats_distribution_card.dart：2 处 `findCat`/`findTag` → `cats.byId`/`tags.byId`
+  - stats_top_card.dart：4 处 + `_tagPills` 签名从 `Tag? Function(String)` 改为 `List<Tag>`
+  - 4 edit 页 + transaction_form：initState 里的 controller 创建简化为 `syncedTextController(...)` 调用
+- [x] R4.4 `flutter analyze` 0 issues + `flutter test` 通过（171 tests）
+
+**Phase R4 收益**：
+
+- 6 处闭包定义（每处 5 行）+ 5 处 TextEditingController 模板（每处 6~10 行）合计约 65 行模板代码消失。
+- transaction_form 多控制器同步从手写双字段 listenManual 收敛到两次 `syncedTextController` 调用，可读性更好。
+- 顺带修了状态回写没去重的潜在光标跳动 bug。
+
+**已完成 Step Phase R3**：
 
 **当前 Step**：Phase R3 — transaction_form 拆 part 文件 ✅
 

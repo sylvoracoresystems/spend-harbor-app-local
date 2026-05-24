@@ -14,6 +14,7 @@ import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/icons/icon_registry.dart';
 import '../../../shared/utils/hex_color.dart';
+import '../../../shared/utils/synced_text_controller.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/transaction_type_toggle.dart';
 import '../../../theme/app_colors.dart';
@@ -76,20 +77,20 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
   @override
   void initState() {
     super.initState();
-    _amountCtrl = TextEditingController();
-    _noteCtrl = TextEditingController();
+    final isEditing = widget.editId != null;
+    _amountCtrl = syncedTextController(
+      ref: ref,
+      provider: _provider(),
+      selector: (s) => s.amountInput,
+      watch: isEditing,
+    );
+    _noteCtrl = syncedTextController(
+      ref: ref,
+      provider: _provider(),
+      selector: (s) => s.note,
+      watch: isEditing,
+    );
     _tagSearchCtrl = TextEditingController();
-    final initial = ref.read(_provider());
-    _amountCtrl.text = initial.amountInput;
-    _noteCtrl.text = initial.note;
-    if (widget.editId != null) {
-      ref.listenManual<TransactionFormState>(_provider(), (prev, next) {
-        if (prev?.amountInput != next.amountInput) {
-          _amountCtrl.text = next.amountInput;
-        }
-        if (prev?.note != next.note) _noteCtrl.text = next.note;
-      });
-    }
   }
 
   @override

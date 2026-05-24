@@ -9,6 +9,7 @@ import '../../../../domain/value_objects/currency.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../shared/icons/icon_registry.dart';
 import '../../../../shared/utils/hex_color.dart';
+import '../../../../shared/utils/lookup_by_id.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
@@ -37,12 +38,6 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
     final f = ref.watch(statsFilterProvider);
     final async = ref.watch(categoryDistributionProvider(_type));
     final cats = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
-    Category? findCat(String id) {
-      for (final x in cats) {
-        if (x.id == id) return x;
-      }
-      return null;
-    }
 
     return StatsSectionCard(
       icon: Icons.pie_chart,
@@ -73,9 +68,9 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
                     slices: [
                       for (final s in data.slices)
                         DonutSlice(
-                          color: _categoryColor(findCat(s.categoryId)),
+                          color: _categoryColor(cats.byId(s.categoryId)),
                           value: s.totalCents.toDouble(),
-                          icon: iconFor(findCat(s.categoryId)?.icon ?? 'tag'),
+                          icon: iconFor(cats.byId(s.categoryId)?.icon ?? 'tag'),
                         ),
                     ],
                     centerLabel:
@@ -103,7 +98,7 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
                           child: _categoryRow(
                             context,
                             l,
-                            findCat(s.categoryId),
+                            cats.byId(s.categoryId),
                             s.totalCents,
                             f.currency,
                             _type,
@@ -139,12 +134,6 @@ class _TDState extends ConsumerState<TagDistributionCard> {
     final f = ref.watch(statsFilterProvider);
     final async = ref.watch(tagDistributionProvider(_type));
     final tags = ref.watch(allTagsProvider).valueOrNull ?? const [];
-    Tag? findTag(String id) {
-      for (final x in tags) {
-        if (x.id == id) return x;
-      }
-      return null;
-    }
 
     return StatsSectionCard(
       cardKey: widget.cardKey,
@@ -176,7 +165,7 @@ class _TDState extends ConsumerState<TagDistributionCard> {
                     slices: [
                       for (final s in data.slices)
                         DonutSlice(
-                          color: _tagColor(findTag(s.tagId)),
+                          color: _tagColor(tags.byId(s.tagId)),
                           value: s.totalCents.toDouble(),
                         ),
                     ],
@@ -205,7 +194,7 @@ class _TDState extends ConsumerState<TagDistributionCard> {
                           child: _tagRow(
                             context,
                             l,
-                            findTag(s.tagId),
+                            tags.byId(s.tagId),
                             s.totalCents,
                             f.currency,
                             _type,

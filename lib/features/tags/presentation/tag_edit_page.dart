@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/utils/hex_color.dart';
+import '../../../shared/utils/synced_text_controller.dart';
 import '../../../shared/widgets/color_grid.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/preview_card.dart';
@@ -27,12 +28,11 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
   @override
   void initState() {
     super.initState();
-    _nameCtrl = TextEditingController();
-    ref.listenManual<TagFormState>(_provider(), (prev, next) {
-      if (prev?.name != next.name && _nameCtrl.text != next.name) {
-        _nameCtrl.text = next.name;
-      }
-    });
+    _nameCtrl = syncedTextController(
+      ref: ref,
+      provider: _provider(),
+      selector: (s) => s.name,
+    );
   }
 
   @override

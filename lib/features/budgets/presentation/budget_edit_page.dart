@@ -9,6 +9,7 @@ import '../../../domain/enums/budget_scope.dart';
 import '../../../domain/enums/transaction_type.dart';
 import '../../../domain/value_objects/currency.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/utils/synced_text_controller.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/pill_segmented.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
@@ -33,13 +34,11 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
   @override
   void initState() {
     super.initState();
-    _amountCtrl = TextEditingController();
-    ref.listenManual<BudgetFormState>(_provider(), (prev, next) {
-      if (prev?.amountInput != next.amountInput &&
-          _amountCtrl.text != next.amountInput) {
-        _amountCtrl.text = next.amountInput;
-      }
-    });
+    _amountCtrl = syncedTextController(
+      ref: ref,
+      provider: _provider(),
+      selector: (s) => s.amountInput,
+    );
   }
 
   @override

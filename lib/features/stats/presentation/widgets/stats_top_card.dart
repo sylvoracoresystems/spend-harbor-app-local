@@ -9,6 +9,7 @@ import '../../../../domain/value_objects/currency.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../shared/icons/icon_registry.dart';
 import '../../../../shared/utils/hex_color.dart';
+import '../../../../shared/utils/lookup_by_id.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
@@ -133,19 +134,6 @@ class _ByCategoryBody extends ConsumerWidget {
     final async = ref.watch(topByCategoryProvider(type));
     final cats = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
     final tags = ref.watch(allTagsProvider).valueOrNull ?? const [];
-    Category? findCat(String id) {
-      for (final x in cats) {
-        if (x.id == id) return x;
-      }
-      return null;
-    }
-
-    Tag? findTag(String id) {
-      for (final x in tags) {
-        if (x.id == id) return x;
-      }
-      return null;
-    }
 
     return async.when(
       skipLoadingOnReload: true,
@@ -173,11 +161,11 @@ class _ByCategoryBody extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          _categoryAvatar(findCat(row.categoryId)),
+                          _categoryAvatar(cats.byId(row.categoryId)),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              _categoryName(l, findCat(row.categoryId)),
+                              _categoryName(l, cats.byId(row.categoryId)),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -201,7 +189,7 @@ class _ByCategoryBody extends ConsumerWidget {
                             context,
                             l,
                             row.tagFrequencies,
-                            findTag,
+                            tags,
                           ),
                         ),
                       Padding(
@@ -225,7 +213,7 @@ class _ByCategoryBody extends ConsumerWidget {
     BuildContext context,
     AppL10n l,
     Map<String, int> freq,
-    Tag? Function(String) findTag,
+    List<Tag> tags,
   ) {
     final sorted =
         freq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
@@ -237,8 +225,8 @@ class _ByCategoryBody extends ConsumerWidget {
       children: [
         for (final e in top)
           TagPill(
-            label: _tagName(l, findTag(e.key)),
-            color: _tagColor(findTag(e.key)),
+            label: _tagName(l, tags.byId(e.key)),
+            color: _tagColor(tags.byId(e.key)),
             compact: true,
           ),
         if (extra > 0)
@@ -269,19 +257,6 @@ class _ByTagBody extends ConsumerWidget {
     final async = ref.watch(topByTagProvider(type));
     final cats = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
     final tags = ref.watch(allTagsProvider).valueOrNull ?? const [];
-    Category? findCat(String id) {
-      for (final x in cats) {
-        if (x.id == id) return x;
-      }
-      return null;
-    }
-
-    Tag? findTag(String id) {
-      for (final x in tags) {
-        if (x.id == id) return x;
-      }
-      return null;
-    }
 
     return async.when(
       skipLoadingOnReload: true,
@@ -309,8 +284,8 @@ class _ByTagBody extends ConsumerWidget {
                         children: [
                           Flexible(
                             child: TagPill(
-                              label: _tagName(l, findTag(row.tagId)),
-                              color: _tagColor(findTag(row.tagId)),
+                              label: _tagName(l, tags.byId(row.tagId)),
+                              color: _tagColor(tags.byId(row.tagId)),
                             ),
                           ),
                           const SizedBox(width: AppSpacing.x2),
@@ -338,8 +313,8 @@ class _ByTagBody extends ConsumerWidget {
                               for (final tc in row.topCategories)
                                 _categoryChip(
                                   context,
-                                  _categoryName(l, findCat(tc.categoryId)),
-                                  _categoryColor(findCat(tc.categoryId)),
+                                  _categoryName(l, cats.byId(tc.categoryId)),
+                                  _categoryColor(cats.byId(tc.categoryId)),
                                   _formatAmount(tc.totalCents, currency, type),
                                 ),
                             ],
