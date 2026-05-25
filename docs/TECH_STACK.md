@@ -84,44 +84,55 @@
 
 ```
 spend-harbor-app-local/
-├── android/                # Android 原生工程（Flutter 自动生成）
-├── ios/                    # iOS 原生工程
+├── android/                  # Android 原生工程（Flutter 自动生成）
+├── ios/                      # iOS 原生工程
 ├── lib/
-│   ├── main.dart           # 入口：runApp(ProviderScope(SpendHarborApp))
-│   ├── app.dart            # MaterialApp + theme + router 装配
-│   ├── theme/              # 设计 token（颜色、间距、圆角、字号、阴影）+ ThemeData
-│   ├── l10n/               # ARB 文件 + 生成的本地化代码
-│   ├── data/               # 数据层
-│   │   ├── database/       # drift database 定义、迁移
-│   │   ├── daos/           # 每个表/聚合一个 DAO
-│   │   └── seed/           # 首次启动默认数据（分类/标签/来源）
-│   ├── domain/             # 领域层（纯 Dart，零 Flutter 依赖）
-│   │   ├── entities/       # 实体（Transaction、Category、Tag、Source、Budget）
-│   │   ├── enums/          # TransactionType、BudgetPeriod、BudgetScope...
-│   │   └── value_objects/  # Money、Period、CurrencyCode...
-│   ├── features/           # 功能模块（feature-first）
+│   ├── main.dart             # 入口：runApp(ProviderScope(SpendHarborApp))
+│   ├── app.dart              # MaterialApp + theme + router + AppLockGate 装配
+│   ├── theme/                # 设计 token（颜色、间距、圆角、字号、阴影）+ ThemeData
+│   ├── l10n/                 # ARB（en/zh）
+│   │   └── generated/        # flutter gen-l10n 产物
+│   ├── data/                 # 数据层
+│   │   ├── database/         # drift database 定义、迁移、provider
+│   │   ├── daos/             # 每个表一个 DAO
+│   │   └── seed/             # 首次启动默认数据（分类/标签/来源）
+│   ├── domain/               # 领域层（纯 Dart，零 Flutter 依赖）
+│   │   ├── entities/         # 实体
+│   │   ├── enums/            # TransactionType、BudgetPeriod、BudgetScope...
+│   │   └── value_objects/    # Currency、Money...
+│   ├── features/             # 功能模块（feature-first）
 │   │   ├── dashboard/
-│   │   │   ├── application/ # 状态、用例（providers）
-│   │   │   └── presentation/# Widget、页面
-│   │   ├── stats/
-│   │   ├── transactions/
+│   │   │   ├── application/  # 状态、用例（providers / controllers）
+│   │   │   └── presentation/ # 页面、widget；大页面拆 part 文件到同名子目录
+│   │   ├── transactions/     # presentation/{transaction_form, transactions_page}/
+│   │   ├── stats/            # presentation/widgets/ 内含图表/卡片组件
+│   │   ├── budgets/
+│   │   ├── categories/
+│   │   ├── tags/
+│   │   ├── sources/
+│   │   ├── data_io/          # 导入/导出/备份（xlsx/csv/.shbackup）
 │   │   ├── settings/
 │   │   └── onboarding/
-│   └── shared/             # 跨 feature 复用
-│       ├── widgets/        # AppCard、AppPrimaryButton、AmountText...
-│       ├── utils/          # 格式化、扩展方法
-│       └── router/         # go_router 配置
-├── test/                   # 测试镜像 lib/ 结构
+│   └── shared/               # 跨 feature 复用
+│       ├── widgets/          # 通用 UI 组件
+│       ├── utils/            # 格式化、扩展方法
+│       ├── icons/            # 图标注册表 + 调色板
+│       ├── providers/        # 跨 feature 共享 provider（locale/prefs/onboarding）
+│       └── router/           # go_router 配置 + AppShell
+├── test/                     # 测试镜像 lib/ 结构
 │   ├── data/
 │   ├── domain/
-│   └── features/
+│   ├── features/             # 按 feature 分目录
+│   └── shared/
 ├── docs/
 │   ├── PRODUCT_SPEC.md
 │   ├── DESIGN_STANDARDS.md
-│   ├── TECH_STACK.md       # 本文
+│   ├── TECH_STACK.md         # 本文
 │   └── PROGRESS.md
 └── pubspec.yaml
 ```
+
+> 约定：feature 内 `application/` 放状态层（StateNotifier / provider），`presentation/` 放页面与 widget。大页面（`dashboard_page`、`transactions_page`、`transaction_form`）拆成 `part` 文件放进同名子目录，主文件保留 `part 'xxx/yyy.dart'` 声明。
 
 ### 3.1 分层依赖方向
 
