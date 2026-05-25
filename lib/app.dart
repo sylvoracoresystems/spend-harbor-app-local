@@ -8,6 +8,7 @@ import 'shared/providers/locale_provider.dart';
 import 'shared/router/app_router.dart';
 import 'theme/app_theme.dart';
 
+/// 应用根 widget：装配主题/语言/路由，并用 AppLockGate 包裹整树。
 class SpendHarborApp extends ConsumerWidget {
   const SpendHarborApp({super.key});
 

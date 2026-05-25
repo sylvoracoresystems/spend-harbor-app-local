@@ -30,31 +30,10 @@ import '../../features/transactions/presentation/recycle_bin_page.dart';
 import '../../features/transactions/presentation/transaction_edit_page.dart';
 import '../../features/transactions/application/transactions_list_controller.dart';
 import '../../features/transactions/presentation/transactions_page.dart';
-import '../../l10n/generated/app_localizations.dart';
 import '../providers/onboarding_provider.dart';
-import '../widgets/placeholder_page.dart';
 import 'app_shell.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
-
-/// Settings 子路由配置：路径 + 标题构造器（用 ARB 解析）。
-typedef _SettingsRoute = ({String path, String Function(AppL10n) title});
-
-const _settingsRoutes = <_SettingsRoute>[
-  // profile / appearance / language 已实现，从占位列表中移除
-  // categories 已实现，从占位列表中移除
-  // tags 已实现，从占位列表中移除
-  // sources 已实现，从占位列表中移除
-  // budgets 已实现，从占位列表中移除
-  // export 已实现，从占位列表中移除
-  // import 已实现，从占位列表中移除
-  // backup 已实现，从占位列表中移除
-  // currency 已实现
-  // language 已实现
-  // appearance 已实现
-  // security 已实现
-  // about / legal 已实现
-];
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -216,13 +195,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             TransactionEditPage(id: state.pathParameters['id']),
       ),
-      for (final r in _settingsRoutes)
-        GoRoute(
-          path: r.path,
-          parentNavigatorKey: _rootKey,
-          builder: (context, _) =>
-              PlaceholderPage(title: r.title(AppL10n.of(context))),
-        ),
       StatefulShellRoute.indexedStack(
         builder: (_, __, shell) => AppShell(navigationShell: shell),
         branches: [
