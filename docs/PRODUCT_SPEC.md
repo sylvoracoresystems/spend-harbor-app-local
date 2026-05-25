@@ -72,30 +72,40 @@
 
 ### 3.1 顶层路由表
 
-| 路径                     | 页面                      | 加载策略 |
-| ------------------------ | ------------------------- | -------- |
-| `/`                      | Dashboard（仪表盘，首页） | 主 chunk |
-| `/stats`                 | 统计分析                  | lazy     |
-| `/transactions`          | 交易列表                  | lazy     |
-| `/transactions/new`      | 新建交易                  | lazy     |
-| `/transactions/:id/edit` | 编辑交易                  | lazy     |
-| `/settings`              | 设置中心入口              | lazy     |
-| `/settings/profile`      | 个人偏好（昵称、头像）    | lazy     |
-| `/settings/categories`   | 分类管理                  | lazy     |
-| `/settings/tags`         | 标签管理                  | lazy     |
-| `/settings/sources`      | 来源管理                  | lazy     |
-| `/settings/budgets`      | 预算管理                  | lazy     |
-| `/settings/export`       | 数据导出                  | lazy     |
-| `/settings/import`       | 数据导入                  | lazy     |
-| `/settings/backup`       | 备份与恢复                | lazy     |
-| `/settings/currency`     | 默认货币                  | lazy     |
-| `/settings/language`     | 语言切换                  | lazy     |
-| `/settings/appearance`   | 外观（浅色/深色/跟随系统）| lazy     |
-| `/settings/security`     | 应用锁（PIN/生物识别）    | lazy     |
-| `/settings/about`        | 关于、版本、致谢          | lazy     |
-| `/settings/legal`        | 隐私政策、服务条款        | lazy     |
+| 路径                              | 页面                       | 加载策略 |
+| --------------------------------- | -------------------------- | -------- |
+| `/onboarding`                     | 首次启动引导（一次性）     | lazy     |
+| `/`                               | Dashboard（仪表盘，首页）  | 主 chunk |
+| `/stats`                          | 统计分析                   | lazy     |
+| `/transactions`                   | 交易列表                   | lazy     |
+| `/transactions/new`               | 新建交易                   | lazy     |
+| `/transactions/:id/edit`          | 编辑交易                   | lazy     |
+| `/transactions/recycle-bin`       | 回收站（30 天软删除）      | lazy     |
+| `/settings`                       | 设置中心入口               | lazy     |
+| `/settings/profile`               | 个人偏好（昵称、头像）     | lazy     |
+| `/settings/categories`            | 分类管理（列表）           | lazy     |
+| `/settings/categories/new`        | 新建分类                   | lazy     |
+| `/settings/categories/:id/edit`   | 编辑分类                   | lazy     |
+| `/settings/tags`                  | 标签管理（列表）           | lazy     |
+| `/settings/tags/new`              | 新建标签                   | lazy     |
+| `/settings/tags/:id/edit`         | 编辑标签                   | lazy     |
+| `/settings/sources`               | 来源管理（列表）           | lazy     |
+| `/settings/sources/new`           | 新建来源                   | lazy     |
+| `/settings/sources/:id/edit`      | 编辑来源                   | lazy     |
+| `/settings/budgets`               | 预算管理（列表）           | lazy     |
+| `/settings/budgets/new`           | 新建预算                   | lazy     |
+| `/settings/budgets/:id/edit`      | 编辑预算                   | lazy     |
+| `/settings/export`                | 数据导出                   | lazy     |
+| `/settings/import`                | 数据导入                   | lazy     |
+| `/settings/backup`                | 备份与恢复                 | lazy     |
+| `/settings/currency`              | 默认货币                   | lazy     |
+| `/settings/language`              | 语言切换                   | lazy     |
+| `/settings/appearance`            | 外观（浅色/深色/跟随系统） | lazy     |
+| `/settings/security`              | 应用锁（PIN/生物识别）     | lazy     |
+| `/settings/about`                 | 关于、版本、致谢           | lazy     |
+| `/settings/legal`                 | 隐私政策、服务条款         | lazy     |
 
-> 无需鉴权守卫；首次启动可选展示一次性 Onboarding 引导（介绍 + 默认数据 seed），完成后直接进入 Dashboard。
+> 无需鉴权守卫。首次启动若 onboarding 未完成，全局 redirect 到 `/onboarding`；完成后所有路由可访问。
 
 ### 3.2 移动端导航（<768px）
 

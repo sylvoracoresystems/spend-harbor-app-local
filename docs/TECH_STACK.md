@@ -31,7 +31,7 @@
 | `flutter_localizations`       | sdk        | Flutter 官方多语言基础                   | 必选                                                           |
 | `cupertino_icons`             | ^1.0.8     | iOS 风格图标（小范围使用）               | 工程默认                                                       |
 | `flutter_riverpod`            | ^2.5.1     | 状态管理 + 依赖注入                      | 编译期安全、可测试、与异步天然友好；比 Provider/Bloc 更轻量    |
-| `go_router`                   | ^14.2.7    | 声明式路由 + 深链                        | Flutter 官方维护；路径集中配置，便于状态保留                   |
+| `go_router`                   | ^17.0.0    | 声明式路由 + 深链                        | Flutter 官方维护；路径集中配置，便于状态保留                   |
 | `drift`                       | ^2.20.0    | 类型安全 SQLite ORM                      | 类型安全、迁移友好、跨平台；优于 `sqflite`                     |
 | `drift_flutter`               | ^0.2.0     | drift 的 Flutter 集成                    | 自动选择 native executor                                       |
 | `sqlite3_flutter_libs`        | ^0.5.24    | 内置 SQLite 静态库                       | 保证各平台 SQLite 版本一致                                     |
@@ -40,7 +40,7 @@
 | `flutter_secure_storage`      | ^9.2.2     | 加密键值存储                             | 存放 App 锁 PIN；iOS Keychain / Android EncryptedSharedPreferences |
 | `local_auth`                  | ^2.3.0     | 生物识别（Face ID / Touch ID / 指纹）    | 配合 App 锁                                                    |
 | `intl`                        | any        | 国际化、日期、数字格式化                 | 由 `flutter_localizations` 钉版本                              |
-| `lucide_icons`                | ^0.257.0   | Lucide 图标集                            | DESIGN_STANDARDS 指定的唯一图标库                              |
+| `lucide_icons_flutter`        | ^3.1.14    | Lucide 图标集                            | DESIGN_STANDARDS 指定的主图标库（社区活跃维护的 Flutter 版本）  |
 | `material_symbols_icons`      | ^4.2928.1  | Material Symbols 可变图标字体             | 仅用于底部导航；支持 weight/fill 调节，描边比 Lucide 更细       |
 | `collection`                  | ^1.18.0    | 集合工具（groupBy、firstWhereOrNull）    | 常用                                                           |
 | `uuid`                        | ^4.5.0     | 本地实体主键生成                         | 避免依赖自增 ID，便于导入合并                                  |
@@ -51,25 +51,22 @@
 | `xml`                         | ^6.5.0     | XLSX SpreadsheetML XML 解析              | 同上；提升为直接依赖                                          |
 | `share_plus`                  | ^12.x      | 调起系统分享面板（导出 / 备份分享）       | 跨平台官方维护；通过临时文件 + XFile 分享                    |
 | `file_picker`                 | ^11.0.2    | 选择 CSV / XLSX 导入文件                  | 跨平台；11.x 改为 `FilePicker.pickFiles` 静态调用             |
-| `crypto`                      | ^3.0.6     | PIN SHA-256 哈希                          | 标准实现；纯 Dart 不联网                                      |
+| `crypto`                      | ^3.0.7     | PIN SHA-256 哈希                          | 标准实现；纯 Dart 不联网                                      |
 
 ### 2.2 开发时依赖（`dev_dependencies`）
 
-| 包                | 版本    | 用途                                  |
-| ----------------- | ------- | ------------------------------------- |
-| `flutter_test`    | sdk     | 单元测试 / Widget 测试                |
-| `flutter_lints`   | ^5.0.0  | 官方 lint 规则                        |
-| `build_runner`    | ^2.4.13 | 代码生成执行器                        |
-| `drift_dev`       | ^2.20.0 | drift 表 / DAO 代码生成               |
+| 包                        | 版本    | 用途                                                   |
+| ------------------------- | ------- | ------------------------------------------------------ |
+| `flutter_test`            | sdk     | 单元测试 / Widget 测试                                 |
+| `flutter_lints`           | ^5.0.0  | 官方 lint 规则                                         |
+| `build_runner`            | ^2.4.13 | 代码生成执行器                                         |
+| `drift_dev`               | ^2.20.0 | drift 表 / DAO 代码生成                                |
+| `flutter_launcher_icons`  | ^0.14.4 | 生成 App 图标（`dart run flutter_launcher_icons`）     |
+| `flutter_native_splash`   | ^2.4.6  | 生成原生启动页（`dart run flutter_native_splash:create`） |
 
-### 2.3 暂未引入但已规划
+### 2.3 历史选型记录
 
-| 包                       | 用途             | 何时引入                       |
-| ------------------------ | ---------------- | ------------------------------ |
-| `flutter_launcher_icons` | 生成 App 图标    | 上架前                         |
-| `flutter_native_splash`  | 生成启动页       | 上架前                         |
-
-> 注：原计划用 `excel` / `syncfusion_flutter_xlsio` 处理 .xlsx，但前者与 `flutter_native_splash` 在 `archive` 大版本上冲突，后者商用收费。最终用 `archive` + `xml` 自研 [`xlsx_codec.dart`](../lib/features/data_io/application/xlsx_codec.dart) 实现 OOXML SpreadsheetML 最小子集（仅字符串 / 数字单元格 + sharedStrings + 多 sheet），约 200 行，零冲突且能往返读写示例文件。
+> 原计划用 `excel` / `syncfusion_flutter_xlsio` 处理 .xlsx，但前者与 `flutter_native_splash` 在 `archive` 大版本上冲突，后者商用收费。最终用 `archive` + `xml` 自研 [`xlsx_codec.dart`](../lib/features/data_io/application/xlsx_codec.dart) 实现 OOXML SpreadsheetML 最小子集（仅字符串 / 数字单元格 + sharedStrings + 多 sheet），约 200 行，零冲突且能往返读写示例文件。
 
 ### 2.4 明确不引入
 
