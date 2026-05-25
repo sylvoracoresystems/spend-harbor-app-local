@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **当前阶段**：Phase R5 — dashboard / transactions 页拆 part 文件 ✅
-- **当前 Step**：dashboard 481 → 63 + 3 part；transactions 456 → 223 + 2 part
+- **当前阶段**：Phase R6 — 文档与死代码清理 ✅
+- **当前 Step**：features 类注释 + 目录树刷新 + `_settingsRoutes` 死代码删除
 - **最近更新**：2026-05-24
 
 ---
@@ -17,6 +17,29 @@
 ## Current Work（细粒度进度，新会话先读这一段）
 
 > 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+
+**当前 Step**：Phase R6 — 文档与死代码清理 ✅
+
+**Phase R6 子任务**：
+
+- [x] R6.1 byId 扩展收尾：补 3 处遗漏调用站（commit `5f8fd61`）。
+- [x] R6.2 WHY-focused 文件/函数级注释扫一遍（commit `795341c`）：只在「为什么这么设计」「非显然约束」「隐藏顺序依赖」处加 `///`，跳过命名已自解释的代码。
+- [x] R6.3 `lib/features` 下 133 个类全部补一行 `///` 中文职责说明（commit `9fb5e9a`）：60 个文件、+133 行。
+- [x] R6.4 `docs/TECH_STACK.md §3` 项目目录树刷新（commit `8afea75`）：补齐 10 个 feature 模块、`shared/{icons,providers}`、`l10n/generated`、`app.dart` 的 `AppLockGate`，加 part 文件子目录约定。
+- [x] R6.5 删除 `_settingsRoutes` 占位路由死代码 + `PlaceholderPage` widget（commit `b669170`）：所有 settings 子页已实现，原列表清空仅剩 13 行历史进度注释；同步给 `app.dart` 的 `SpendHarborApp` 补上漏掉的类注释。−83 / +1 行。
+- [x] R6.6 `flutter analyze` 0 issues + `flutter test` 通过（171 tests）。
+
+**Phase R6 收益**：
+
+- 文档与代码漂移消除：TECH_STACK 的目录树与实际 lib/ 结构对齐；features 全部类有一行职责说明，新人/后续 AI 入手成本降低。
+- `_settingsRoutes` 这种「实现完就该删」的占位 scaffolding 不再误导阅读者。
+- 代码内注释统一为 WHY-focused 风格：能从命名读出 WHAT 的类/函数不强加废话注释。
+
+**下一步接入点**：回到 Phase 7（打磨与上架）剩余子项 — 7.3 i18n 全量回归 / 7.4 性能基准 / 7.5 隐私清单 / 7.6 商店素材 / 7.7 上架审核。优先级建议 7.5 → 7.3 → 7.6 → 7.4 → 7.7（隐私清单卡审核，先处理）。
+
+---
+
+**已完成 Step Phase R5**：
 
 **当前 Step**：Phase R5 — dashboard / transactions 页拆 part 文件 ✅
 
@@ -763,6 +786,7 @@
 | 2026-05-13 | 完成 Phase 7 · 7.2：App 图标 + 启动页              | flutter_launcher_icons + flutter_native_splash 白底品牌 logo    |
 | 2026-05-14 | 完成 Phase 8：Stats 视觉重构                       | Week/Month/Year + 选中桶锚点 + Cat/Tag Distribution + Top；新增 21 单测；169 tests 全过 |
 | 2026-05-13 | 完成 Phase 7 · 7.1：Dashboard 视觉重构             | 过滤条（月份导航 + 货币/来源 pill）+ tile-icon 2×2 卡 + 11 单测 |
+| 2026-05-24 | 完成 Phase R6：文档与死代码清理                    | features 133 类一行 doc + TECH_STACK §3 目录树刷新 + 删 `_settingsRoutes`/PlaceholderPage 死代码（−83/+1 行）；171 tests 全过 |
 
 ---
 
