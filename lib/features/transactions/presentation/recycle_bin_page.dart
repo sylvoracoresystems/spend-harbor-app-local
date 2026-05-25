@@ -65,8 +65,7 @@ class _TrashRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final c = context.appColors;
-    final categories = ref.watch(allCategoriesProvider).valueOrNull ?? const [];
-    final cat = categories.where((x) => x.id == tx.categoryId).firstOrNull;
+    final cat = ref.watch(categoriesByIdProvider)[tx.categoryId];
     final isExpense = tx.type == TransactionType.expense;
     final amountColor = isExpense ? c.expense : c.income;
     final sign = isExpense ? '-' : '+';

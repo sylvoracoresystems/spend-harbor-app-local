@@ -32,6 +32,8 @@ class TransactionsPage extends ConsumerWidget {
     final l = AppL10n.of(context);
     final c = context.appColors;
     final async = ref.watch(filteredTransactionsProvider);
+    // 分组结果走派生 provider，按 rows 身份记忆；选择模式 toggle 不触发分组重算。
+    final asyncGroups = ref.watch(groupedTransactionsProvider);
     final selection = ref.watch(selectionControllerProvider);
     final selecting = selection.isNotEmpty;
 
@@ -120,7 +122,7 @@ class TransactionsPage extends ConsumerWidget {
           if (rows.isEmpty) {
             return RootPageEmpty(text: l.txListEmpty);
           }
-          final groups = groupByDay(rows);
+          final groups = asyncGroups.valueOrNull ?? const <DayGroup>[];
           // 宽屏（iPad / 大屏横屏）下按 dashboard / settings 的卡片风格展示：
           // 左右留出 padding，每个 day group 包成带边框的圆角卡片。
           final isWide = MediaQuery.sizeOf(context).width >= 720;

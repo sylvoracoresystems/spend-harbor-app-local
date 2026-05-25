@@ -182,6 +182,15 @@ class DayGroup {
   final List<Transaction> items;
 }
 
+/// [filteredTransactionsProvider] 的派生：按日分组后的结果。
+///
+/// 走 provider 而非每次 build 内调用 [groupByDay]，避免选择模式 toggle 等
+/// 与列表数据无关的重建也触发 O(rows) 的分组+排序+DateTime.parse。
+final groupedTransactionsProvider =
+    Provider<AsyncValue<List<DayGroup>>>((ref) {
+  return ref.watch(filteredTransactionsProvider).whenData(groupByDay);
+});
+
 /// 交易列表选择模式状态：空集 = 未进入选择模式。
 class SelectionController extends StateNotifier<Set<String>> {
   SelectionController() : super(const <String>{});

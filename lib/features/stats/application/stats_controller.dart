@@ -49,24 +49,31 @@ final trendBucketsProvider =
   final end = buckets.last.end;
   final rows = await dao.findByDateRange(isoDate(start), isoDate(end));
 
-  final out = <TrendBucketValues>[];
-  for (final b in buckets) {
-    int inc = 0;
-    int exp = 0;
-    for (final r in rows) {
-      if (r.currency != f.currency) continue;
-      if (f.sourceId != null && r.sourceId != f.sourceId) continue;
-      final d = DateTime.parse(r.transactedOn);
-      if (d.isBefore(b.start) || d.isAfter(b.end)) continue;
-      if (r.type == TransactionType.expense) {
-        exp += r.amountCents;
-      } else {
-        inc += r.amountCents;
-      }
+  // 单次扫描 rows：把每行 DateTime 只 parse 一次，按 period 对齐起点反查桶 index。
+  // 之前是 O(buckets · rows) 双循环且每轮内层重复 parse，年视图 + 大量数据时压力可见。
+  final n = buckets.length;
+  final incomes = List<int>.filled(n, 0);
+  final expenses = List<int>.filled(n, 0);
+  for (final r in rows) {
+    if (r.currency != f.currency) continue;
+    if (f.sourceId != null && r.sourceId != f.sourceId) continue;
+    final d = DateTime.parse(r.transactedOn);
+    final idx = periodStepsBetween(start, alignToPeriodStart(d, f.period), f.period);
+    if (idx < 0 || idx >= n) continue;
+    if (r.type == TransactionType.expense) {
+      expenses[idx] += r.amountCents;
+    } else {
+      incomes[idx] += r.amountCents;
     }
-    out.add(TrendBucketValues(bucket: b, incomeCents: inc, expenseCents: exp));
   }
-  return out;
+  return [
+    for (var i = 0; i < n; i++)
+      TrendBucketValues(
+        bucket: buckets[i],
+        incomeCents: incomes[i],
+        expenseCents: expenses[i],
+      ),
+  ];
 });
 
 /// 选中桶范围内 + currency/source 过滤后的原始 rows（给 Distribution / Top 复用）。

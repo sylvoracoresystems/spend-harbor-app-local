@@ -36,18 +36,17 @@ class TransactionListRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.appColors;
-    final categories =
-        ref.watch(allCategoriesProvider).valueOrNull ?? const <Category>[];
-    final sources =
-        ref.watch(allSourcesProvider).valueOrNull ?? const <Source>[];
-    final allTags = ref.watch(allTagsProvider).valueOrNull ?? const <Tag>[];
+    final categoriesById = ref.watch(categoriesByIdProvider);
+    final sourcesById = ref.watch(sourcesByIdProvider);
+    final tagsById = ref.watch(tagsByIdProvider);
     final tagsByTx = ref.watch(tagsForCurrentListProvider).valueOrNull ??
         const <String, List<String>>{};
-    final cat = categories.where((x) => x.id == tx.categoryId).firstOrNull;
-    final src = sources.where((x) => x.id == tx.sourceId).firstOrNull;
+    final cat = categoriesById[tx.categoryId];
+    final src = sourcesById[tx.sourceId];
     final txTagIds = tagsByTx[tx.id] ?? const <String>[];
     final txTags = [
-      for (final id in txTagIds) ...allTags.where((t) => t.id == id),
+      for (final id in txTagIds)
+        if (tagsById[id] case final t?) t,
     ];
 
     final isExpense = tx.type == TransactionType.expense;
