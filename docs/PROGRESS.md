@@ -1,22 +1,68 @@
 # SpendHarbor Local — 开发进度（Progress）
 
-> 滚动开发日志。按阶段勾选完成项，记录里程碑、阻塞与决策变更。**每完成一个 Step 更新一次**。
+> 进度与维护日志。首期开发完成；当前进入维护迭代阶段。
 >
-> 配套文档：[PRODUCT_SPEC.md](PRODUCT_SPEC.md) · [DESIGN_STANDARDS.md](DESIGN_STANDARDS.md) · [TECH_STACK.md](TECH_STACK.md)
+> 配套文档：[PRODUCT_SPEC.md](PRODUCT_SPEC.md) · [DESIGN_STANDARDS.md](DESIGN_STANDARDS.md) · [TECH_STACK.md](TECH_STACK.md) · [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)
 
 ---
 
 ## 当前状态
 
-- **当前阶段**：Phase R6 — 文档与死代码清理 ✅
-- **当前 Step**：features 类注释 + 目录树刷新 + `_settingsRoutes` 死代码删除
+- **阶段**：**维护期（Maintenance Mode）**
+- **首期 GA**：2026-05-24（Phase 1-10 + R1-R6 + 三处性能优化全部落地）
 - **最近更新**：2026-05-24
 
 ---
 
-## Current Work（细粒度进度，新会话先读这一段）
+## 🏁 首期开发完成里程碑（2026-05-24）
 
-> 这一段记录**当前 Step 内的子任务进度**。每完成一个子项立即勾选；context 即将用尽或用户说「checkpoint」时同步更新。新会话可直接从「下一步接入点」继续。
+10 个开发 Phase + 6 个重构 Phase + 3 处性能优化全部交付。
+
+| 维度 | 状态 |
+| --- | --- |
+| 功能完成度 | Phase 1-10 全部 ✅；详见下方「上架前 Pending」与历史归档 |
+| 测试 | 171 unit + widget tests，全部绿 |
+| 静态分析 | `flutter analyze` 0 issues |
+| 性能基线 | 列表行 O(M+N) 反查 / 趋势桶单次扫描 / day-group 走 provider 记忆（见维护期日志 2026-05） |
+| 代码组织 | 单文件 ≤ ~500 行；features 全部类有 `///` 一行职责说明 |
+| 文档对齐 | PRODUCT_SPEC §3.1 路由 / TECH_STACK §2-§3 依赖与目录 / README 全部与代码同步 |
+
+---
+
+## 上架前 Pending（Phase 7 收尾）
+
+进入维护期前还有未做的上架准备工作，**不阻塞功能开发但阻塞商店发布**。具体动作清单见 [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)，下面仅追踪进度。
+
+- [ ] 7.3 国际化全量回归（中英 × 浅/深 × 100%/200% 字号 手动 QA）
+- [ ] 7.4 性能基准（冷启动 + Stats 聚合实测 + Profile 模式 Frame 时间采样）—— 注：维护期已做 3 处针对性优化，但「基准」需要真机数据。
+- [ ] 7.5 隐私清单（Apple Privacy Manifest + Google Data Safety；优先级最高，影响过审）
+- [ ] 7.6 应用商店素材（icon 已就绪；截图 / 描述 / 关键词 待出）
+- [ ] 7.7 上架审核（iOS TestFlight → App Store；Android Internal → Production）
+
+---
+
+## 维护期日志（Maintenance Log）
+
+> 维护期改动按月归档，新条目追加在最上方。格式：`YYYY-MM-DD · commit短 hash · 类型（bug/perf/refactor/docs/feat）· what / why`。
+>
+> 新会话恢复时：读「当前状态」+ 本节最新两个月即可建立上下文；细节翻 git log。
+
+### 2026-05
+
+- **2026-05-24 · `82968fd` · perf** — 3 处针对性优化：① TransactionsPage `groupByDay` 移到 `groupedTransactionsProvider`，选择模式 toggle 不再触发分组重算；② `trendBucketsProvider` 从 O(buckets·rows) 改为单次扫描 + 每行 DateTime.parse 只一次；③ 新增 `categoriesByIdProvider` / `tagsByIdProvider` / `sourcesByIdProvider`（Map<id, T>），交易行 + 回收站行的反查从 O(M·N) 退到 O(M+N)。171 tests pass。
+- **2026-05-24 · `c0072db` · docs** — 文档漂移修复：README 整篇重写、PRODUCT_SPEC §3.1 路由表补 13 条、TECH_STACK §2 修 3 处版本/包名 + launcher_icons/native_splash 从「暂未引入」迁到 dev_dependencies。
+- **2026-05-24 · `08d611e` · docs** — 记录 Phase R6 + 性能优化 commit 入 PROGRESS。
+- **2026-05-24 · `8afea75` · docs** — TECH_STACK §3 目录树刷新（补齐 10 feature 模块 + shared 子目录）。
+- **2026-05-24 · `b669170` · refactor** — 删除 `_settingsRoutes` 占位路由死代码 + `PlaceholderPage` widget（−83/+1 行）；给 `SpendHarborApp` 补上漏掉的类注释。
+- **2026-05-24 · `9fb5e9a` · docs** — `lib/features` 60 文件、133 个类全部补一行 `///` 中文职责说明。
+- **2026-05-24 · `795341c` · docs** — 全量补 WHY-focused 文件 / 函数级注释（只在非显然约束 / 隐藏顺序依赖 / 设计动机处加）。
+- **2026-05-24 · `5f8fd61` · refactor** — byId 扩展收尾：补 3 处遗漏调用站。
+
+---
+
+## 历史开发日志（首期开发归档，按 Phase 倒序）
+
+> 以下为 2026-05-09 ~ 2026-05-24 的开发期日志，保留原 Current Work 结构供回溯。**不再追加新条目**——新增改动请走上方「维护期日志」。
 
 **当前 Step**：Phase R6 — 文档与死代码清理 ✅
 
@@ -787,6 +833,9 @@
 | 2026-05-14 | 完成 Phase 8：Stats 视觉重构                       | Week/Month/Year + 选中桶锚点 + Cat/Tag Distribution + Top；新增 21 单测；169 tests 全过 |
 | 2026-05-13 | 完成 Phase 7 · 7.1：Dashboard 视觉重构             | 过滤条（月份导航 + 货币/来源 pill）+ tile-icon 2×2 卡 + 11 单测 |
 | 2026-05-24 | 完成 Phase R6：文档与死代码清理                    | features 133 类一行 doc + TECH_STACK §3 目录树刷新 + 删 `_settingsRoutes`/PlaceholderPage 死代码（−83/+1 行）；171 tests 全过 |
+| 2026-05-24 | 文档漂移修复 + 维护期切换                          | README 重写 / PRODUCT_SPEC §3.1 路由补 13 条 / TECH_STACK §2 版本与包名修 3 处；PROGRESS.md 重构为「首期完成 + 维护期日志」结构 |
+| 2026-05-24 | 性能优化（3 处）                                   | groupByDay 走 provider 记忆 / trendBuckets 单次扫描 / 行级反查 O(M·N)→O(M+N)；171 tests 全过 |
+| 2026-05-24 | **首期开发完成 GA**                                | Phase 1-10 + R1-R6 + perf 全部交付；进入维护期 |
 
 ---
 

@@ -17,7 +17,7 @@
 | `docs/PRODUCT_SPEC.md`     | 实现某个功能 / 不确定业务规则时                                                    |
 | `docs/DESIGN_STANDARDS.md` | 写 UI / 新组件 / 不确定视觉规范时                                                  |
 | `docs/TECH_STACK.md`       | 加依赖 / 不确定目录结构或分层依赖方向时                                            |
-| `docs/PROGRESS.md`         | **每次开新会话先读这个**——尤其顶部的「Current Work」段，是细粒度进度与下一步接入点 |
+| `docs/PROGRESS.md`         | **每次开新会话先读这个**——「当前状态」+「维护期日志」最新两个月足以建立上下文；首期开发期细节在「历史开发日志」归档段 |
 
 ## 目录速查
 
@@ -47,7 +47,7 @@ dart run build_runner build --delete-conflicting-outputs   # drift 代码生成
 
 ## 工作流约定
 
-- 改动后必须更新 `docs/PROGRESS.md` 勾选完成项。
+- 项目已进入**维护期**：每个有意义的改动（bug fix / perf / refactor / feat）追加一条到 `docs/PROGRESS.md` §维护期日志（格式：`YYYY-MM-DD · 短 hash · 类型 · what / why`），追加在该月最上方。
 - 新增依赖必须更新 `docs/TECH_STACK.md §2`。
 - 不要主动创建新文档；用户明确要求才建。
 - 不要在代码里加废话注释。
@@ -61,6 +61,6 @@ dart run build_runner build --delete-conflicting-outputs   # drift 代码生成
 
 ## Checkpoint 机制（防 context 中断）
 
-- 用户说「checkpoint」时：① 跑 `flutter analyze` + `flutter test` 确认可编译 ② 更新 `docs/PROGRESS.md` 的「Current Work」段（勾选已完成子项、更新「下一步接入点」、记录未提交改动） ③ 简短回复确认。
+- 用户说「checkpoint」时：① 跑 `flutter analyze` + `flutter test` 确认可编译 ② 若本会话已 commit 但未入维护期日志，把对应条目追加到 `docs/PROGRESS.md` §维护期日志 ③ 简短回复确认。
 - 完成一个有意义的子任务（一个文件 / 一组测试通过）后，主动提示用户「可以 commit」。
-- 新会话恢复时：先 `git status` + `git log --oneline -10` 看代码状态，再读 `docs/PROGRESS.md` 的「Current Work」段，从「下一步接入点」继续。
+- 新会话恢复时：先 `git status` + `git log --oneline -10` 看代码状态，再读 `docs/PROGRESS.md` 的「当前状态」+「维护期日志」最近条目，了解当前焦点。
