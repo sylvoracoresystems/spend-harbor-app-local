@@ -16,6 +16,7 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../application/source_form_controller.dart';
 
+/// 来源新建/编辑页：`id` 为空走新建，否则加载已有来源。
 class SourceEditPage extends ConsumerStatefulWidget {
   const SourceEditPage({super.key, this.id});
   final String? id;
@@ -24,6 +25,7 @@ class SourceEditPage extends ConsumerStatefulWidget {
   ConsumerState<SourceEditPage> createState() => _SourceEditPageState();
 }
 
+/// 持有名称 TextEditingController 并与 controller state 双向同步。
 class _SourceEditPageState extends ConsumerState<SourceEditPage> {
   late final TextEditingController _nameCtrl;
 

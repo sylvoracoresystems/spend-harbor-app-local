@@ -1,5 +1,6 @@
 part of '../dashboard_page.dart';
 
+/// 指标卡网格：收入/支出/净额/笔数 4 张卡，宽屏排 4 列、窄屏 2 列。
 class _MetricsGrid extends StatelessWidget {
   const _MetricsGrid({required this.metrics});
   final DashboardMetrics metrics;
@@ -99,6 +100,7 @@ class _MetricsGrid extends StatelessWidget {
   }
 }
 
+/// 单张指标卡：图标 + 标题 + 金额，支持多币种角标提示。
 class _TileMetricCard extends StatelessWidget {
   const _TileMetricCard({
     required this.label,

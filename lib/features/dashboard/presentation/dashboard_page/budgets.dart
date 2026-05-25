@@ -1,5 +1,6 @@
 part of '../dashboard_page.dart';
 
+/// Dashboard 预算卡片：列出当前周期的预算进度，空列表则不渲染。
 class _BudgetsSection extends ConsumerWidget {
   const _BudgetsSection();
 
@@ -64,6 +65,7 @@ class _BudgetsSection extends ConsumerWidget {
   }
 }
 
+/// 单条预算进度行：名称 + 已用/总额 + 进度条。
 class _BudgetRow extends ConsumerWidget {
   const _BudgetRow({required this.progress});
   final BudgetProgress progress;

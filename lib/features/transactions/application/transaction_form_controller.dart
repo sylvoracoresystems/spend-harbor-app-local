@@ -103,6 +103,7 @@ enum TransactionFormError {
   tagLimitExceeded,
 }
 
+/// 驱动交易新建/编辑：加载、字段更新（金额/类别/标签/来源/日期）、校验与提交。
 class TransactionFormController extends StateNotifier<TransactionFormState> {
   TransactionFormController(this._ref, {String? editId})
       : super(_initial(_ref, editId)) {

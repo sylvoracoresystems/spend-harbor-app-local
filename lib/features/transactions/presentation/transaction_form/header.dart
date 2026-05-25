@@ -1,5 +1,6 @@
 part of '../transaction_form.dart';
 
+/// 表单顶栏：返回 + 标题 + （可选）删除/设置按钮。
 class _Header extends StatelessWidget {
   const _Header({
     required this.title,

@@ -15,6 +15,7 @@ import '../application/import_controller.dart';
 import '../application/taxonomy_import_controller.dart';
 import '../application/xlsx_codec.dart';
 
+/// 数据导入页：支持交易（xlsx/csv）与分类标签来源导入。
 class ImportPage extends ConsumerStatefulWidget {
   const ImportPage({super.key});
 
@@ -22,6 +23,7 @@ class ImportPage extends ConsumerStatefulWidget {
   ConsumerState<ImportPage> createState() => _ImportPageState();
 }
 
+/// 持有 busy 状态、去重开关，以及上次导入摘要供 UI 回显。
 class _ImportPageState extends ConsumerState<ImportPage> {
   bool _busy = false;
   bool _allowDuplicates = false;

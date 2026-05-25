@@ -16,6 +16,7 @@ import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 
+/// 来源管理页（设置入口）：列出全部来源并支持新建/进入编辑。
 class SourcesPage extends ConsumerWidget {
   const SourcesPage({super.key});
 
@@ -59,6 +60,7 @@ class SourcesPage extends ConsumerWidget {
   }
 }
 
+/// 单条来源行：图标 + 名称 + 货币，点击进入编辑。
 class _SourceRow extends StatelessWidget {
   const _SourceRow({required this.src});
   final Source src;

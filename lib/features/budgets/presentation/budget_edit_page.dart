@@ -20,6 +20,7 @@ import '../../../theme/app_typography.dart';
 import '../application/budget_form_controller.dart';
 import '../application/budget_period_alignment.dart';
 
+/// 预算新建/编辑页：`id` 为空走新建分支，否则加载已有预算。
 class BudgetEditPage extends ConsumerStatefulWidget {
   const BudgetEditPage({super.key, this.id});
   final String? id;
@@ -28,6 +29,7 @@ class BudgetEditPage extends ConsumerStatefulWidget {
   ConsumerState<BudgetEditPage> createState() => _BudgetEditPageState();
 }
 
+/// 持有金额 TextEditingController 并将其与 controller state 双向同步。
 class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
   late final TextEditingController _amountCtrl;
 
@@ -218,6 +220,7 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
   }
 }
 
+/// 仅展示支出类目的下拉，过滤掉已删除/不匹配的旧值。
 class _CategoryDropdown extends ConsumerWidget {
   const _CategoryDropdown({required this.value, required this.onPicked});
   final String? value;

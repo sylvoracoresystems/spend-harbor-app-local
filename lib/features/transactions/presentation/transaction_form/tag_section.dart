@@ -1,5 +1,6 @@
 part of '../transaction_form.dart';
 
+/// 标签区：搜索 + 排序（选中→近 30d 频次→新→旧）+ 展开/收起。
 class _TagsSection extends ConsumerWidget {
   const _TagsSection({
     required this.selectedIds,
@@ -109,6 +110,7 @@ class _TagsSection extends ConsumerWidget {
   }
 }
 
+/// 标签 chip：选中态给品牌色填充 + 微阴影。
 class _TagChip extends StatelessWidget {
   const _TagChip({
     required this.label,
@@ -159,6 +161,7 @@ class _TagChip extends StatelessWidget {
   }
 }
 
+///「+N 更多 / 收起」展开切换 chip。
 class _MoreChip extends StatelessWidget {
   const _MoreChip({required this.label, required this.onTap});
   final String label;

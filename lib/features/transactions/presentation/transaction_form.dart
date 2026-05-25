@@ -31,6 +31,7 @@ part 'transaction_form/category_grid.dart';
 part 'transaction_form/tag_section.dart';
 part 'transaction_form/footer.dart';
 
+/// 交易表单：金额/币种/日期/类别/标签/来源/备注一站式编辑。
 class TransactionForm extends ConsumerStatefulWidget {
   const TransactionForm({super.key, this.editId});
 
@@ -66,6 +67,7 @@ InputDecoration _flatDecoration({
   );
 }
 
+/// 持有金额/备注/标签搜索三个 TextController，及 UI 局部态（展开/字段错误）。
 class _TransactionFormState extends ConsumerState<TransactionForm> {
   late final TextEditingController _amountCtrl;
   late final TextEditingController _noteCtrl;

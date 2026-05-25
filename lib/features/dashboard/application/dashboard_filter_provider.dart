@@ -25,6 +25,7 @@ class DashboardFilter {
   static const _sentinel = Object();
 }
 
+/// 维护 dashboard 顶部过滤条的当次选择（货币 / 来源）。
 class DashboardFilterController extends StateNotifier<DashboardFilter> {
   DashboardFilterController(String defaultCurrency)
       : super(DashboardFilter(currency: defaultCurrency));

@@ -26,6 +26,7 @@ part 'dashboard_page/metrics.dart';
 part 'dashboard_page/recent.dart';
 part 'dashboard_page/budgets.dart';
 
+/// 首页（Dashboard）：顶部过滤条 + 指标卡 + 预算 + 最近交易。
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
 

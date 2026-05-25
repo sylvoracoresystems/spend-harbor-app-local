@@ -13,6 +13,7 @@ import '../../../theme/app_typography.dart';
 import '../../transactions/application/transactions_list_controller.dart';
 import '../application/export_controller.dart';
 
+/// 数据导出页：交易导出（xlsx/csv，按范围）+ 分类标签来源导出。
 class ExportPage extends ConsumerStatefulWidget {
   const ExportPage({super.key});
 
@@ -20,6 +21,7 @@ class ExportPage extends ConsumerStatefulWidget {
   ConsumerState<ExportPage> createState() => _ExportPageState();
 }
 
+/// 持有用户选择的格式 / 范围 / 自定义日期段，及两个 busy 标志位。
 class _ExportPageState extends ConsumerState<ExportPage> {
   bool _txBusy = false;
   bool _taxBusy = false;
@@ -215,6 +217,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
   }
 }
 
+/// 圆角卡片容器：标题 + 任意子组件，用于分隔导出页内不同分块。
 class _SectionCard extends StatelessWidget {
   const _SectionCard({required this.title, required this.children});
   final String title;
@@ -248,6 +251,7 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
+/// 日期选择字段：点击弹原生 date picker，回传所选日期。
 class _DateField extends StatelessWidget {
   const _DateField({
     required this.label,

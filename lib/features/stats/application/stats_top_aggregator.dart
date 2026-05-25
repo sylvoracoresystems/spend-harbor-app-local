@@ -9,6 +9,7 @@ library;
 import '../../../data/database/app_database.dart';
 import '../../../domain/enums/transaction_type.dart';
 
+/// Top 卡片「按分类」单行：金额合计 + 笔数 + 该分类下的 tag 频次。
 class TopCategoryRow {
   const TopCategoryRow({
     required this.categoryId,
@@ -22,12 +23,14 @@ class TopCategoryRow {
   final Map<String, int> tagFrequencies; // tagId -> occurrence count
 }
 
+/// Top 卡片「按标签」展开后的子分类金额项。
 class TopTagCategory {
   const TopTagCategory({required this.categoryId, required this.totalCents});
   final String categoryId;
   final int totalCents;
 }
 
+/// Top 卡片「按标签」单行：金额合计 + 笔数 + 关联前 3 分类。
 class TopTagRow {
   const TopTagRow({
     required this.tagId,
@@ -41,12 +44,14 @@ class TopTagRow {
   final List<TopTagCategory> topCategories; // up to 3, desc by amount
 }
 
+/// 未挂任何 tag 的交易汇总，与 tagged 行并列展示。
 class UntaggedRow {
   const UntaggedRow({required this.totalCents, required this.count});
   final int totalCents;
   final int count;
 }
 
+/// 「按标签」聚合结果：rows + 未打标签汇总（可空）。
 class TopTagAggregate {
   const TopTagAggregate({required this.rows, required this.untagged});
   final List<TopTagRow> rows;

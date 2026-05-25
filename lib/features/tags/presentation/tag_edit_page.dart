@@ -14,6 +14,7 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../application/tag_form_controller.dart';
 
+/// 标签新建/编辑页：`id` 为空走新建，否则加载已有标签。
 class TagEditPage extends ConsumerStatefulWidget {
   const TagEditPage({super.key, this.id});
   final String? id;
@@ -22,6 +23,7 @@ class TagEditPage extends ConsumerStatefulWidget {
   ConsumerState<TagEditPage> createState() => _TagEditPageState();
 }
 
+/// 持有名称 TextEditingController 并与 controller state 双向同步。
 class _TagEditPageState extends ConsumerState<TagEditPage> {
   late final TextEditingController _nameCtrl;
 

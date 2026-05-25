@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../application/theme_mode_provider.dart';
 
+/// 外观设置页：选择亮/暗/跟随系统主题。
 class AppearancePage extends ConsumerWidget {
   const AppearancePage({super.key});
 

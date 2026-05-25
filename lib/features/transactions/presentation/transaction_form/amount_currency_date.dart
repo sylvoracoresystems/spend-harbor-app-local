@@ -1,5 +1,6 @@
 part of '../transaction_form.dart';
 
+/// 金额输入 + 币种下拉，组合成一行。
 class _AmountAndCurrencyRow extends StatelessWidget {
   const _AmountAndCurrencyRow({
     required this.amountCtrl,
@@ -86,6 +87,7 @@ class _AmountAndCurrencyRow extends StatelessWidget {
   }
 }
 
+/// 表单字段的统一外边框容器（圆角 + border + surface 背景）。
 class _OutlinedBox extends StatelessWidget {
   const _OutlinedBox({
     required this.child,
@@ -116,6 +118,7 @@ class _OutlinedBox extends StatelessWidget {
   }
 }
 
+/// 日期选择行：今天/昨天快捷按钮 + 自定义日期选择器。
 class _DateRow extends StatelessWidget {
   const _DateRow({required this.value, required this.onPicked});
   final DateTime value;

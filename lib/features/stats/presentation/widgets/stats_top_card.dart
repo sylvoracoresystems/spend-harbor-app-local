@@ -22,6 +22,7 @@ import 'type_pill_toggle.dart';
 
 enum TopMode { category, tag }
 
+/// Top 卡片：按分类 / 按标签两种聚合视图切换。
 class StatsTopCard extends ConsumerStatefulWidget {
   const StatsTopCard({super.key, required this.onJumpToTagDist});
   final VoidCallback onJumpToTagDist;
@@ -30,6 +31,7 @@ class StatsTopCard extends ConsumerStatefulWidget {
   ConsumerState<StatsTopCard> createState() => _Top();
 }
 
+/// 持有当前 tab（category/tag）和收/支类型。
 class _Top extends ConsumerState<StatsTopCard> {
   TopMode _mode = TopMode.category;
   TransactionType _type = TransactionType.expense;
@@ -82,6 +84,7 @@ class _Top extends ConsumerState<StatsTopCard> {
   }
 }
 
+/// 卡内 tab 按钮：选中态加底部下划线高亮。
 class _TabBtn extends StatelessWidget {
   const _TabBtn({
     required this.label,
@@ -122,6 +125,7 @@ class _TabBtn extends StatelessWidget {
   }
 }
 
+/// 「按分类」视图主体：展示分类排行 + 内部 tag 频次。
 class _ByCategoryBody extends ConsumerWidget {
   const _ByCategoryBody({required this.type, required this.currency});
   final TransactionType type;
@@ -240,6 +244,7 @@ class _ByCategoryBody extends ConsumerWidget {
   }
 }
 
+/// 「按标签」视图主体：标签排行 + 跳转分布卡入口。
 class _ByTagBody extends ConsumerWidget {
   const _ByTagBody({
     required this.type,

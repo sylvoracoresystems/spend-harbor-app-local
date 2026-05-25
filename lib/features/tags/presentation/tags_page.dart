@@ -17,6 +17,7 @@ import '../../../theme/app_typography.dart';
 /// 与 categories_page 共用阈值：超过即显示搜索框。
 const int _kSearchThreshold = 15;
 
+/// 标签管理页（设置入口）：列出全部标签，超出阈值显示搜索框。
 class TagsPage extends ConsumerStatefulWidget {
   const TagsPage({super.key});
 
@@ -24,6 +25,7 @@ class TagsPage extends ConsumerStatefulWidget {
   ConsumerState<TagsPage> createState() => _TagsPageState();
 }
 
+/// 持有本地搜索关键词；过滤逻辑只走名称（含 i18n 默认名）。
 class _TagsPageState extends ConsumerState<TagsPage> {
   String _query = '';
 
@@ -92,6 +94,7 @@ class _TagsPageState extends ConsumerState<TagsPage> {
   }
 }
 
+/// 带搜索图标的圆角输入框，用于标签列表的本地过滤。
 class _SearchField extends StatelessWidget {
   const _SearchField({required this.hint, required this.onChanged});
   final String hint;
@@ -137,6 +140,7 @@ class _SearchField extends StatelessWidget {
   }
 }
 
+/// 单条标签行：色块 + 名称，点击进入编辑。
 class _TagRow extends StatelessWidget {
   const _TagRow({required this.tag});
   final Tag tag;

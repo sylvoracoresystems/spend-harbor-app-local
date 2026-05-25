@@ -7,6 +7,7 @@ import '../../settings/application/default_currency_provider.dart';
 
 const _uuid = Uuid();
 
+/// 来源（账户）编辑表单的不可变状态快照。
 class SourceFormState {
   const SourceFormState({
     this.id,
@@ -45,6 +46,7 @@ class SourceFormState {
 
 enum SourceFormError { nameRequired, nameDuplicate }
 
+/// 驱动来源新建/编辑：加载、字段更新、同名校验、提交与软删除。
 class SourceFormController extends StateNotifier<SourceFormState> {
   SourceFormController(this._ref, {String? editId})
       : super(SourceFormState(

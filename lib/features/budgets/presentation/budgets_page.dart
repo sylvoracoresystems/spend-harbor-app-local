@@ -17,6 +17,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../application/budget_form_controller.dart';
 
+/// 预算列表页（设置入口）：展示全部预算并支持新建/进入编辑。
 class BudgetsPage extends ConsumerWidget {
   const BudgetsPage({super.key});
 
@@ -60,6 +61,7 @@ class BudgetsPage extends ConsumerWidget {
   }
 }
 
+/// 单条预算行：展示 scope/period/金额，点击进入编辑。
 class _BudgetRow extends ConsumerWidget {
   const _BudgetRow({required this.b});
   final Budget b;

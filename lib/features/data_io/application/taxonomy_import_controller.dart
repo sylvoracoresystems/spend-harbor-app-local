@@ -14,6 +14,7 @@ import 'taxonomy_xlsx.dart';
 
 const _uuid = Uuid();
 
+/// 分类/标签/来源批量导入的结果汇总（增删改条数 + 无效行列表）。
 class TaxonomyImportSummary {
   const TaxonomyImportSummary({
     required this.categoriesAdded,

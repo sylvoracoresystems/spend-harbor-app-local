@@ -105,6 +105,7 @@ class ParsedTaxonomy {
   final List<String> invalidRows;
 }
 
+/// xlsx 解析后的单条分类记录（待入库前的中间结构）。
 class ParsedCategory {
   const ParsedCategory({
     required this.name,
@@ -120,6 +121,7 @@ class ParsedCategory {
   final int sortOrder;
 }
 
+/// xlsx 解析后的单条标签记录。
 class ParsedTag {
   const ParsedTag({
     required this.name,
@@ -131,6 +133,7 @@ class ParsedTag {
   final int sortOrder;
 }
 
+/// xlsx 解析后的单条来源记录。
 class ParsedSource {
   const ParsedSource({
     required this.name,

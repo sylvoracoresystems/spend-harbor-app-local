@@ -17,6 +17,7 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../application/category_form_controller.dart';
 
+/// 分类新建/编辑页：`id` 为空走新建，`initialType` 决定新建的收/支默认值。
 class CategoryEditPage extends ConsumerStatefulWidget {
   const CategoryEditPage({super.key, this.id, this.initialType});
 
@@ -29,6 +30,7 @@ class CategoryEditPage extends ConsumerStatefulWidget {
   ConsumerState<CategoryEditPage> createState() => _CategoryEditPageState();
 }
 
+/// 持有名称 TextEditingController 并与 controller state 双向同步。
 class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   late final TextEditingController _nameCtrl;
 

@@ -52,6 +52,7 @@ abstract class LockStorage {
   Future<void> writeBiometric(bool v);
 }
 
+/// 默认 LockStorage 实现：基于 flutter_secure_storage 的 keychain/keystore。
 class _SecureLockStorage implements LockStorage {
   _SecureLockStorage(this._storage);
   final FlutterSecureStorage _storage;
@@ -87,6 +88,7 @@ final lockStorageProvider = Provider<LockStorage>(
 final localAuthProvider =
     Provider<LocalAuthentication>((ref) => LocalAuthentication());
 
+/// 管理 app 启动锁：PIN 设置/校验、生物识别开关、未解锁态拦截。
 class AppLockController extends StateNotifier<AppLockState> {
   AppLockController(this._ref)
       : super(const AppLockState(

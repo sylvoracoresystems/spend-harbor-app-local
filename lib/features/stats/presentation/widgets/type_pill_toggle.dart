@@ -120,6 +120,7 @@ class TypePillToggle extends StatelessWidget {
   }
 }
 
+/// 收/支 pill 切换器的单半侧，选中态填充品牌色。
 class _Half extends StatelessWidget {
   const _Half({
     required this.label,

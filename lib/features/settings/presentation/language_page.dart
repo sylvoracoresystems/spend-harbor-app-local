@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/providers/locale_provider.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 
+/// 语言设置页：中/英/跟随系统三选一。
 class LanguagePage extends ConsumerWidget {
   const LanguagePage({super.key});
 

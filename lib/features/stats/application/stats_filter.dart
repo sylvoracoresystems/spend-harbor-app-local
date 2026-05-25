@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 enum StatsPeriod { week, month, year }
 
 @immutable
+/// Stats 视图的过滤条件：币种/来源/周期/当前桶 + 周/年/月切换记忆锚点。
 class StatsFilter {
   const StatsFilter({
     required this.currency,

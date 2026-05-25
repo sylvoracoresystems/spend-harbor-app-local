@@ -23,6 +23,7 @@ import 'transaction_list_row.dart';
 part 'transactions_page/day_group.dart';
 part 'transactions_page/list_summary.dart';
 
+/// 交易列表页：过滤条 + 按日分组 + 多选批量操作。
 class TransactionsPage extends ConsumerWidget {
   const TransactionsPage({super.key});
 

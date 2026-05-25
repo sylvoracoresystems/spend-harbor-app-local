@@ -6,6 +6,7 @@ import '../../../shared/providers/preferences_provider.dart';
 
 const _kKey = 'app.defaultCurrency';
 
+/// 持久化「默认货币」偏好，未设置或非法时回退到 CAD。
 class DefaultCurrencyController extends StateNotifier<String> {
   DefaultCurrencyController(this._prefs)
       : super(_load(_prefs));

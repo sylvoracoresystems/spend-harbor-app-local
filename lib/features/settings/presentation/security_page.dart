@@ -11,6 +11,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../application/app_lock_controller.dart';
 
+/// 安全设置页：启用 PIN 锁、修改 PIN、生物识别开关。
 class SecurityPage extends ConsumerWidget {
   const SecurityPage({super.key});
 
@@ -66,6 +67,7 @@ class SecurityPage extends ConsumerWidget {
   }
 }
 
+/// PIN 设置/修改对话框：要求二次输入一致。
 class _SetPinDialog extends StatefulWidget {
   const _SetPinDialog({required this.change});
   final bool change;
@@ -74,6 +76,7 @@ class _SetPinDialog extends StatefulWidget {
   State<_SetPinDialog> createState() => _SetPinDialogState();
 }
 
+/// 持有两个 PIN 输入框 + 错误消息；提交时校验长度与一致性。
 class _SetPinDialogState extends State<_SetPinDialog> {
   final _p1 = TextEditingController();
   final _p2 = TextEditingController();
@@ -207,6 +210,7 @@ class _SetPinDialogState extends State<_SetPinDialog> {
   }
 }
 
+/// 圆角数字输入框，仅允许数字 + 限长，用于 PIN 输入。
 class _PinField extends StatelessWidget {
   const _PinField({
     required this.controller,

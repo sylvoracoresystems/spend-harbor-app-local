@@ -7,6 +7,7 @@ import '../../../data/database/app_database_provider.dart';
 
 const _uuid = Uuid();
 
+/// 标签编辑表单的不可变状态快照。
 class TagFormState {
   const TagFormState({
     this.id,
@@ -37,6 +38,7 @@ class TagFormState {
 
 enum TagFormError { nameRequired, nameDuplicate }
 
+/// 驱动标签新建/编辑：加载、字段更新、同名校验、提交与软删除。
 class TagFormController extends StateNotifier<TagFormState> {
   TagFormController(this._ref, {String? editId})
       : super(TagFormState(id: editId)) {

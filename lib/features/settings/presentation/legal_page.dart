@@ -6,6 +6,7 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 
+/// 法律条款页：展示隐私政策与服务条款全文。
 class LegalPage extends StatelessWidget {
   const LegalPage({super.key});
 

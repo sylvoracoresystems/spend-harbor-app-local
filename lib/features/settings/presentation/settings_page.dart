@@ -9,6 +9,7 @@ import '../../../theme/app_radius.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 
+/// 设置主页：分组列出所有子页面入口。
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -84,6 +85,7 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
+/// 单个分组的视觉容器：标题 + 圆角卡片包裹的条目列表。
 class _SectionView extends StatelessWidget {
   const _SectionView({required this.section});
   final _SettingsSection section;
@@ -135,6 +137,7 @@ class _SectionView extends StatelessWidget {
   }
 }
 
+/// 单条设置入口：图标 + 标题 + 箭头，点击跳到对应路由。
 class _ItemRow extends StatelessWidget {
   const _ItemRow({required this.item});
   final _SettingsItem item;
@@ -161,12 +164,14 @@ class _ItemRow extends StatelessWidget {
   }
 }
 
+/// 设置分组的纯数据载体：标题 + 若干条目。
 class _SettingsSection {
   const _SettingsSection(this.title, this.items);
   final String title;
   final List<_SettingsItem> items;
 }
 
+/// 设置条目的纯数据载体：icon + 标题 + 路由 + 调色板。
 class _SettingsItem {
   const _SettingsItem(
     this.icon,

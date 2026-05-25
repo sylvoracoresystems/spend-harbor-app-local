@@ -1,5 +1,6 @@
 part of '../transaction_form.dart';
 
+/// 备注输入框：多行 + 500 字限长。
 class _NoteField extends StatelessWidget {
   const _NoteField({required this.controller, required this.onChanged});
   final TextEditingController controller;
@@ -29,6 +30,7 @@ class _NoteField extends StatelessWidget {
   }
 }
 
+/// 来源下拉：选中后回传 id 与对应币种，便于联动金额币种字段。
 class _SourceDropdown extends ConsumerWidget {
   const _SourceDropdown({required this.selected, required this.onPicked});
 
@@ -93,6 +95,7 @@ class _SourceDropdown extends ConsumerWidget {
   }
 }
 
+/// 表单底部固定操作条：取消 + 保存。
 class _BottomBar extends StatelessWidget {
   const _BottomBar({
     required this.submitting,
@@ -156,6 +159,7 @@ class _BottomBar extends StatelessWidget {
   }
 }
 
+/// 行内字段错误提示：`show=false` 时占位为零，避免布局抖动。
 class _ErrorIfAny extends StatelessWidget {
   const _ErrorIfAny({required this.show, required this.message});
   final bool show;

@@ -21,6 +21,7 @@ import 'stats_section_card.dart';
 import '../../../../shared/widgets/tag_pill.dart';
 import 'type_pill_toggle.dart';
 
+/// 分类分布卡：环形图 + 列表，可切换收/支类型。
 class CategoryDistributionCard extends ConsumerStatefulWidget {
   const CategoryDistributionCard({super.key});
 
@@ -28,6 +29,7 @@ class CategoryDistributionCard extends ConsumerStatefulWidget {
   ConsumerState<CategoryDistributionCard> createState() => _CDState();
 }
 
+/// 持有当前选中的收/支类型。
 class _CDState extends ConsumerState<CategoryDistributionCard> {
   TransactionType _type = TransactionType.expense;
 
@@ -116,6 +118,7 @@ class _CDState extends ConsumerState<CategoryDistributionCard> {
   }
 }
 
+/// 标签分布卡：环形图 + 列表，可切换收/支类型；接受外部 GlobalKey 供跨卡跳转。
 class TagDistributionCard extends ConsumerStatefulWidget {
   const TagDistributionCard({super.key, required this.cardKey});
   final GlobalKey cardKey;
@@ -124,6 +127,7 @@ class TagDistributionCard extends ConsumerStatefulWidget {
   ConsumerState<TagDistributionCard> createState() => _TDState();
 }
 
+/// 持有当前选中的收/支类型。
 class _TDState extends ConsumerState<TagDistributionCard> {
   TransactionType _type = TransactionType.expense;
 

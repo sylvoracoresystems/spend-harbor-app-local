@@ -6,6 +6,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/root_page_scaffold.dart';
 import '../application/default_currency_provider.dart';
 
+/// 默认货币设置页：列出支持的币种供用户选择。
 class CurrencyPage extends ConsumerWidget {
   const CurrencyPage({super.key});
 

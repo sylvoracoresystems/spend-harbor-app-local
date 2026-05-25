@@ -20,11 +20,13 @@ sealed class XlsxCell {
   factory XlsxCell.num(num v) = XlsxNum;
 }
 
+/// 字符串单元格。
 class XlsxStr extends XlsxCell {
   const XlsxStr(this.value);
   final String value;
 }
 
+/// 数值单元格（int/double 均可）。
 class XlsxNum extends XlsxCell {
   const XlsxNum(this.value);
   final num value;

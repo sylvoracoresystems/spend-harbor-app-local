@@ -16,6 +16,7 @@ import '../../application/stats_filter.dart';
 import '../../application/stats_filter_provider.dart';
 import 'stats_section_card.dart';
 
+/// 趋势卡片：当前桶范围 chip + 收支双色柱状图。
 class StatsTrendCard extends ConsumerWidget {
   const StatsTrendCard({super.key});
 
@@ -83,6 +84,7 @@ class StatsTrendCard extends ConsumerWidget {
   }
 }
 
+/// 当前桶范围标签：周显示日期段、月显示「年-月」、年显示年份。
 class _RangeChip extends StatelessWidget {
   const _RangeChip({required this.filter, required this.locale});
   final StatsFilter filter;
@@ -117,6 +119,7 @@ class _RangeChip extends StatelessWidget {
   }
 }
 
+/// 可横向滚动的双色柱状图，点击柱子切换选中桶。
 class _Bars extends StatefulWidget {
   const _Bars({
     required this.rows,
@@ -136,6 +139,7 @@ class _Bars extends StatefulWidget {
   State<_Bars> createState() => _BarsState();
 }
 
+/// 管理滚动控制、可见范围 max-Y 计算与首次跳转到选中桶。
 class _BarsState extends State<_Bars> {
   static const double _yAxisWidth = 36;
   static const double _bottomReserved = 28;
@@ -445,6 +449,7 @@ class _BarsState extends State<_Bars> {
   }
 }
 
+/// 图例容器：水平排列收入/支出两个色点。
 class _Legend extends StatelessWidget {
   const _Legend({
     required this.incomeColor,
@@ -481,6 +486,7 @@ class _Legend extends StatelessWidget {
   }
 }
 
+/// 图例单元：色点 + 文字。
 class _LegendDot extends StatelessWidget {
   const _LegendDot({
     required this.color,

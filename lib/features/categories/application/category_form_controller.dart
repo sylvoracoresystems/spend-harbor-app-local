@@ -8,6 +8,7 @@ import '../../../shared/icons/icon_registry.dart';
 
 const _uuid = Uuid();
 
+/// 分类编辑表单的不可变状态快照。
 class CategoryFormState {
   const CategoryFormState({
     this.id,
@@ -45,6 +46,7 @@ class CategoryFormState {
 
 enum CategoryFormError { nameRequired, nameDuplicate }
 
+/// 驱动分类新建/编辑：加载、字段更新、同步+异步重名校验、提交与软删除。
 class CategoryFormController extends StateNotifier<CategoryFormState> {
   CategoryFormController(
     this._ref, {

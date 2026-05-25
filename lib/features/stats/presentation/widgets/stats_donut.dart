@@ -7,6 +7,7 @@ import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_spacing.dart';
 import '../../../../theme/app_typography.dart';
 
+/// 环形图的一片：颜色 + 数值 + 可选徽标图标。
 class DonutSlice {
   const DonutSlice({required this.color, required this.value, this.icon});
 
@@ -17,6 +18,7 @@ class DonutSlice {
   final IconData? icon;
 }
 
+/// 环形图组件：中心金额 + 多片切片 + 大片徽标。
 class StatsDonut extends StatefulWidget {
   const StatsDonut({
     super.key,
@@ -42,6 +44,7 @@ class StatsDonut extends StatefulWidget {
   State<StatsDonut> createState() => _StatsDonutState();
 }
 
+/// 持有首屏 sweep 动画控制器；后续数据变化交给 fl_chart 内置 lerp。
 class _StatsDonutState extends State<StatsDonut>
     with SingleTickerProviderStateMixin {
   /// 首屏 sweep 控制器。完成后保持在 t=1；后续数据变化交给 fl_chart 内部的
@@ -257,6 +260,7 @@ class _StatsDonutState extends State<StatsDonut>
   }
 }
 
+/// 一根 leader line 的纯数据：从切片起点偏转角 + 颜色。
 class _LeaderEntry {
   const _LeaderEntry({required this.degFromStart, required this.color});
   final double degFromStart;
@@ -311,6 +315,7 @@ class _LeaderLinesPainter extends CustomPainter {
   }
 }
 
+/// 切片旁的小徽标：色块 + （icon 或圆点）+ 占比文本。
 class _SliceBadge extends StatelessWidget {
   const _SliceBadge({
     required this.color,

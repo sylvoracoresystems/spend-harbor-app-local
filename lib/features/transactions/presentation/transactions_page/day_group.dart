@@ -1,5 +1,6 @@
 part of '../transactions_page.dart';
 
+/// 单日交易组：日期表头 + 当日交易行列表。
 class _DayGroupView extends ConsumerWidget {
   const _DayGroupView({required this.group, this.cardStyle = false});
   final DayGroup group;
@@ -44,6 +45,7 @@ class _DayGroupView extends ConsumerWidget {
   }
 }
 
+/// 日期组表头：左侧显示日期，右侧汇总当日收支。
 class _DayHeader extends StatelessWidget {
   const _DayHeader({required this.group});
   final DayGroup group;

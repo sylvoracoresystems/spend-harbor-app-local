@@ -68,6 +68,7 @@ StatsFilter applySetCurrency(
   );
 }
 
+/// 管理 Stats 过滤条件：周期切换、桶位移、币种/来源选择 + 切换锚点记忆。
 class StatsFilterController extends StateNotifier<StatsFilter> {
   StatsFilterController(this._ref, StatsFilter seed) : super(seed);
 

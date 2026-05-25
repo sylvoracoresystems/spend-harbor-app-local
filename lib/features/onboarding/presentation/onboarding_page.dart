@@ -9,6 +9,7 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 
+/// 首次启动引导页：展示产品价值、确认后写入「已引导」标志。
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({super.key});
 

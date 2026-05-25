@@ -86,6 +86,7 @@ BackupSnapshot decodeBackup(String body) {
   );
 }
 
+/// 备份文件 schemaVersion 与当前 app 不匹配时抛出。
 class BackupVersionException implements Exception {
   const BackupVersionException({required this.found, required this.expected});
   final int found;

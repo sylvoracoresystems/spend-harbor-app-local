@@ -11,6 +11,7 @@ import 'budget_period_alignment.dart';
 
 const _uuid = Uuid();
 
+/// 预算编辑表单的不可变状态快照。
 class BudgetFormState {
   const BudgetFormState({
     this.id,
@@ -71,6 +72,7 @@ const _unset = Object();
 
 enum BudgetFormError { amountInvalid, categoryRequired }
 
+/// 驱动预算新建/编辑表单：加载、字段更新、校验、提交与软删除。
 class BudgetFormController extends StateNotifier<BudgetFormState> {
   BudgetFormController(this._ref, {String? editId})
       : super(BudgetFormState(

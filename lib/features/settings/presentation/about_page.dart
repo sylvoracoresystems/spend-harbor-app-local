@@ -9,6 +9,7 @@ import '../../../theme/app_typography.dart';
 
 const _kAppVersion = '1.0.0';
 
+/// 关于页：展示 app 版本、产品定位与法律入口。
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 

@@ -4,6 +4,7 @@ library;
 
 import 'stats_filter.dart';
 
+/// 趋势图的单个时间桶：半开区间 [start, end)。
 class TrendBucket {
   const TrendBucket({required this.start, required this.end});
   final DateTime start;

@@ -20,6 +20,7 @@ class AppLockGate extends ConsumerStatefulWidget {
   ConsumerState<AppLockGate> createState() => _AppLockGateState();
 }
 
+/// 监听 app 生命周期：进入后台时调用 lock()，下次回前台需重新解锁。
 class _AppLockGateState extends ConsumerState<AppLockGate>
     with WidgetsBindingObserver {
   @override
@@ -58,12 +59,14 @@ class _AppLockGateState extends ConsumerState<AppLockGate>
   }
 }
 
+/// 解锁覆盖层：PIN 输入 + 生物识别回退。
 class _LockScreen extends ConsumerStatefulWidget {
   const _LockScreen();
   @override
   ConsumerState<_LockScreen> createState() => _LockScreenState();
 }
 
+/// 持有 PIN 输入控制器与生物识别一次性尝试标志。
 class _LockScreenState extends ConsumerState<_LockScreen> {
   final _ctrl = TextEditingController();
   String? _error;

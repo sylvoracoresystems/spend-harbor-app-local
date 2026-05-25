@@ -9,6 +9,7 @@ import 'widgets/stats_filter_bar.dart';
 import 'widgets/stats_top_card.dart';
 import 'widgets/stats_trend_card.dart';
 
+/// 统计页：过滤条 + 趋势卡 + 分布卡 + Top 卡，支持跨卡跳转。
 class StatsPage extends ConsumerStatefulWidget {
   const StatsPage({super.key});
 
@@ -16,6 +17,7 @@ class StatsPage extends ConsumerStatefulWidget {
   ConsumerState<StatsPage> createState() => _StatsPageState();
 }
 
+/// 持有 tag 分布卡的 GlobalKey，用于其他卡片调用滚动到此处。
 class _StatsPageState extends ConsumerState<StatsPage> {
   final _tagDistKey = GlobalKey();
 

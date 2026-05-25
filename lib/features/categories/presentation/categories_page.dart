@@ -19,6 +19,7 @@ import '../../../theme/app_typography.dart';
 /// 超过该阈值时显示搜索框。
 const int _kSearchThreshold = 15;
 
+/// 分类管理页（设置入口）：展示全部分类，超出阈值时显示搜索框。
 class CategoriesPage extends ConsumerStatefulWidget {
   const CategoriesPage({super.key});
 
@@ -26,6 +27,7 @@ class CategoriesPage extends ConsumerStatefulWidget {
   ConsumerState<CategoriesPage> createState() => _CategoriesPageState();
 }
 
+/// 持有本地搜索关键词；过滤逻辑只走名称（含 i18n 默认名）。
 class _CategoriesPageState extends ConsumerState<CategoriesPage> {
   String _query = '';
 
@@ -96,6 +98,7 @@ class _CategoriesPageState extends ConsumerState<CategoriesPage> {
   }
 }
 
+/// 带搜索图标的圆角输入框，用于分类列表的本地过滤。
 class _SearchField extends StatelessWidget {
   const _SearchField({required this.hint, required this.onChanged});
   final String hint;
@@ -141,6 +144,7 @@ class _SearchField extends StatelessWidget {
   }
 }
 
+/// 单条分类行：图标 + 名称 + 收/支徽标，点击进入编辑。
 class _CategoryRow extends StatelessWidget {
   const _CategoryRow({required this.cat});
   final Category cat;

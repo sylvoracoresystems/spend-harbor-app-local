@@ -107,24 +107,28 @@ final bucketTagsByTxProvider =
       .tagIdsForMany(rows.map((r) => r.id).toList());
 });
 
+/// 分类维度的单片：分类 id + 该分类金额合计（cents）。
 class CategorySlice {
   const CategorySlice({required this.categoryId, required this.totalCents});
   final String categoryId;
   final int totalCents;
 }
 
+/// 标签维度的单片：标签 id + 该标签金额合计（cents）。
 class TagSlice {
   const TagSlice({required this.tagId, required this.totalCents});
   final String tagId;
   final int totalCents;
 }
 
+/// 分类分布的聚合结果：所有 slice + 总金额。
 class CategoryDistribution {
   const CategoryDistribution({required this.slices, required this.totalCents});
   final List<CategorySlice> slices;
   final int totalCents;
 }
 
+/// 标签分布的聚合结果：所有 slice + 总金额 + 未打标签金额。
 class TagDistribution {
   const TagDistribution({
     required this.slices,

@@ -24,6 +24,7 @@ String _encode(ThemeMode mode) => switch (mode) {
       ThemeMode.system => 'system',
     };
 
+/// 持久化亮/暗/跟随系统的主题偏好。
 class ThemeModeController extends StateNotifier<ThemeMode> {
   ThemeModeController(this._prefs)
       : super(_decode(_prefs.getString(_kThemeModeKey)));

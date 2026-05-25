@@ -9,6 +9,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../application/profile_provider.dart';
 
+/// 个人资料页：编辑昵称等本地展示信息。
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
@@ -16,6 +17,7 @@ class ProfilePage extends ConsumerStatefulWidget {
   ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
+/// 持有昵称 TextEditingController 并在提交时写回 provider。
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   late final TextEditingController _ctrl;
 

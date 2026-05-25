@@ -15,6 +15,7 @@ import '../../../theme/app_spacing.dart';
 import '../../../theme/app_typography.dart';
 import '../application/recycle_bin_controller.dart';
 
+/// 回收站页：列出软删除的交易，支持还原 / 永久删除。
 class RecycleBinPage extends ConsumerWidget {
   const RecycleBinPage({super.key});
 
@@ -55,6 +56,7 @@ class RecycleBinPage extends ConsumerWidget {
   }
 }
 
+/// 单条回收站行：交易摘要 + 距清空剩余天数 + 还原/删除按钮。
 class _TrashRow extends ConsumerWidget {
   const _TrashRow({required this.tx});
   final Transaction tx;

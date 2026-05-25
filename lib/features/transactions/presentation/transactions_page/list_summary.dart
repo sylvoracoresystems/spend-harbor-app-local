@@ -60,6 +60,7 @@ class _ListSummary extends StatelessWidget {
   }
 }
 
+/// 汇总条单币种行：收入/支出小计 + 币种标签。
 class _SummaryAmounts extends StatelessWidget {
   const _SummaryAmounts({
     required this.currency,

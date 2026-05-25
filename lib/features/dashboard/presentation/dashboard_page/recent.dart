@@ -1,5 +1,6 @@
 part of '../dashboard_page.dart';
 
+/// Dashboard 最近交易卡片：列出近 N 条交易，空列表则不渲染。
 class _RecentSection extends ConsumerWidget {
   const _RecentSection({required this.asyncRows});
   final AsyncValue<List<Transaction>> asyncRows;

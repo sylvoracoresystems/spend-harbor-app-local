@@ -1,5 +1,6 @@
 part of '../transaction_form.dart';
 
+/// 按当前收/支类型过滤的分类选择网格，列数随视口自适应。
 class _CategoryGrid extends ConsumerWidget {
   const _CategoryGrid({
     required this.type,
@@ -83,6 +84,7 @@ class _CategoryGrid extends ConsumerWidget {
   }
 }
 
+/// 网格单元：图标 + 名称，选中态给品牌色高亮。
 class _CategoryTile extends StatelessWidget {
   const _CategoryTile({
     required this.cat,

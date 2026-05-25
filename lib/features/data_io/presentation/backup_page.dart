@@ -11,6 +11,7 @@ import '../application/backup_controller.dart';
 import '../application/backup_serializer.dart';
 import 'backup_reminder_banner.dart';
 
+/// 备份/恢复页：导出 .shbackup、从备份还原、提醒频率设置。
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
 
@@ -18,6 +19,7 @@ class BackupPage extends ConsumerStatefulWidget {
   ConsumerState<BackupPage> createState() => _BackupPageState();
 }
 
+/// 跟踪正在导出/恢复的 loading 状态，防止重复点击。
 class _BackupPageState extends ConsumerState<BackupPage> {
   bool _exporting = false;
   bool _restoring = false;
