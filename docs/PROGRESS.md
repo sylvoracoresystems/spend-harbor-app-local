@@ -49,6 +49,7 @@
 
 ### 2026-05
 
+- **2026-05-30 · `f6dc594` · fix** — 新建交易默认日期改"跨天重置今天、同日内沿用上次"：原逻辑用 SharedPreferences 持久化「上次选的日期」并无条件复用，导致补录历史后日期"卡"在过去几天，下次正常记账容易误记。改为额外记录提交时 wall-clock，只在仍为同一日历日时沿用，跨天 / 首次打开一律重置为今天；编辑态不受影响。171 tests pass。
 - **2026-05-24 · `82968fd` · perf** — 3 处针对性优化：① TransactionsPage `groupByDay` 移到 `groupedTransactionsProvider`，选择模式 toggle 不再触发分组重算；② `trendBucketsProvider` 从 O(buckets·rows) 改为单次扫描 + 每行 DateTime.parse 只一次；③ 新增 `categoriesByIdProvider` / `tagsByIdProvider` / `sourcesByIdProvider`（Map<id, T>），交易行 + 回收站行的反查从 O(M·N) 退到 O(M+N)。171 tests pass。
 - **2026-05-24 · `c0072db` · docs** — 文档漂移修复：README 整篇重写、PRODUCT_SPEC §3.1 路由表补 13 条、TECH_STACK §2 修 3 处版本/包名 + launcher_icons/native_splash 从「暂未引入」迁到 dev_dependencies。
 - **2026-05-24 · `08d611e` · docs** — 记录 Phase R6 + 性能优化 commit 入 PROGRESS。
