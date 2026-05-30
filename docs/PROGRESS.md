@@ -49,6 +49,8 @@
 
 ### 2026-05
 
+- **2026-05-30 · `631e8c4` · feat** — 标签搜索无匹配时，把「无匹配标签」改成「创建 "<query>"」chip：点击直接创建并选中（默认色 #10b981），清空搜索框让新 tag 在 selected-first 排序里置顶。免去"退出表单→设置→新建→返回"的整套流程，是标签使用频次下的更大痛点。受 5 个标签上限约束，重名（罕见，仅 l10n 展示分歧时可能）兜底为静默忽略。
+- **2026-05-30 · `0a4c4c2` · feat** — 分类网格末位追加「管理」入口 tile：点击 push `/settings/categories`，分类增删完回到表单（state 不丢，`allCategoriesProvider` 自动反映变更）。视觉上用空心圆 + 灰色与彩色分类 tile 区分。
 - **2026-05-30 · `f6dc594` · fix** — 新建交易默认日期改"跨天重置今天、同日内沿用上次"：原逻辑用 SharedPreferences 持久化「上次选的日期」并无条件复用，导致补录历史后日期"卡"在过去几天，下次正常记账容易误记。改为额外记录提交时 wall-clock，只在仍为同一日历日时沿用，跨天 / 首次打开一律重置为今天；编辑态不受影响。171 tests pass。
 - **2026-05-24 · `82968fd` · perf** — 3 处针对性优化：① TransactionsPage `groupByDay` 移到 `groupedTransactionsProvider`，选择模式 toggle 不再触发分组重算；② `trendBucketsProvider` 从 O(buckets·rows) 改为单次扫描 + 每行 DateTime.parse 只一次；③ 新增 `categoriesByIdProvider` / `tagsByIdProvider` / `sourcesByIdProvider`（Map<id, T>），交易行 + 回收站行的反查从 O(M·N) 退到 O(M+N)。171 tests pass。
 - **2026-05-24 · `c0072db` · docs** — 文档漂移修复：README 整篇重写、PRODUCT_SPEC §3.1 路由表补 13 条、TECH_STACK §2 修 3 处版本/包名 + launcher_icons/native_splash 从「暂未引入」迁到 dev_dependencies。
