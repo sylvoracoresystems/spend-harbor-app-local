@@ -200,6 +200,27 @@ class TransactionFormController extends StateNotifier<TransactionFormState> {
     return true;
   }
 
+  /// 用搜索词直接创建一个新标签并选中。
+  /// 返回 true=成功；false=失败（已达上限）。
+  /// 调用前提：name 已 trim 且非空；理论上不与已有标签同名（搜索过滤已先行）。
+  Future<bool> createAndSelectTag(String rawName) async {
+    final name = rawName.trim();
+    if (name.isEmpty) return false;
+    if (state.tagIds.length >= kMaxTagsPerTransaction) return false;
+    final dao = _ref.read(tagDaoProvider);
+    // 兜底大小写不敏感重名检查：若命中（罕见，比如 l10n 翻译造成的差异），不创建副本。
+    if (await dao.existsName(name)) return false;
+    final id = _uuid.v4();
+    await dao.insertTag(TagsCompanion.insert(
+      id: id,
+      name: name,
+      color: '#10b981',
+      nameKey: const Value(null),
+    ));
+    state = state.copyWith(tagIds: {...state.tagIds, id});
+    return true;
+  }
+
   /// 校验当前状态；返回首个错误或 null。
   TransactionFormError? validate() {
     final raw = state.amountInput.trim();

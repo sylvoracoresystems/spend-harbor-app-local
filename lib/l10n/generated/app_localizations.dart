@@ -473,6 +473,12 @@ abstract class AppL10n {
   /// **'You can pick up to 5 tags'**
   String get txTagLimitReached;
 
+  /// No description provided for @txTagCreateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create \"{name}\"'**
+  String txTagCreateAction(String name);
+
   /// No description provided for @txNoteOptional.
   ///
   /// In en, this message translates to:

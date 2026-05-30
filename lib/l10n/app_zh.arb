@@ -73,6 +73,8 @@
   "@txTagMore": {"placeholders": {"count": {"type": "int"}}},
   "txTagLess": "收起",
   "txTagLimitReached": "最多选择 5 个标签",
+  "txTagCreateAction": "创建 \"{name}\"",
+  "@txTagCreateAction": {"placeholders": {"name": {"type": "String"}}},
   "txNoteOptional": "备注（选填）",
 
   "txListEmpty": "本月暂无交易",

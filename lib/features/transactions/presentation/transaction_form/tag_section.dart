@@ -10,6 +10,7 @@ class _TagsSection extends ConsumerWidget {
     required this.onQueryChanged,
     required this.onToggleExpand,
     required this.onToggleTag,
+    required this.onCreateTag,
   });
 
   final Set<String> selectedIds;
@@ -19,6 +20,7 @@ class _TagsSection extends ConsumerWidget {
   final ValueChanged<String> onQueryChanged;
   final VoidCallback onToggleExpand;
   final ValueChanged<String> onToggleTag;
+  final ValueChanged<String> onCreateTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,12 +76,18 @@ class _TagsSection extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.x2),
             if (filtered.isEmpty)
+              // 搜索无匹配：直接给「创建并选中」入口（query 非空时才提供）。
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
-                child: Text(
-                  l.txTagNoMatch,
-                  style: AppTypography.sm.copyWith(color: c.textMuted),
-                ),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.x1),
+                child: q.isEmpty
+                    ? Text(
+                        l.txTagNoMatch,
+                        style: AppTypography.sm.copyWith(color: c.textMuted),
+                      )
+                    : _CreateTagChip(
+                        label: l.txTagCreateAction(query.trim()),
+                        onTap: () => onCreateTag(query.trim()),
+                      ),
               )
             else
               Wrap(
@@ -194,4 +202,49 @@ class _MoreChip extends StatelessWidget {
 String _tagDisplay(BuildContext context, Tag t) {
   final localized = resolveDefaultName(AppL10n.of(context), t.nameKey);
   return localized ?? t.name;
+}
+
+/// 搜索无匹配时的「创建并选中」chip：用 + 图标 + 品牌色描边与普通 tag chip 区分。
+class _CreateTagChip extends StatelessWidget {
+  const _CreateTagChip({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: AppRadius.brFull,
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.x2 + 2,
+            vertical: 4,
+          ),
+          decoration: BoxDecoration(
+            color: c.surface,
+            border: Border.all(color: c.action, width: 1),
+            borderRadius: AppRadius.brFull,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(LucideIcons.plus, size: 14, color: c.action),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: AppTypography.xs.copyWith(
+                  color: c.action,
+                  fontWeight: AppTypography.weightMedium,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

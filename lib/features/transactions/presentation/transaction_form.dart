@@ -207,6 +207,22 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                             );
                           }
                         },
+                        onCreateTag: (name) async {
+                          final ok = await notifier.createAndSelectTag(name);
+                          if (!context.mounted) return;
+                          if (!ok) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(l.txTagLimitReached),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                            return;
+                          }
+                          // 创建成功后清空搜索框，让用户看到完整列表（新 tag 因 selected-first 排序置顶）。
+                          _tagSearchCtrl.clear();
+                          setState(() => _tagQuery = '');
+                        },
                       ),
                       const SizedBox(height: AppSpacing.x3),
                       _NoteField(

@@ -200,6 +200,11 @@ class AppL10nEn extends AppL10n {
   String get txTagLimitReached => 'You can pick up to 5 tags';
 
   @override
+  String txTagCreateAction(String name) {
+    return 'Create \"$name\"';
+  }
+
+  @override
   String get txNoteOptional => 'Note (optional)';
 
   @override

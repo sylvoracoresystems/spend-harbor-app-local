@@ -76,6 +76,8 @@
   "@txTagMore": {"placeholders": {"count": {"type": "int"}}},
   "txTagLess": "Less",
   "txTagLimitReached": "You can pick up to 5 tags",
+  "txTagCreateAction": "Create \"{name}\"",
+  "@txTagCreateAction": {"placeholders": {"name": {"type": "String"}}},
   "txNoteOptional": "Note (optional)",
 
   "txListEmpty": "No transactions this month",

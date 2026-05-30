@@ -200,6 +200,11 @@ class AppL10nZh extends AppL10n {
   String get txTagLimitReached => '最多选择 5 个标签';
 
   @override
+  String txTagCreateAction(String name) {
+    return '创建 \"$name\"';
+  }
+
+  @override
   String get txNoteOptional => '备注（选填）';
 
   @override
