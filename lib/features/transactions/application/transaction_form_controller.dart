@@ -117,12 +117,27 @@ class TransactionFormController extends StateNotifier<TransactionFormState> {
       // 编辑态：先占位 date=null，加载完成后填回。
       return TransactionFormState(id: editId);
     }
-    // 新建态：默认日期取上次提交日期或今天；币种取默认币种。
-    final lastIso = ref.read(lastTransactedOnProvider);
-    DateTime date = DateTime.now();
-    if (lastIso != null) {
-      final parsed = DateTime.tryParse(lastIso);
-      if (parsed != null) date = DateTime(parsed.year, parsed.month, parsed.day);
+    // 新建态默认日期策略：
+    // - 如果"上次提交"发生在今天（wall-clock 同一日历日），沿用上次选的日期，
+    //   方便同日内连续补录前几天的交易不必每笔重选；
+    // - 否则（跨天 / 首次打开）一律重置为今天，避免日期"卡在过去"误记。
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    DateTime date = today;
+    final entry = ref.read(lastTransactedOnProvider);
+    if (entry != null) {
+      final submittedDay = DateTime(
+        entry.submittedAt.year,
+        entry.submittedAt.month,
+        entry.submittedAt.day,
+      );
+      if (submittedDay == today) {
+        date = DateTime(
+          entry.picked.year,
+          entry.picked.month,
+          entry.picked.day,
+        );
+      }
     }
     final defaultCurrency = ref.read(defaultCurrencyProvider);
     return TransactionFormState(date: date, currency: defaultCurrency);
@@ -221,7 +236,7 @@ class TransactionFormController extends StateNotifier<TransactionFormState> {
         await dao.updateWithTags(companion, state.tagIds.toList());
       } else {
         await dao.insertWithTags(companion, state.tagIds.toList());
-        // 仅新建态持久化日期，避免编辑态污染。
+        // 仅新建态记录"上次提交"，编辑态不污染该状态。
         await _ref.read(lastTransactedOnProvider.notifier).set(date);
       }
       return true;
