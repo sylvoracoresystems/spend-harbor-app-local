@@ -168,6 +168,9 @@ class AppL10nZh extends AppL10n {
   String get txEmptyCategory => '暂无分类';
 
   @override
+  String get txManageCategories => '管理';
+
+  @override
   String get txEmptySource => '暂无来源';
 
   @override

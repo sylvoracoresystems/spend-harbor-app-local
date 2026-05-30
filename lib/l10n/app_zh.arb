@@ -62,6 +62,7 @@
   "txErrSourceRequired": "请选择来源",
   "txErrCurrencyRequired": "请选择币种",
   "txEmptyCategory": "暂无分类",
+  "txManageCategories": "管理",
   "txEmptySource": "暂无来源",
   "txNotePlaceholder": "例如：团建午餐",
   "txAmountPlaceholder": "0.00",

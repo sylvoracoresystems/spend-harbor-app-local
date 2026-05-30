@@ -65,6 +65,7 @@
   "txErrSourceRequired": "Pick a source",
   "txErrCurrencyRequired": "Pick a currency",
   "txEmptyCategory": "No categories yet",
+  "txManageCategories": "Manage",
   "txEmptySource": "No sources yet",
   "txNotePlaceholder": "e.g. Lunch with team",
   "txAmountPlaceholder": "0.00",

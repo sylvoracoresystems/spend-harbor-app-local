@@ -168,6 +168,9 @@ class AppL10nEn extends AppL10n {
   String get txEmptyCategory => 'No categories yet';
 
   @override
+  String get txManageCategories => 'Manage';
+
+  @override
   String get txEmptySource => 'No sources yet';
 
   @override

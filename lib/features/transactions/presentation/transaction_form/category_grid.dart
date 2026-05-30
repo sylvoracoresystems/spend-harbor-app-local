@@ -41,7 +41,9 @@ class _CategoryGrid extends ConsumerWidget {
               4,
               ((cons.maxWidth + spacing) / (targetTileWidth + spacing)).floor(),
             );
-            final rows = (filtered.length / crossCount).ceil();
+            // 末尾追加一个「管理分类」入口 tile，便于表单内直达 CategoriesPage 后回来续填。
+            final itemCount = filtered.length + 1;
+            final rows = (itemCount / crossCount).ceil();
             final visibleRows = rows.clamp(1, maxVisibleRows);
             final tileWidth =
                 (cons.maxWidth - spacing * (crossCount - 1)) / crossCount;
@@ -54,7 +56,7 @@ class _CategoryGrid extends ConsumerWidget {
                 physics: rows > maxVisibleRows
                     ? const ClampingScrollPhysics()
                     : const NeverScrollableScrollPhysics(),
-                itemCount: filtered.length,
+                itemCount: itemCount,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossCount,
                   crossAxisSpacing: spacing,
@@ -62,6 +64,11 @@ class _CategoryGrid extends ConsumerWidget {
                   childAspectRatio: aspectRatio,
                 ),
                 itemBuilder: (ctx, i) {
+                  if (i == filtered.length) {
+                    return _ManageCategoriesTile(
+                      onTap: () => context.push('/settings/categories'),
+                    );
+                  }
                   final cat = filtered[i];
                   final isSel = selected == cat.id;
                   return _CategoryTile(
@@ -160,4 +167,64 @@ class _CategoryTile extends StatelessWidget {
 String _categoryDisplay(BuildContext context, Category c) {
   final localized = resolveDefaultName(AppL10n.of(context), c.nameKey);
   return localized ?? c.name;
+}
+
+/// 分类网格末位的「管理分类」入口；视觉上用空心圆 + 灰色文字与真实分类区分。
+class _ManageCategoriesTile extends StatelessWidget {
+  const _ManageCategoriesTile({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final c = context.appColors;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: AppRadius.brXl,
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.x1 + 2),
+          decoration: BoxDecoration(
+            color: c.surface,
+            border: Border.all(color: c.border, width: 1),
+            borderRadius: AppRadius.brXl,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: c.textMuted, width: 1.2),
+                ),
+                child: Icon(
+                  LucideIcons.plus,
+                  size: 14,
+                  color: c.textMuted,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
+                child: Text(
+                  l.txManageCategories,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppTypography.xs.copyWith(
+                    color: c.textMuted,
+                    fontWeight: AppTypography.weightMedium,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

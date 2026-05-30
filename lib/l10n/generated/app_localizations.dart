@@ -413,6 +413,12 @@ abstract class AppL10n {
   /// **'No categories yet'**
   String get txEmptyCategory;
 
+  /// No description provided for @txManageCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get txManageCategories;
+
   /// No description provided for @txEmptySource.
   ///
   /// In en, this message translates to:
